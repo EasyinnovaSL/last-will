@@ -1,0 +1,8 @@
+# Dependency directories
+node_modules
+
+# NPM pakcgae lock
+package-lock.json
+
+# Contract json
+contract.json
