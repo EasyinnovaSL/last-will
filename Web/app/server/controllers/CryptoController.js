@@ -21,7 +21,7 @@ exports.isEtherKeySet = function(req,res,next){
  */
 exports.savePassword = async function (req, res) {
     if (req.body.password && req.body.keys) {
-        var name = req.body.name;
+        var keyName = req.body.name;
         var password = req.body.password;
         var keys = req.body.keys.split(";");
 
@@ -59,7 +59,7 @@ exports.savePassword = async function (req, res) {
             var encrypted = await EasyCrypto.EncryptTextAsymmetric(part, friendPublicKey);
 
             // Send to Smart Contract
-            var result = EthereumController.addHierarchy(req.eth.address, friendAddress, encrypted, i);
+            var result = EthereumController.addHierarchy(req.eth.address, friendAddress, encrypted, i, keyName);
             if (result === false) {
                 return res.status(400).json({message: "Error saving to Smart Contract"});
             }
@@ -67,7 +67,7 @@ exports.savePassword = async function (req, res) {
         }
 
         // Cehck the smart contract has all keys
-        var nPartsInContract = EthereumController.getNumberHierarchyUsers(req.eth.address);
+        var nPartsInContract = EthereumController.getNumberHierarchyUsers(req.eth.address, keyName);
         if (nParts !== nPartsInContract) {
             return res.status(400).json({message: "Error saving to Smart Contract"});
         }
@@ -96,11 +96,12 @@ exports.splitString = function (str, chunkSize) {
  * Recover your password from the Blockchain
  */
 exports.recoverPassword = async function (req, res) {
-    if (req.body.lostAddress) {
+    if (req.body.lostAddress && req.body.name) {
         var lostAddress = req.body.lostAddress;
+        var keyName = req.body.name;
 
         // Get form smart contract my encrypted part of the lost address
-        var parts = EthereumController.getFullKey(req.eth.address, lostAddress);
+        var parts = EthereumController.getFullKey(req.eth.address, lostAddress, keyName);
 
         // Each part
         var fullKey = "";
@@ -120,13 +121,14 @@ exports.recoverPassword = async function (req, res) {
  * Recover a password part from the blockchain
  */
 exports.recoverPasswordPart = async function (req, res) {
-    if (req.body.lostAddress && req.body.newPublicKey) {
+    if (req.body.lostAddress && req.body.newPublicKey && req.body.name) {
         var lostAddress = req.body.lostAddress;
         var newPublicKey = req.body.newPublicKey;
         var newAddress = EasyCrypto.PublicKeyToAddress(newPublicKey);
+        var keyName = req.body.name;
 
         // Get form smart contract my encrypted part of the lost address
-        var key = EthereumController.getMyKeyPart(req.eth.address, lostAddress);
+        var key = EthereumController.getMyKeyPart(req.eth.address, lostAddress, keyName);
 
         // Decrypt it
         var decrypted = await EasyCrypto.DecryptTextAsymmetric(key.key, req.eth.privateKey);
@@ -135,7 +137,7 @@ exports.recoverPasswordPart = async function (req, res) {
         var reEncrypted = await EasyCrypto.EncryptTextAsymmetric(decrypted, newPublicKey);
 
         // Send to Smart Contract the encrypted part
-        var status = EthereumController.addRestoreKey(req.eth.address, lostAddress, newAddress, reEncrypted, key.index);
+        var status = EthereumController.addRestoreKey(req.eth.address, lostAddress, newAddress, reEncrypted, key.index, keyName);
 
         return res.status(200).json({status: status});
     }
