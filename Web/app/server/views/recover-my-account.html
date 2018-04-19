@@ -45,13 +45,10 @@
         <div class="row">
             <div class="mbr-white col-lg-8 col-md-7 content-container">
                 <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1">
-                    INTRO WITH FORM
+                    RECOVER YOUR ACCOUNT
                 </h1>
                 <p class="mbr-text pb-3 mbr-fonts-style display-5">
-                    Click any text to edit or style it. Select text to insert a link. Click blue
-                    "Gear" icon in the top right corner to hide/show text, title and change the
-                    block or form background. Click red "+" in the bottom right corner to add a new
-                    block. Use the top left menu to create new pages, sites and add themes.
+                    In order to recover your account, you must provide your private key, the account name and the address that saved the account.
                 </p>
             </div>
             <div class="col-lg-4 col-md-5">
@@ -87,10 +84,19 @@
 
                             <span class="input-group-btn">
                     <button href="" type="submit" class="btn btn-secondary btn-form display-4">RECOVER MY ACCOUNT</button>
+                                <!--<button id="simulate" type="button" class="btn btn-info btn-small">Simulate fill fields</button>-->
                 </span>
                         </form>
                         <script>
                           $(document).ready(function () {
+
+                              // $("#simulate").on('click', function(){
+                              //     var now = $.cookie('name');
+                              //     $("input[name=privateKey]").val("0xbdf40c2c4048184a26e7916ee50454afe4b7903ee8a6712db17002f4c5a067b5");
+                              //     $("input[name=name]").val("BTC_"+now);
+                              //     $("input[name=lostAddress]").val("0xc0Eb469a948C5b7A163Df6e9bCa0a7115a74B7a9");
+                              // });
+
                             $("#recover-account").submit(function (event) {
 
                               // get the form data
