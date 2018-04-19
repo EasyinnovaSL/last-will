@@ -110,14 +110,14 @@
                                     // using the done promise callback
                                         .done(function(data ) {
 
-                                            $('#ModalResult').find('.modal-body').html('Recover Part Complete');
-                                            $('#ModalResult').modal('show');
+                                            $('#OkModal').modal('show');
 
                                         })
                                         .fail(function(data ) {
 
-                                            $('#ModalResult').find('.modal-body').html('Error: '+data.responseJSON.message);
-                                            $('#ModalResult').modal('show');
+                                            $('#ErrorModal').find('.modal-body').find('p')
+                                                .html('Something went wrong. ' + data.responseJSON.message);
+                                            $('#ErrorModal').modal('show');
 
                                         })
 
@@ -136,4 +136,51 @@
             <i class="mbri-down mbr-iconfont"></i>
         </a>
     </div>
+
+
+    <!--Ok Modal HTML -->
+    <div id="OkModal" class="modal fade">
+        <div class="modal-dialog modal-confirm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="icon-box">
+                        <i class="material-icons">&#xE876;</i>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <h4>Great!</h4>
+                    <p>Operation Succesful!</p>
+                    <button class="btn btn-success" data-dismiss="modal">
+                        <span>Continue</span> <i class="material-icons">&#xE5C8;</i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal HTML -->
+    <div id="ErrorModal" class="modal fade">
+        <div class="modal-dialog modal-error">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="icon-box">
+                        <i class="material-icons">&#xE5CD;</i>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <h4>Ooops!</h4>
+                    <p></p>
+                    <button class="btn btn-success" data-dismiss="modal">Try Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 </section>
