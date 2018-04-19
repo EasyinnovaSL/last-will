@@ -17,6 +17,9 @@ module.exports = function (app) {
     // Recover password
     app.post('/recover-password', CryptoController.recoverPassword);
 
+    // Recover password part
+    app.post('/recover-part', CryptoController.recoverPasswordPart);
+
     // Get public and address form private key
     app.post('/parse-private', CryptoController.parsePrivateKey);
 

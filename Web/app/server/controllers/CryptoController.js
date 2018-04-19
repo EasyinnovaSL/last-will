@@ -48,6 +48,7 @@ exports.savePassword = async function (req, res) {
             if (result === false) {
                 return res.status(400).json({message: "Error saving to Smart Contract"});
             }
+            encryptedParts.push({address: friendAddress, encrypted: encrypted, order: i});
         }
 
         // Cehck the smart contract has all keys
@@ -56,7 +57,7 @@ exports.savePassword = async function (req, res) {
             return res.status(400).json({message: "Error saving to Smart Contract"});
         }
 
-        return res.status(200).json({encrypted: encryptedParts});
+        return res.status(200).json({parts: nParts, encrypted: encryptedParts});
     }
     return res.status(400).json({message: "Invalid parameters"});
 };
@@ -79,18 +80,18 @@ exports.splitString = function (str, chunkSize) {
 /**
  * Recover your password from the Blockchain
  */
-exports.recoverPassword = function (req, res) {
+exports.recoverPassword = async function (req, res) {
     if (req.body.lostAddress) {
         var lostAddress = req.body.lostAddress;
 
         // Get form smart contract my encrypted part of the lost address
-        var parts = EthereumController.getFullKey(lostAddress);
+        var parts = EthereumController.getFullKey(req.eth.address, lostAddress);
 
         // Each part
         var fullKey = "";
         for (var part of parts) {
             if (part !== "") {
-                var decrypted = EasyCrypto.DecryptTextAsymmetric(part, req.eth.privateKey);
+                var decrypted = await EasyCrypto.DecryptTextAsymmetric(part, req.eth.privateKey);
                 fullKey += decrypted;
             }
         }

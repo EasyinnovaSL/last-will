@@ -16,14 +16,15 @@ fs.readFile("contract.json", 'utf8', function (err,data) {
 
 function contract_init(address) {
 
-    web3 = new Web3(new Web3.providers.HttpProvider(host));
-    contract = web3.eth.contract(abi).at(contractAddress);
-
     try {
+        var host = "http://localhost:8545";
+        web3 = new Web3(new Web3.providers.HttpProvider(host));
+        contract = web3.eth.contract(abi).at(contractAddress);
+
         web3.eth.defaultAccount = web3.eth.accounts[0];
         if (address != null) web3.eth.defaultAccount = address;
     } catch (ex) {
-        console.log("Ethereum is not running");
+        console.log("Ethereum is not running: " + ex.message);
         return false;
     }
 
@@ -37,8 +38,9 @@ exports.addHierarchy = function (address, friendAddress, keyPart, order) {
     if (!contract_init(address)) return false;
 
     try {
-        contract.addHierarchy(address, friendAddress, keyPart, order, {gas: 3000000});
+        contract.addHierarchy(friendAddress, keyPart, order, {gas: 3000000});
     } catch(ex) {
+        console.log("Error addHierarchy: " + ex.message);
         return false;
     }
 
@@ -51,7 +53,7 @@ exports.addHierarchy = function (address, friendAddress, keyPart, order) {
 exports.getNumberHierarchyUsers = function (address) {
     if (!contract_init(address)) return false;
 
-    return contract.getNumberHierarchyUsers.call();
+    return parseInt(contract.getNumberHierarchyUsers.call());
 };
 
 /**
@@ -64,7 +66,7 @@ exports.getMyKeyPart = function (address, ownerAddress) {
 
     return {
         key: result[0],
-        index: result[1],
+        index: parseInt(result[1]),
     }
 };
 
