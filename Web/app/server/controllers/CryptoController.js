@@ -17,10 +17,21 @@ exports.isEtherKeySet = function(req,res,next){
  */
 exports.savePassword = async function (req, res) {
     if (req.body.password && req.body.keys) {
+        var name = req.body.name;
         var password = req.body.password;
         var keys = req.body.keys.split(";");
-        if (password.length < 20) {
-            return res.status(400).json({message: "Password too small. Minimum 20 characters."});
+
+        // Validate parameters
+        if (keys.length < 2) {
+            return res.status(400).json({message: "Enter at least two public keys."});
+        }
+        for (var key of keys) {
+            if (key.length != 128) {
+                return res.status(400).json({message: "Key length invalid. Public keys must be 128 characters long."});
+            }
+        }
+        if (password.length < 10) {
+            return res.status(400).json({message: "Password too small. Minimum 10 characters."});
         }
 
         // Decompose password
