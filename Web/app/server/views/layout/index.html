@@ -10,15 +10,41 @@
 		<!--Javascript-->
 		<script src="/vendor/jquery-2.2.3.min.js"></script>
 		<script src="/vendor/bootstrap.min.js"></script>
+		<script src="/vendor/jquery.cookie.js"></script>
+		<script src="/vendor/jquery.form.min.js"></script>
+		<script src="/js/application.js"></script>
 		<!--CSS-->
 		<link rel="stylesheet" href="/vendor/bootstrap.min.css" type="text/css">
 		<link rel="stylesheet" href="/css/style.css" type="text/css">
 	</head>
 
 	<body>
+
+		<!--Ether info-->
+		<p>
+			<label>Ethereum Private Key:</label>
+			<span id="privateKey-span">Not set</span>
+		</p>
+
+		<p>
+			<label>Ethereum Public Key:</label>
+			<span id="publicKey-span">Not set</span>
+		</p>
+
+		<p>
+			<label>Ethereum Address:</label>
+			<span id="address-span">Not set</span>
+		</p>
+
+		<a href="javascript:resetCoockies();" class="btn btn-primary">Change Address</a>
+
+		<!-- Page Content -->
 		<div class="container">
 			<%-defineContent('content')%>
 		</div>
-	</body>
 
+		<!--Modals-->
+		<% include ../modals/ether.html %>
+
+	</body>
 </html>
