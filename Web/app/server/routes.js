@@ -7,6 +7,14 @@ module.exports = function (app) {
     // Home
     app.get('/', RenderController.renderHome);
 
+    //Save account
+  app.get('/save-account', RenderController.renderSaveAccount);
+    //Recover my account
+  app.get('/recover-my-account', RenderController.renderRecoverMyAccount);
+    //Recover account part
+  app.get('/recover-account-part', RenderController.renderRecoverAccountPart);
+
+
     // Save password
     app.post('/save-password', CryptoController.savePassword);
 
