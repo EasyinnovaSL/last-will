@@ -69,18 +69,18 @@
                                            required="true" id="private-key-header15-z">
                                 </div>
                             </div>
-                            <div data-for="account-name">
+                            <div data-for="name">
                                 <div class="form-group">
-                                    <input type="text" class="form-control px-3" name="account-name"
-                                           data-form-field="Account-Name" placeholder="Account Name"
+                                    <input type="text" class="form-control px-3" name="name"
+                                           data-form-field="Name" placeholder="Account Name"
                                            required="true" id="account-name-header15-z">
                                 </div>
                             </div>
-                            <div data-for="address">
+                            <div data-for="lostAddress">
                                 <div class="form-group">
-                                    <input type="text" class="form-control px-3" name="address"
-                                           data-form-field="Address" placeholder="Recover Address"
-                                           required="true" id="address-header15-z">
+                                    <input type="text" class="form-control px-3" name="lostAddress"
+                                           data-form-field="LostAddress" placeholder="Recover Address"
+                                           required="true" id="lostAddress-header15-z">
                                 </div>
                             </div>
 
@@ -107,6 +107,7 @@
                               // using the done promise callback
                                 .done(function (data) {
 
+                                  $('#ErrorModal').find('.modal-body').find('p.recoveredKey').html(data.recoveredKey);
                                   $('#OkModal').modal('show');
 
                                 })
@@ -142,9 +143,10 @@
                 </div>
                 <div class="modal-body text-center">
                     <h4>Great!</h4>
-                    <p>Your account has been created successfully.</p>
+                    <p>Your account has been recovery successfully.</p>
+                    <p class="recoveredKey"></p>
                     <button class="btn btn-success" data-dismiss="modal">
-                        <span>Start Exploring</span> <i class="material-icons">&#xE5C8;</i></button>
+                        <span>Continue</span> <i class="material-icons">&#xE5C8;</i></button>
                 </div>
             </div>
         </div>
