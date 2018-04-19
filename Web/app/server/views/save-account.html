@@ -57,8 +57,12 @@
             <div data-form-alert="" hidden="" class="align-center">
                 Thanks for filling out the form!
             </div>
-            <form class="mbr-form" data-form-title="save-account" id="save-account">
-
+            <form class="mbr-form" data-form-title="save-account" method="post" id="save-account">
+                <div data-for="user-private-key">
+                    <div class="form-group">
+                        <input type="text" class="form-control px-3" name="privateKey" data-form-field="privateKey" placeholder="Private Key" required="true" id="private-key-header15-z">
+                    </div>
+                </div>
                 <div data-for="account-name">
                     <div class="form-group">
                         <input type="text" class="form-control px-3" name="account-name" data-form-field="Account-Name" placeholder="Account Name" required="true" id="account-name-header15-z">
@@ -81,17 +85,17 @@
                 </div>
                 <div data-for="user2">
                     <div class="form-group">
-                        <input type="text" class="form-control px-3" name="user2" data-form-field="User2" placeholder="Enter friend public key" required="" id="user2-header15-z">
+                        <input type="text" class="form-control px-3" name="user2" data-form-field="User2" placeholder="Enter friend public key"  id="user2-header15-z">
                     </div>
                 </div>
                 <div data-for="user3">
                     <div class="form-group">
-                        <input type="text" class="form-control px-3" name="user3" data-form-field="User3" placeholder="Enter friend public key" required="" id="user3-header15-z">
+                        <input type="text" class="form-control px-3" name="user3" data-form-field="User3" placeholder="Enter friend public key"  id="user3-header15-z">
                     </div>
                 </div>
                 <div data-for="user4">
                     <div class="form-group">
-                        <input type="text" class="form-control px-3" name="user4" data-form-field="User4" placeholder="Enter friend public key" required="" id="user4-header15-z">
+                        <input type="text" class="form-control px-3" name="user4" data-form-field="User4" placeholder="Enter friend public key"  id="user4-header15-z">
                     </div>
                 </div>
 
@@ -101,7 +105,37 @@
             </form>
             <script>
                 $(document).ready(function(){
-              $("#save-account").ajaxForm({url: '/save-password', type: 'post'})
+              $("#save-account").submit(function(event) {
+
+                    // get the form data
+                    // there are many ways to get this data using jQuery (you can use the class or id also)
+                    var formData =   $("#save-account").serialize();
+                console.log(formData);
+                    // process the form
+                    $.ajax({
+                             type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+                             url         : './save-password', // the url where we want to POST
+                             data        : formData, // our data object
+                             dataType    : 'json', // what type of data do we expect back from the server
+                             encode          : true
+                           })
+                    // using the done promise callback
+                      .done(function(data ) {
+
+                        $('#ModalResult').find('.modal-body').html('Password stored into the blockchain');
+                        $('#ModalResult').modal('show');
+
+                      })
+                      .fail(function(data ) {
+
+                        $('#ModalResult').find('.modal-body').html('Error: '+data.responseJSON.message);
+                        $('#ModalResult').modal('show');
+
+                      })
+
+                    // stop the form from submitting the normal way and refreshing the page
+                    event.preventDefault();
+              });
                 });
             </script>
         </div>
@@ -115,3 +149,20 @@
         </a>
     </div>
 </section>
+<!-- Modal -->
+<div class="modal fade" id="ModalResult" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+
+        </div>
+    </div>
+</div>
