@@ -40,7 +40,7 @@ contract AfterLife {
     }
 
 
-    function getMyKeyPart(address _ownerAddress, string _passwordName) public view returns (string, uint8){
+    function getMyKeyPart(address _ownerAddress, string _passwordName) public returns (string, uint8){
         return (
             listFileHashmap[_ownerAddress].listUsersHierarchy[_passwordName].listUserKeys[msg.sender][0].keyPart,
             listFileHashmap[_ownerAddress].listUsersHierarchy[_passwordName].listUserKeys[msg.sender][0].order
@@ -51,12 +51,12 @@ contract AfterLife {
         listFileHashmap[oldOwnerAddress].listUsersHierarchy[_passwordName].listUserKeys[newOwnerUserAddress].push(Key({keyPart: _keyPart, order: _order}));
     }
 
-    function getNumberHierarchyUsers(string _passwordName) public view returns (uint) {
+    function getNumberHierarchyUsers(string _passwordName) public returns (uint) {
         return listFileHashmap[msg.sender].listUsersHierarchy[_passwordName].listUsers.length;
     }
 
     function getFullKey(address ownerAddress, string _passwordName)
-    view
+
     returns (string, string, string, string, string, string, string)
     {
 

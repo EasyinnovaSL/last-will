@@ -20,10 +20,16 @@ exports.isEtherKeySet = function(req,res,next){
  * Save your password into the Blockchain
  */
 exports.savePassword = async function (req, res) {
-    if (req.body.password && req.body.keys) {
+    if (req.body.password) {
         var keyName = req.body.name;
         var password = req.body.password;
-        var keys = req.body.keys.split(";");
+        var keys=[];
+
+      for(var i=0;i<5;i++){
+          if(req.body['user'+i]!="") keys.push(req.body['user'+i]);
+      }
+
+
 
         // Validate parameters
         if (keys.length < 2) {

@@ -70,19 +70,19 @@
                                            required="true" id="private-key-header15-z">
                                 </div>
                             </div>
-                            <div data-for="account-name">
+                            <div data-for="name">
                                 <div class="form-group">
-                                    <input type="text" class="form-control px-3" name="account-name"
-                                           data-form-field="Account-Name" placeholder="Account Name"
-                                           required="true" id="account-name-header15-z">
+                                    <input type="text" class="form-control px-3" name="name"
+                                           data-form-field="Name" placeholder="Name"
+                                           required="true" id="name-header15-z">
                                 </div>
                             </div>
-                            <div data-for="account">
+                            <div data-for="password">
                                 <div class="form-group">
-                                    <textarea type="text" class="form-control px-3" name="account"
-                                              data-form-field="Account"
+                                    <textarea type="text" class="form-control px-3" name="password"
+                                              data-form-field="Password"
                                               placeholder="Account to protect" required="true"
-                                              id="name-header15-z"></textarea>
+                                              id="password-header15-z"></textarea>
                                 </div>
                             </div>
                             <div data-for="user0">
@@ -150,7 +150,7 @@
                                 .done(function (data) {
 
                                   $('#OkModal').modal('show');
-
+                                  $("#save-account")[0].reset();
                                 })
                                 .fail(function (data) {
 
@@ -170,5 +170,45 @@
             </div>
         </div>
     </div>
-
+    <!-- Modal HTML -->
+    <div id="OkModal" class="modal fade">
+        <div class="modal-dialog modal-confirm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="icon-box">
+                        <i class="material-icons">&#xE876;</i>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <h4>Great!</h4>
+                    <p>Your account has been created successfully.</p>
+                    <button class="btn btn-success" data-dismiss="modal">
+                        <span>Continue</span> <i class="material-icons">&#xE5C8;</i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal HTML -->
+    <div id="ErrorModal" class="modal fade">
+        <div class="modal-dialog modal-error">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="icon-box">
+                        <i class="material-icons">&#xE5CD;</i>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <h4>Ooops!</h4>
+                    <p></p>
+                    <button class="btn btn-success" data-dismiss="modal">Try Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
