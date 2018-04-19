@@ -35,11 +35,11 @@ function contract_init(address) {
 /**
  * Adds a key part to the Smart Contract
  */
-exports.addHierarchy = function (address, friendAddress, keyPart, order) {
+exports.addHierarchy = function (address, friendAddress, keyPart, order, keyName) {
     if (!contract_init(address)) return false;
 
     try {
-        contract.addHierarchy(friendAddress, keyPart, order, {gas: 3000000});
+        contract.addHierarchy(friendAddress, keyPart, order, keyName, {gas: 3000000});
     } catch(ex) {
         console.log("Error addHierarchy: " + ex.message);
         return false;
@@ -51,19 +51,19 @@ exports.addHierarchy = function (address, friendAddress, keyPart, order) {
 /**
  * Get number of hierarchy users
  */
-exports.getNumberHierarchyUsers = function (address) {
+exports.getNumberHierarchyUsers = function (address, keyName) {
     if (!contract_init(address)) return false;
 
-    return parseInt(contract.getNumberHierarchyUsers.call());
+    return parseInt(contract.getNumberHierarchyUsers.call(keyName));
 };
 
 /**
  * Get number of hierarchy users
  */
-exports.getMyKeyPart = function (address, ownerAddress) {
+exports.getMyKeyPart = function (address, ownerAddress, keyName) {
     if (!contract_init(address)) return false;
 
-    var result = contract.getMyKeyPart.call(ownerAddress);
+    var result = contract.getMyKeyPart.call(ownerAddress, keyName);
 
     return {
         key: result[0],
@@ -74,11 +74,11 @@ exports.getMyKeyPart = function (address, ownerAddress) {
 /**
  * Add a restored key part
  */
-exports.addRestoreKey = function (address, oldOwnerAddress, newOwnerAddress, keyPart, index) {
+exports.addRestoreKey = function (address, oldOwnerAddress, newOwnerAddress, keyPart, index, keyName) {
     if (!contract_init(address)) return false;
 
     try {
-        contract.addRestoreKey(oldOwnerAddress, newOwnerAddress, keyPart, index, {gas: 3000000});
+        contract.addRestoreKey(oldOwnerAddress, newOwnerAddress, keyPart, index, keyName, {gas: 3000000});
     } catch(ex) {
         return false;
     }
@@ -89,10 +89,10 @@ exports.addRestoreKey = function (address, oldOwnerAddress, newOwnerAddress, key
 /**
  * Get restored key parts
  */
-exports.getFullKey = function (address, newAddress) {
+exports.getFullKey = function (address, newAddress, keyName) {
     if (!contract_init(address)) return false;
 
-    var parts = contract.getFullKey.call(newAddress);
+    var parts = contract.getFullKey.call(newAddress, keyName);
 
     return parts;
 };
