@@ -49,7 +49,7 @@
         <div class="row">
             <div class="mbr-white col-lg-8 col-md-7 content-container">
                 <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1">
-                    INTRO WITH FORM
+                    HELP YOUR FRIEND
                 </h1>
                 <p class="mbr-text pb-3 mbr-fonts-style display-5">
                     Click any text to edit or style it. Select text to insert a link. Click blue "Gear" icon in the top right corner to hide/show  text, title and change the block or form background. Click red "+" in the bottom right corner to add a new block. Use the top left menu to create new pages, sites and add themes.
@@ -63,33 +63,34 @@
                         </div>
                         <form class="mbr-form" data-form-title="save-account" method="post" id="recover-account-part">
 
+                            <div data-for="user-private-key">
+                                <div class="form-group">
+                                    <input type="text" class="form-control px-3" name="privateKey" data-form-field="privateKey" placeholder="Your Private Key" required="true" id="private-key">
+                                </div>
+                            </div>
+
+                            <hr>
+
                             <div data-for="account-name">
                                 <div class="form-group">
-                                    <input type="text" class="form-control px-3" name="name" data-form-field="name" placeholder="Account Name" required="true" id="account-name-header15-z">
+                                    <input type="text" class="form-control px-3" name="name" data-form-field="name" placeholder="Friend Account Name" required="true" id="account-name-header15-z">
                                 </div>
                             </div>
 
                             <div data-for="account">
                                 <div class="form-group">
-                                    <textarea type="text" class="form-control px-3" name="lostAddress" data-form-field="lostAddress" placeholder="Lost Address" required="true" id="name-header15-z"></textarea>
+                                    <input type="text" class="form-control px-3" name="lostAddress" data-form-field="lostAddress" placeholder="Friend Lost Address" required="true" id="name-header15-z">
                                 </div>
                             </div>
 
                             <div data-for="user-prublic-key">
                                 <div class="form-group">
-                                    <input type="text" class="form-control px-3" name="newPublicKey" data-form-field="newPublicKey" placeholder="New Public Key" required="true" id="public-key">
+                                    <input type="text" class="form-control px-3" name="newPublicKey" data-form-field="newPublicKey" placeholder="Friend Public Key" required="true" id="public-key">
                                 </div>
                             </div>
-
-                            <div data-for="user-private-key">
-                                <div class="form-group">
-                                    <input type="text" class="form-control px-3" name="privateKey" data-form-field="privateKey" placeholder="Private Key" required="true" id="private-key">
-                                </div>
-                            </div>
-
 
                             <div class="input-group-btn" style="text-align: center;">
-                                <button href="" type="submit" class="btn btn-secondary btn-form display-4">SEND FORM</button>
+                                <button href="" type="submit" class="btn btn-secondary btn-form display-4">HELP MY FRIEND!</button>
                             </div>
 
                         </form>
