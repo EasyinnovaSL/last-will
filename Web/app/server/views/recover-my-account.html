@@ -65,10 +65,11 @@
                             <div data-for="user-private-key">
                                 <div class="form-group">
                                     <input type="text" class="form-control px-3" name="privateKey"
-                                           data-form-field="privateKey" placeholder="Private Key"
+                                           data-form-field="privateKey" placeholder="Your Private Key"
                                            required="true" id="private-key-header15-z">
                                 </div>
                             </div>
+                            <hr>
                             <div data-for="name">
                                 <div class="form-group">
                                     <input type="text" class="form-control px-3" name="name"
@@ -107,7 +108,7 @@
                               // using the done promise callback
                                 .done(function (data) {
 
-                                  $('#ErrorModal').find('.modal-body').find('p.recoveredKey').html(data.recoveredKey);
+                                  $('#OkModal').find('.modal-body').find('p.recoveredKey').html(data.recoveredKey);
                                   $('#OkModal').modal('show');
 
                                 })
