@@ -6,8 +6,12 @@ var EthereumController = require('./EthereumController');
  */
 exports.isEtherKeySet = function(req,res,next){
     if (req.body.privateKey) {
-        req.eth = EasyCrypto.CreateIdentityByPrivateKey(req.body.privateKey);
-        return next();
+        try {
+            req.eth = EasyCrypto.CreateIdentityByPrivateKey(req.body.privateKey);
+            return next();
+        } catch (ex) {
+            return res.status(400).json({message: ex.message});
+        }
     }
     return res.status(400).json({message: "Ethereum private key is needed"});
 };

@@ -14,8 +14,8 @@ var session      = require('express-session');
 
 global.__base = __dirname + '/';
 
-var port = 3001;
-var portSSL = 3004;
+var port = 5002;
+var portSSL = 5004;
 
 var app = express();
 

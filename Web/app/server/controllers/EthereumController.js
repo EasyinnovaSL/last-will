@@ -6,6 +6,8 @@ var contract;
 var abi = "";
 var contractAddress = "";
 
+var host = "http://localhost:9595";
+
 // Read contract info
 fs.readFile("contract.json", 'utf8', function (err,data) {
     if (err) console.log(err);
@@ -17,7 +19,6 @@ fs.readFile("contract.json", 'utf8', function (err,data) {
 function contract_init(address) {
 
     try {
-        var host = "http://localhost:8545";
         web3 = new Web3(new Web3.providers.HttpProvider(host));
         contract = web3.eth.contract(abi).at(contractAddress);
 
