@@ -26,7 +26,7 @@ contract AfterLife {
         require(listFileHashmap[msg.sender].listUsers.length <= 7);
     }
 
-    function getMyKeyPart(address _ownerAddress) public view returns (string, uint8){
+    function getMyKeyPart(address _ownerAddress) returns (string, uint8){
         return (listFileHashmap[_ownerAddress].listUserKeys[msg.sender][0].keyPart, listFileHashmap[_ownerAddress].listUserKeys[msg.sender][0].order);
     }
 
@@ -36,12 +36,12 @@ contract AfterLife {
     }
 
 
-    function getNumberHierarchyUsers() public view returns (uint) {
+    function getNumberHierarchyUsers()  returns (uint) {
         return listFileHashmap[msg.sender].listUsers.length;
     }
 
     function getFullKey(address ownerAddress)
-        view
+
         returns (string, string, string, string, string, string, string)
     {
 
