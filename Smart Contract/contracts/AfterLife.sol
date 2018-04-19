@@ -16,7 +16,7 @@ contract AfterLife {
     mapping (address => Hierarchy) listFileHashmap;
 
 
-    function addHierarchy(address _userWithAccess, string _keyPart, uint8 _order){
+    function addHierarchy(address _userWithAccess, string _keyPart, uint8 _order) public{
 
         //Add User
         listFileHashmap[msg.sender].listUsers.push(_userWithAccess);
@@ -25,17 +25,17 @@ contract AfterLife {
         listFileHashmap[msg.sender].listUserKeys[_userWithAccess].push(Key({keyPart: _keyPart, order: _order}));
     }
 
-    function getMyKeyPart(address _ownerAddress) returns (string, uint8){
+    function getMyKeyPart(address _ownerAddress) public view returns (string, uint8){
         return (listFileHashmap[_ownerAddress].listUserKeys[msg.sender][0].keyPart, listFileHashmap[_ownerAddress].listUserKeys[msg.sender][0].order);
     }
 
 
-    function addRestoreKey(address oldOwnerAddress, address newOwnerUserAddress, string _keyPart, uint8 _order){
+    function addRestoreKey(address oldOwnerAddress, address newOwnerUserAddress, string _keyPart, uint8 _order) public{
         listFileHashmap[oldOwnerAddress].listUserKeys[newOwnerUserAddress].push(Key({keyPart: _keyPart, order: _order}));
     }
 
 
-    function getNumberHierarchyUsers() returns (uint) {
+    function getNumberHierarchyUsers() public view returns (uint) {
         return listFileHashmap[msg.sender].listUsers.length;
     }
 
