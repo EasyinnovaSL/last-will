@@ -7,9 +7,15 @@ module.exports = function (app) {
     // Home
     app.get('/', RenderController.renderHome);
 
-// Ether private key is required //
+    //Save account
+  app.get('/save-account', RenderController.renderSaveAccount);
+    //Recover my account
+  app.get('/recover-my-account', RenderController.renderRecoverMyAccount);
+    //Recover account part
+  app.get('/recover-account-part', RenderController.renderRecoverAccountPart);
 
-    app.use('*', CryptoController.isEtherKeySet);
+  // Ether private key is required //
+  app.use('*', CryptoController.isEtherKeySet);
 
     // Save password
     app.post('/save-password', CryptoController.savePassword);
