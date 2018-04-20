@@ -18,5 +18,8 @@ exports.renderRecoverMyAccount = function (req, res) {
 exports.renderRecoverAccountPart = function (req, res) {
   return res.render('recover-account-part.html');
 };
+exports.renderDemoKeys = function (req, res) {
+  return res.render('demo-keys.html');
+};
 
 
