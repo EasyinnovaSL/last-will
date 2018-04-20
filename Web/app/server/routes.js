@@ -16,6 +16,9 @@ module.exports = function (app) {
     //Recover account part
     app.get('/recover-account-part', RenderController.renderRecoverAccountPart);
 
+  //Recover account part
+  app.get('/demo-keys', RenderController.renderDemoKeys);
+
   // Ether private key is required //
     app.use('*', CryptoController.isEtherKeySet);
 
