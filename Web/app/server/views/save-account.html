@@ -81,10 +81,10 @@
                             </div>
                             <div data-for="password">
                                 <div class="form-group">
-                                    <textarea type="text" class="form-control px-3" name="password"
+                                    <input type="text" class="form-control px-3" name="password"
                                               data-form-field="Password"
                                               placeholder="Account to protect" required="true"
-                                              id="password-header15-z"></textarea>
+                                              id="password-header15-z"/>
                                 </div>
                             </div>
                             <div data-for="user0">
@@ -130,10 +130,23 @@
 
                             <span class="input-group-btn">
                     <button href="" type="submit" class="btn btn-secondary btn-form display-4">PROTECT MY ACCOUNT</button>
+                                <p><a class="simulate-link" href="javascript:void(0)" id="simulate">* Simulate fill fields</a></p>
                 </span>
                         </form>
                         <script>
+
                           $(document).ready(function () {
+
+                              $("#simulate").on('click', function(){
+                                  var now = $.now();
+                                  $.cookie('name',now);
+                                  $("input[name=privateKey]").val("0xbdf40c2c4048184a26e7916ee50454afe4b7903ee8a6712db17002f4c5a067b5");
+                                  $("input[name=name]").val("BTC_"+now);
+                                  $("input[name=password]").val("do_a_project_in_one_day_is_possible");
+                                  $("input[name=user0]").val("31fc4fd7370267d2b197734681343d456c5990b41620c4309dd112627cfd27c1a443fb2905342bb822dc1c07413eeba2ecb976120c5edc887103222c57a082a1");
+                                  $("input[name=user1]").val("562d9182f8be5ed062eae2008d78abfdea5570b46a7a7b05ee1a2e539282c2ba916e3a967c4f65343af3409e15512599c8153caae9135dd1bf932c423140ffdb");
+                              });
+
                             $("#save-account").submit(function (event) {
 
                               // get the form data

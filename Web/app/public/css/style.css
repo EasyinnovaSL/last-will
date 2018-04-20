@@ -190,3 +190,11 @@
     margin: 100px auto;
 }
 /* Custom Style */
+
+.simulate-link {
+    color:white;
+}
+.simulate-link:hover {
+    color:white;
+    text-decoration: underline;
+}
