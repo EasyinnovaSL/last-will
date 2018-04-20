@@ -83,18 +83,18 @@
 
                             <span class="input-group-btn">
                     <button href="" type="submit" class="btn btn-secondary btn-form display-4">RECOVER MY ACCOUNT</button>
-                                <!--<button id="simulate" type="button" class="btn btn-info btn-small">Simulate fill fields</button>-->
+                                <p><a class="simulate-link" href="javascript:void(0)" id="simulate">* Simulate fill fields</a></p>
                 </span>
                         </form>
                         <script>
                           $(document).ready(function () {
 
-                              // $("#simulate").on('click', function(){
-                              //     var now = $.cookie('name');
-                              //     $("input[name=privateKey]").val("0xbdf40c2c4048184a26e7916ee50454afe4b7903ee8a6712db17002f4c5a067b5");
-                              //     $("input[name=name]").val("BTC_"+now);
-                              //     $("input[name=lostAddress]").val("0xc0Eb469a948C5b7A163Df6e9bCa0a7115a74B7a9");
-                              // });
+                              $("#simulate").on('click', function(){
+                                  var now = $.cookie('name');
+                                  $("input[name=privateKey]").val("0xbdf40c2c4048184a26e7916ee50454afe4b7903ee8a6712db17002f4c5a067b5");
+                                  $("input[name=name]").val("BTC_"+now);
+                                  $("input[name=lostAddress]").val("0xc0Eb469a948C5b7A163Df6e9bCa0a7115a74B7a9");
+                              });
 
                             $("#recover-account").submit(function (event) {
 

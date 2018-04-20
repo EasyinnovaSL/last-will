@@ -88,11 +88,29 @@
 
                             <div class="input-group-btn" style="text-align: center;">
                                 <button href="" type="submit" class="btn btn-secondary btn-form display-4">HELP MY FRIEND!</button>
+                                <p><a class="simulate-link" href="javascript:void(0)" id="simulateA">* Simulate fill user A</a></p>
+                                <p><a class="simulate-link" href="javascript:void(0)" id="simulateB">* Simulate fill user B</a></p>
                             </div>
 
                         </form>
                         <script>
                             $(document).ready(function(){
+                                $("#simulateA").on('click', function(){
+                                    var now = $.cookie('name');
+                                    $("input[name=privateKey]").val("0x8dd1081583a3a030b2f3db344f26c641e3b39e1ad006df14f8c26d55b315ee9b");
+                                    $("input[name=name]").val("BTC_"+now);
+                                    $("input[name=lostAddress]").val("0xc0Eb469a948C5b7A163Df6e9bCa0a7115a74B7a9");
+                                    $("input[name=newPublicKey]").val("a0e0e3217c0f2672e616459215e542b40098208f47bdadbe0d085f658c122516264690c86c04373a93d9e807937d1bfaf0ef7a3e2cd94e173919eeb173d61840");
+                                });
+
+                                $("#simulateB").on('click', function(){
+                                    var now = $.cookie('name');
+                                    $("input[name=privateKey]").val("0x59cdcc60ee8b9ea7e2c2a986d755be3aca7baa534056db956508a36ca72a2068");
+                                    $("input[name=name]").val("BTC_"+now);
+                                    $("input[name=lostAddress]").val("0xc0Eb469a948C5b7A163Df6e9bCa0a7115a74B7a9");
+                                    $("input[name=newPublicKey]").val("a0e0e3217c0f2672e616459215e542b40098208f47bdadbe0d085f658c122516264690c86c04373a93d9e807937d1bfaf0ef7a3e2cd94e173919eeb173d61840");
+                                });
+
                                 $("#recover-account-part").submit(function(event) {
 
                                     // get the form data
