@@ -1,5 +1,5 @@
-
 var RenderController = require('./controllers/RenderController');
+var ContractsController = require('./controllers/ContractsController');
 var CryptoController = require('./controllers/CryptoController');
 
 module.exports = function (app) {
@@ -16,23 +16,32 @@ module.exports = function (app) {
     //Recover account part
     app.get('/recover-account-part', RenderController.renderRecoverAccountPart);
 
-  //Recover account part
-  app.get('/demo-keys', RenderController.renderDemoKeys);
+    //Recover account part
+    app.get('/demo-keys', RenderController.renderDemoKeys);
 
-  // Ether private key is required //
-    app.use('*', CryptoController.isEtherKeySet);
+    // Error meta mask
+    app.get('/requirements', RenderController.renderRequirements);
+
+// Ether private key is required //
+    app.use('/eth', CryptoController.isEtherKeySet);
 
     // Save password
-    app.post('/save-password', CryptoController.savePassword);
+    app.post('/eth/save-password', CryptoController.savePassword);
 
     // Recover password
-    app.post('/recover-password', CryptoController.recoverPassword);
+    app.post('/eth/recover-password', CryptoController.recoverPassword);
 
     // Recover password part
-    app.post('/recover-part', CryptoController.recoverPasswordPart);
+    app.post('/eth/recover-part', CryptoController.recoverPasswordPart);
 
     // Get public and address form private key
-    app.post('/parse-private', CryptoController.parsePrivateKey);
+    app.post('/eth/parse-private', CryptoController.parsePrivateKey);
+
+// Meta Mask must be installed
+    app.use('*', ContractsController.getContractsInfo, ContractsController.checkMetaMask);
+
+    // Render hierarchy contracts list
+    // TODO Route contracts list (xavi)
 
     // Error fallback //
     // app.get('*', RenderController.renderError);

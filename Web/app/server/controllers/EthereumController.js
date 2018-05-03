@@ -9,7 +9,7 @@ var contractAddress = "";
 var host = "http://localhost:9595";
 
 // Read contract info
-fs.readFile("contract.json", 'utf8', function (err,data) {
+fs.readFile("../contractLostPassword.json", 'utf8', function (err,data) {
     if (err) console.log(err);
     var config = JSON.parse(data);
     abi = config.abi;
