@@ -16,6 +16,8 @@ module.exports = function (app) {
     //Recover account part
     app.get('/recover-account-part', RenderController.renderRecoverAccountPart);
 
+    app.get('/my-wills', RenderController.renderMyWills);
+
   //Recover account part
   app.get('/demo-keys', RenderController.renderDemoKeys);
 
