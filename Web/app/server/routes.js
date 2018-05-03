@@ -16,9 +16,6 @@ module.exports = function (app) {
     //Recover account part
     app.get('/recover-account-part', RenderController.renderRecoverAccountPart);
 
-    //Recover account part
-    app.get('/demo-keys', RenderController.renderDemoKeys);
-
     // Error meta mask
     app.get('/requirements', RenderController.renderRequirements);
 
@@ -41,7 +38,7 @@ module.exports = function (app) {
     app.use('*', ContractsController.getContractsInfo, ContractsController.checkMetaMask);
 
     // Render hierarchy contracts list
-    // TODO Route contracts list (xavi)
+    app.get('/my-wills', RenderController.renderMyWills);
 
     // Error fallback //
     // app.get('*', RenderController.renderError);

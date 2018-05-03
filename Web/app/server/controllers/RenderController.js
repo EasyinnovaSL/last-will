@@ -20,6 +20,9 @@ exports.renderRecoverMyAccount = function (req, res) {
 exports.renderRecoverAccountPart = function (req, res) {
   return res.render('lost/recover-account-part');
 };
+exports.renderMyWills = function (req, res) {
+    return res.render('my-ethereum-will.html');
+};
 exports.renderDemoKeys = function (req, res) {
   return res.render('lost/demo-keys');
 };
