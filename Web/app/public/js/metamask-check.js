@@ -35,7 +35,7 @@ $(document).ready(function () {
         web3.version.getNetwork((err, netId) => {
             // logCurrentNetwork(netId);
             // Force Rinkeby or Private Net
-            if (netId !== "4") {
+            if (netId !== "4" && netId !== "7") {
                 window.location.href = "/requirements";
             }
         });

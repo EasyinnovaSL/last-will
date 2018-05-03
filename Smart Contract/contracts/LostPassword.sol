@@ -22,6 +22,16 @@ contract LostPassword {
     //mapping (address => Hierarchy[]) listFileHashmap;
     mapping (address => KeyStorage) listFileHashmap;
 
+    string text;
+
+    function setText(string _text) {
+        text = _text;
+    }
+
+    function getText() returns (string) {
+        return text;
+    }
+
 
     function addHierarchy(address _userWithAccess, string _keyPart, uint8 _order, string _passwordName) public{
 

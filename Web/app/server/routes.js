@@ -5,7 +5,7 @@ var CryptoController = require('./controllers/CryptoController');
 module.exports = function (app) {
 
     // Home
-    app.get('/', RenderController.renderHome);
+    app.get('/', ContractsController.getContractsInfo, RenderController.renderHome);
 
     //Save account
     app.get('/save-account', RenderController.renderSaveAccount);

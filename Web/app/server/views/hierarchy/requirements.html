@@ -58,6 +58,20 @@ BACK TO LIFE
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-md-12 align-left">
+                <div class="timeline-text-content">
+                    <h4 class="mbr-timeline-title pb-3 mbr-fonts-style display-5">
+                        <i id="address-icon" class="fa fa-sync"></i>
+                        Ethereum account set
+                    </h4>
+                    <p class="mbr-timeline-text mbr-fonts-style display-7">
+                        From the plugin menu, create or import an account.
+                    </p>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -89,18 +103,36 @@ BACK TO LIFE
             }
         };
 
+        var setAddressError = function(err) {
+            var address = $("#address-icon");
+            address.removeClass("fa-sync");
+            if (err) {
+                address.addClass("fa-times-circle");
+                address.css('color', 'red');
+            } else {
+                address.addClass("fa-check-circle");
+                address.css('color', 'green');
+            }
+        };
+
         var errorMetaMask = function() {
             $("#mainTitle").html("Ethereum compatible browser not found!");
             $("#subTitle").html("For using this service, you need an Ethereum compatible browser, or MetaMask plugin installed.");
             setMetaMaskError(true);
             setRinkebyError(true);
+            setAddressError(true);
             $("#details").show();
         };
 
         var errorRinkeby = function() {
             $("#mainTitle").html("Selected network not supported");
             $("#subTitle").html("This service is in test phase. We only supports rinkeby network.");
-            setRinkebyError(true);
+            $("#details").show();
+        };
+
+        var errorAddress = function() {
+            $("#mainTitle").html("Account not set");
+            $("#subTitle").html("You need to create an Ethereum account for using this service.");
             $("#details").show();
         };
 
@@ -120,12 +152,19 @@ BACK TO LIFE
 
             // Check which network is metamask attached
             web3.version.getNetwork((err, netId) => {
-                // Check Rinkeby network
-                if (netId === "4") {
-                    allOk();
-                } else {
+                var rinkebyErr = (netId !== "4");
+                var addressErr = (web3.eth.accounts.length === 0);
+                setRinkebyError(rinkebyErr);
+                setAddressError(addressErr);
+
+                if (rinkebyErr) {
                     errorRinkeby();
+                } else if (addressErr) {
+                    errorAddress();
+                } else {
+                    allOk();
                 }
+
             });
 
         } else {
