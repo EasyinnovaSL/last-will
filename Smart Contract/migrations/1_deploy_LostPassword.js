@@ -1,14 +1,9 @@
-var AfterLifeContract = artifacts.require("./AfterLife.sol");
+var AfterLifeContract = artifacts.require("./LostPassword.sol");
 
 var fs = require('fs');
 
 var writeToFile = function (content){
-    fs.writeFile("../contract.json", JSON.stringify(content), function(err) {
-        if(err) {
-            return console.log(err);
-        }
-    });
-    fs.writeFile("../Web/contract.json", JSON.stringify(content), function(err) {
+    fs.writeFile("../contractLostPassword.json", JSON.stringify(content), function(err) {
         if(err) {
             return console.log(err);
         }

@@ -17,7 +17,7 @@ $(document).ready(function () {
         if (privateKey.length == 66 && privateKey.startsWith("0x")) {
             modal.find('#error-privkey').hide();
             // Do petition
-            $.post('/parse-private', {privateKey: privateKey}, function(response) {
+            $.post('/eth/parse-private', {privateKey: privateKey}, function(response) {
                 $.cookie('eth', JSON.stringify(response));
                 window.location.reload();
             });

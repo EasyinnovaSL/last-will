@@ -60,6 +60,28 @@
 		</div>
 	</nav>
 </section>
+
+<% if (typeof header === "undefined" || header) { %>
+<section class="cid-qPEgLP71PI"  style="padding-bottom: 0px;" data-bg-video="https://www.youtube.com/embed/iTTrOhEWM-k?rel=0&amp;showinfo=0&amp;autoplay=1&amp;loop=1" id="header2-r">
+    <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(7, 59, 76);"></div>
+    <div class="container align-center">
+        <div class="row justify-content-md-center">
+            <div class="mbr-white col-md-10">
+                <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1"><%-defineContent('title')%></h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mbr-section content4 cid-qPEmnFU9I2" id="content4-11">
+    <div class="container">
+        <div class="media-container-row">
+            <div class="title col-12 col-md-8"></div>
+        </div>
+    </div>
+</section>
+<% } %>
+
 <%-defineContent('content')%>
 
 <section class="cid-qPEl2nnYja" id="footer2-y">
@@ -146,6 +168,25 @@
 <script src="/assets/theme/js/script.js"></script>
 <script src="/vendor/jquery.cookie.js"></script>
 
+<!--Check if metamask is needed-->
+<% if (typeof metamask !== 'undefined' && metamask) { %>
+    <script src="/js/metamask-check.js"></script>
+<% } %>
+
+<!-- Load smart contract variables -->
+<% if (typeof contracts !== 'undefined' && contracts) { %>
+    <script type="application/javascript">
+        var contracts = JSON.parse('<%- JSON.stringify(contracts); %>');
+        $(document).ready(function () {
+            console.log(contracts.base);
+        });
+    </script>
+<% } %>
+
+<!--Main JS-->
+<script src="/js/application.js"></script>
+
 <%- script %>
+
 </body>
 </html>

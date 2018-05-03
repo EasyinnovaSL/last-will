@@ -1,6 +1,6 @@
 pragma solidity ^0.4.15;
 
-contract AfterLife {
+contract LostPassword {
 
     struct KeyStorage{
         string[] listPasswords;

@@ -1,25 +1,29 @@
 
+var FileSystem = require('fs');
+
 /**
  * Render home
  */
 
 exports.renderHome = function (req, res) {
-    return res.render('index');
+    return res.render('index', {header: false});
 };
 
 exports.renderSaveAccount = function (req, res) {
-  return res.render('save-account.html');
+  return res.render('lost/save-account');
 };
 
 exports.renderRecoverMyAccount = function (req, res) {
-  return res.render('recover-my-account.html');
+  return res.render('lost/recover-my-account');
 };
 
 exports.renderRecoverAccountPart = function (req, res) {
-  return res.render('recover-account-part.html');
+  return res.render('lost/recover-account-part');
 };
 exports.renderDemoKeys = function (req, res) {
-  return res.render('demo-keys.html');
+  return res.render('lost/demo-keys');
 };
-
+exports.renderRequirements = function(req,res){
+    return res.render('hierarchy/requirements');
+};
 
