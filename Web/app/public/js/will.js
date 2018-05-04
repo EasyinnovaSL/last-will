@@ -4,11 +4,16 @@ function MyWills(options) {
 
     $('.mbr-more').click($.proxy(this._addWill, this));
     $('#new-will').submit($.proxy(this._saveWill, this));
+    $('.wills-container').on('click','a.edit',this._editWill, this);
 
     this._listWills();
 }
 
 MyWills.prototype.options = {}
+
+MyWills.prototype._editWill = function () {
+
+};
 
 MyWills.prototype._addWill = function () {
     $('.wills-form').show();

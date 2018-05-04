@@ -79,30 +79,7 @@ BACK TO LIFE
 
              <div class="row">
                  <div class="mbr-white col-md-12 content-container wills-container" >
-                     <div class="card will-card">
-                         <div class="card-body">
-                             <h5 class="card-title">Card title</h5>
-                             <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                             <div class="mbri-down" aria-hidden="true">
-                                 <a href="#">
-                                     <i class="mbri-edit mbr-iconfont"></i>
-                                 </a>
-                             </div>
-                         </div>
-                     </div>
-                     <div class="card will-card">
-                         <div class="card-body">
-                             <h5 class="card-title">Card title</h5>
-                             <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                             <div class="mbri-down" aria-hidden="true">
-                                 <a href="#">
-                                     <i class="mbri-edit mbr-iconfont"></i>
-                                 </a>
-                             </div>
-                         </div>
-                     </div>
+
                  </div>
              </div>
 
@@ -169,14 +146,55 @@ BACK TO LIFE
               {{/heirs}}
              </p>
 
-             <a href="#">
+             <a class="edit"  href="">
                  <i class="mbri-edit mbr-iconfont"></i>
              </a>
         </div>
     </div>
     {{/wills}}
 </script>
+<script id="edit-owner-template" type="x-tmpl-mustache">
+   {{#wills}}
+   <div class="card will-card" id="{{address}}">
+                         <div class="card-body">
+                             <h5 class="card-title">{{address}}</h5>
+                             <!-- <h6 class="card-subtitle mb-2 text-muted">{{type}}</h6> -->
+                             <p class="card-text">
+asdfasdfasdf
+                             {{#heir}}
+                              <i class="fa fa-user"></i> {{.}}
+                              {{/heir}}
+                             </p>
 
+                                 <a href="#">
+                                     <i class="mbri-edit mbr-iconfont"></i>
+                                 </a>
+
+        </div>
+    </div>
+    {{/wills}}
+</script>
+<script id="edit-hier-template" type="x-tmpl-mustache">
+   {{#wills}}
+   <div class="card will-card" id="{{address}}">
+                         <div class="card-body">
+                             <h5 class="card-title">{{address}}</h5>
+                             <!-- <h6 class="card-subtitle mb-2 text-muted">{{type}}</h6> -->
+                             <p class="card-text">
+
+                             {{#heir}}
+                              <i class="fa fa-user"></i> {{.}}
+                              {{/heir}}
+                             </p>
+
+                                 <a href="#">
+                                     <i class="mbri-edit mbr-iconfont"></i>
+                                 </a>
+
+        </div>
+    </div>
+    {{/wills}}
+</script>
 <style>
     .will-card{
         border: 1px solid rgba(0,0,0,.125);
