@@ -11,7 +11,7 @@ var expressLayouts = require('express-ejs-layouts');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
-
+var fs = require('fs');
 global.__base = __dirname + '/';
 
 var port = process.env.PORT || 3001;
@@ -45,17 +45,17 @@ app.use(session({ secret: '4xty43yocfxzqkioptkpxcfgvggykb' }));
 require('./app/server/routes')(app);
 
 // Listen HTTP
-app.listen(app.get('port'), function () {
-    console.log('Express server listening on port ' + app.get('port') + '.');
-});
+// app.listen(app.get('port'), function () {
+//     console.log('Express server listening on port ' + app.get('port') + '.');
+// });
 
 // Listen HTTPS
-// var options = {
-//     key: fs.readFileSync('./app/server/cert/key.pem').toString(),
-//     cert: fs.readFileSync('./app/server/cert/cert.pem').toString()
-// };
-// var server = https.createServer(options, app);
-// server.listen(app.get('portSSL'), function () {
-//     console.log('Express server listening on port ' + app.get('port') + '. Secure on ' + app.get('portSSL') + '.');
-// });
+var options = {
+    key: fs.readFileSync('./app/server/cert/key.pem').toString(),
+    cert: fs.readFileSync('./app/server/cert/cert.pem').toString()
+};
+var server = https.createServer(options, app);
+server.listen(app.get('portSSL'), function () {
+    console.log('Express server listening on port ' + app.get('port') + '. Secure on ' + app.get('portSSL') + '.');
+});
 
