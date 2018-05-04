@@ -109,7 +109,7 @@ contract HierarchyContract {
 
     modifier onlyHeir() {
 
-        var s = listHeirs.toSlice();
+        var s = listHeirs.toSlice().copy();
         var delim = ";".toSlice();
         string[] memory listOfHeirs = new string[](s.count(delim) + 1);
         bool itsHeir = false;
@@ -161,6 +161,10 @@ contract HierarchyContract {
 
         //Check if we have to send money
         //Quan més de la meitat dels hereus han declarat la persona morta, es dispara el sistema de repartiment
+
+
+
+
 
     }
 
