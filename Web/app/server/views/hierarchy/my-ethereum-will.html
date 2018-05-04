@@ -157,19 +157,31 @@ BACK TO LIFE
 <script src="/js/will.js"></script>
 
 <script id="will-template" type="x-tmpl-mustache">
-   {{#wills}}
-   <div class="card will-card" id="{{address}}">
-         <div class="card-body">
-             <h5 class="card-title">{{address}}</h5>
-             <!-- <h6 class="card-subtitle mb-2 text-muted">{{type}}</h6> -->
-             <p class="card-text">
+    {{#wills}}
+    <div class="card will-card" id="{{address}}">
+        <div class="card-header">
+            <h5 class="card-title">Heritage ({{address}})</h5>
+        </div>
+        <div class="card-body">
 
-             {{#heirs}}
-              <i class="fa fa-user"></i> {{address}}
-              {{/heirs}}
-             </p>
+            <div class="row">
+                <div class="col-md-12">
+                    <h6 class="text-muted">Heirs:</h6>
+                </div>
+            </div>
 
-             <a href="#">
+            {{#heirs}}
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="card-text">
+                            <i class="fa fa-user"></i> {{address}}
+                        </p>
+                    </div>
+                </div>
+            {{/heirs}}
+        </div>
+        <div class="card-footer">
+            <a href="#">
                  <i class="mbri-edit mbr-iconfont"></i>
              </a>
         </div>
