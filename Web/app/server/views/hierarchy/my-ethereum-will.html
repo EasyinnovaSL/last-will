@@ -1,0 +1,262 @@
+<%- contentFor('title') %>
+BACK TO LIFE
+
+<%- contentFor('content') %>
+
+<section class="cid-qPEh09X89D  mbr-fullscreen mbr-parallax-background" id="header15-s">
+
+    <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(7, 59, 76);"></div>
+    <div class="mbr-more hidden-sm-down" aria-hidden="true">
+        <a href="#next">
+            <i class="mbri-plus mbr-iconfont"></i>
+        </a>
+    </div>
+
+
+
+
+    <div class="container align-left">
+        <div class="row">
+            <div class="mbr-white col-md-12 content-container wills-form" style="display: none">
+                <div class="card will-card">
+                    <div class="card-body">
+                        <h5 class="card-title">New Will</h5>
+
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <form class="mbr-form" data-form-title="new-will" method="post" id="new-will">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01">Will Type</label>
+                            </div>
+                            <select class="custom-select" id="inputGroupSelect01" name="type">
+                                <option>Choose...</option>
+                             <!--   <option value="1">Keep alive</option> -->
+                                  <option value="2" selected>Heirs votes</option>
+                                <!--      <option value="3">Notary</option> -->
+                                 </select>
+                             </div>
+
+                            <label for="hires0">Your heirs</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="hires0"><i class="fa fa-user"></i></span>
+                            </div>
+                            <input type="text" name="heir0" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="hires1"><i class="fa fa-user"></i></span>
+                            </div>
+                            <input type="text" name="heir1" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="hires2"><i class="fa fa-user"></i></span>
+                            </div>
+                            <input type="text" name="heir2" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="hires3"><i class="fa fa-user"></i></span>
+                            </div>
+                            <input type="text" name="heir3" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="hires4"><i class="fa fa-user"></i></span>
+                            </div>
+                            <input type="text" name="heir4" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
+                        </div>
+
+                        <span class="input-group-btn">
+                                <button href="" type="submit" class="btn btn-secondary btn-form display-4">SAVE</button>
+                        </span>
+                        </form>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+
+             <div class="row">
+                 <div class="mbr-white col-md-12 content-container wills-container" >
+                     <div class="card will-card">
+                         <div class="card-body">
+                             <h5 class="card-title">Card title</h5>
+                             <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                             <div class="mbri-down" aria-hidden="true">
+                                 <a href="#">
+                                     <i class="mbri-edit mbr-iconfont"></i>
+                                 </a>
+                             </div>
+                         </div>
+                     </div>
+                     <div class="card will-card">
+                         <div class="card-body">
+                             <h5 class="card-title">Card title</h5>
+                             <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                             <div class="mbri-down" aria-hidden="true">
+                                 <a href="#">
+                                     <i class="mbri-edit mbr-iconfont"></i>
+                                 </a>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+
+         </div>
+
+         <!--Ok Modal HTML -->
+    <div id="OkModal" class="modal fade">
+        <div class="modal-dialog modal-confirm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="icon-box">
+                        <i class="material-icons">&#xE876;</i>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <h4>Great!</h4>
+                    <p>Operation Succesful!</p>
+                    <button class="btn btn-success" data-dismiss="modal">
+                        <span>Continue</span> <i class="material-icons">&#xE5C8;</i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal HTML -->
+    <div id="ErrorModal" class="modal fade">
+        <div class="modal-dialog modal-error">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="icon-box">
+                        <i class="material-icons">&#xE5CD;</i>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <h4>Ooops!</h4>
+                    <p></p>
+                    <button class="btn btn-success" data-dismiss="modal">Try Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<script src="/assets/mustache/js/mustache.min.js"></script>
+<script src="/js/will.js"></script>
+
+<script id="will-template" type="x-tmpl-mustache">
+    {{#wills}}
+    <div class="card will-card" id="{{address}}">
+        <div class="card-header">
+            <span class="float-right">{{balance}} Eth</span>
+            <h5 class="card-title">Heritage ({{address}})</h5>
+        </div>
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h6 class="text-muted">Heirs:</h6>
+                </div>
+            </div>
+
+            {{#heirs}}
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="card-text">
+                            <i class="fa fa-user"></i> {{address}}
+                        </p>
+                    </div>
+                </div>
+            {{/heirs}}
+        </div>
+        <div class="card-footer">
+            {{#owner}}
+                <!-- Owner actions -->
+                <a href="#">
+                    <i class="mbri-edit mbr-iconfont"></i>
+                </a>
+            {{/owner}}
+            {{^owner}}
+                <!-- Hier actions -->
+                <a href="#" class="btn btn-sm btn-primary">
+                    Declare as dead
+                </a>
+            {{/owner}}
+        </div>
+    </div>
+    {{/wills}}
+</script>
+
+<style>
+    .will-card{
+        border: 1px solid rgba(0,0,0,.125);
+        background-color: #fff;
+        margin-bottom: 5px;
+        color: #333333;
+    }
+
+    .mbr-more{
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        width: 60px;
+        height: 60px;
+        cursor: pointer;
+        background-color: rgba(80, 80, 80, 0.5);
+        border-radius: 50%;
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+    }
+    .mbr-more > a {
+        display: inline-block;
+        text-decoration: none;
+        outline-style: none;
+        -webkit-animation: arrowdown 1.7s ease-in-out infinite;
+        animation: arrowdown 1.7s ease-in-out infinite;
+    }
+    .mbr-more a {
+        color: #ffffff;
+    }
+    .mbr-more > a > i {
+        position: absolute;
+        top: -2px;
+        left: 15px;
+        font-size: 2rem;
+    }
+    @media (min-width: 768px) {
+        .content-container.wills-container , .content-container.wills-form{
+            padding-right: 10px;
+        }
+
+    }
+    .wills-container{
+        padding: 10px;
+        border: 1px solid rgba(0,0,0,.125);
+        background-color: #78929bc4;
+        border-radius: .25rem;
+    }
+    .wills-form{
+        padding: 10px;
+
+        border-radius: .25rem;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        var will = new MyWills({contract: contracts.base, hierarchy: contracts.hierarchy});
+    });
+
+</script>

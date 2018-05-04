@@ -175,15 +175,12 @@
 <% if (typeof contracts !== 'undefined' && contracts) { %>
     <script type="application/javascript">
         var contracts = JSON.parse('<%- JSON.stringify(contracts); %>');
-        $(document).ready(function () {
-            console.log(contracts.base);
-        });
     </script>
 <% } %>
 
 <!--Main JS-->
+<script src="/js/heritage.js"></script>
 <script src="/js/back-to-life.js"></script>
-<script src="/js/application.js"></script>
 
 <%- script %>
 
