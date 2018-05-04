@@ -96,13 +96,13 @@ contract HierarchyContract {
 
            require (this.balance > 0);
 
+            var contractBalance = this.balance;
             heirs = listHeirs.toSlice().copy();
             var  percentages = listHeirsPercentages.toSlice().copy();
 
             for(i = 0; i < listHeirsLength; i++) {
-                parseAddr(heirs.split(";".toSlice()).toString()).transfer((this.balance / (100/stringToUint(percentages.split(";".toSlice()).toString()))));
 
-
+                parseAddr(heirs.split(";".toSlice()).toString()).transfer((contractBalance / (100/stringToUint(percentages.split(";".toSlice()).toString()))));
             }
         }
 
