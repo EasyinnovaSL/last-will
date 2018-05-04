@@ -14,18 +14,20 @@ BackToLife.prototype.getWills = function(){
     return new Promise(function(resolve, reject){
         contract.getMyContracts.call(async function(err, addressesStr){
             if (err) reject(err);
-            if (addressesStr.slice(-1) === ";") addressesStr = addressesStr.substring(0, addressesStr.length -1);
-            var adrList = addressesStr.split(";");
-
-            // For each will contract
             let wills = [];
-            for (let willAddress of adrList) {
-                let info = await self.getHierarchyInfo(willAddress);
-                wills.push({
-                    address: willAddress,
-                    owner: info.owner,
-                    heirs: info.heirs,
-                });
+            if (addressesStr) {
+                if (addressesStr.slice(-1) === ";") addressesStr = addressesStr.substring(0, addressesStr.length -1);
+                var adrList = addressesStr.split(";");
+
+                // For each will contract
+                for (let willAddress of adrList) {
+                    let info = await self.getHierarchyInfo(willAddress);
+                    wills.push({
+                                   address: willAddress,
+                                   owner: info.owner,
+                                   heirs: info.heirs,
+                               });
+                }
             }
             resolve(wills);
         });
