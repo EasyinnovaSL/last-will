@@ -5,7 +5,8 @@
 # contract.json
 contract.json
 contractLostPassword.json
-contractBackToLife,json
+contractBackToLife.json
+contractHierarchy.json
 
 # Blockchain folder
 blockchain/

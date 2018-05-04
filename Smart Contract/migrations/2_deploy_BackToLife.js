@@ -1,25 +1,24 @@
 var BackToLifeContract = artifacts.require("./BackToLife.sol");
+var HierarchyContract = artifacts.require("./HierarchyContract.sol");
 var StringUtilities = artifacts.require("./strings.sol");
 
 
 var fs = require('fs');
 
-var writeToFile = function (content){
-    fs.writeFile("../contractBackToLife.json", JSON.stringify(content), function(err) {
-        if(err) {
-            return console.log(err);
-        }
-    });
+var writeToFile = function (name, content = ""){
+    fs.writeFileSync(name, JSON.stringify(content));
 };
 
 
 module.exports = function(deployer) {
-    writeToFile();
+    writeToFile("../contractBackToLife.json");
+    writeToFile("../contractHierarchy.json");
 
     deployer.deploy(StringUtilities);
     deployer.link(StringUtilities, BackToLifeContract);
 
     return deployer.deploy(BackToLifeContract).then(function(tx){
-        writeToFile({address: BackToLifeContract.address, abi: BackToLifeContract.abi});
+        writeToFile("../contractBackToLife.json", {address: BackToLifeContract.address, abi: BackToLifeContract.abi});
+        writeToFile("../contractHierarchy.json", {abi: HierarchyContract.abi});
     });
 };

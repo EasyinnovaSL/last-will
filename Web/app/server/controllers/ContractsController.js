@@ -6,13 +6,17 @@ var FileSystem = require('fs');
  */
 
 exports.getContractsInfo = function (req, res, next) {
-    // var baseContract = FileSystem.readFileSync("../contractBackToLife.json");
-    // if (!baseContract) return res.redirect("/error");
+    // Read contracts
+    var baseContract = FileSystem.readFileSync("../contractBackToLife.json");
+    if (!baseContract) return res.redirect("/error");
+    var hierarchyContract = FileSystem.readFileSync("../contractHierarchy.json");
+    if (!hierarchyContract) return res.redirect("/error");
     var lostContract = FileSystem.readFileSync("../contractLostPassword.json");
     if (!lostContract) return res.redirect("/error");
     res.locals.contracts = {
-        // base: JSON.parse(baseContract),
-        lost: JSON.parse(lostContract)
+        base: JSON.parse(baseContract),
+        lost: JSON.parse(lostContract),
+        hierarchy: JSON.parse(hierarchyContract),
     };
 
     // Continue
