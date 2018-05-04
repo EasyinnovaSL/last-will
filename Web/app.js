@@ -45,17 +45,18 @@ app.use(session({ secret: '4xty43yocfxzqkioptkpxcfgvggykb' }));
 require('./app/server/routes')(app);
 
 // Listen HTTP
-// app.listen(app.get('port'), function () {
-//     console.log('Express server listening on port ' + app.get('port') + '.');
-// });
+app.listen(app.get('port'), function () {
 
-// Listen HTTPS
-var options = {
-    key: fs.readFileSync('./app/server/cert/key.pem').toString(),
-    cert: fs.readFileSync('./app/server/cert/cert.pem').toString()
-};
-var server = https.createServer(options, app);
-server.listen(app.get('portSSL'), function () {
-    console.log('Express server listening on port ' + app.get('port') + '. Secure on ' + app.get('portSSL') + '.');
+    // Listen HTTPS
+    var options = {
+        key: fs.readFileSync('./app/server/cert/key.pem').toString(),
+        cert: fs.readFileSync('./app/server/cert/cert.pem').toString()
+    };
+    var server = https.createServer(options, app);
+    server.listen(app.get('portSSL'), function () {
+        console.log('Express server listening on port ' + app.get('port') + '. Secure on ' + app.get('portSSL') + '.');
+    });
 });
+
+
 
