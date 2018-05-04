@@ -135,13 +135,7 @@ BACK TO LIFE
 
 <script id="will-template" type="x-tmpl-mustache">
    {{#wills}}
-   <div class="card will-card" id="{{address}}">
-         <div class="card-body">
-             <h5 class="card-title">{{address}}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Heirs</h6>
-             <p class="card-text">
-    {{#wills}}
-    <div class="card will-card" id="{{address}}">
+  <div class="card will-card" id="{{address}}">
         <div class="card-header">
             <h5 class="card-title">Heritage ({{address}})</h5>
         </div>
@@ -165,11 +159,11 @@ BACK TO LIFE
         </div>
         <div class="input-group mb-3">
   <div class="input-group-prepend">
-    <button class="btn btn-outline-secondary" type="button" style="margin:0px">Send</button>
+    <button class="btn btn-outline-secondary send" data-address="{{address}}" type="button" style="margin:0px">Send</button>
   </div>
-  <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
+  <input type="text" class="form-control" name="value-{{address}}" placeholder="0.00" aria-label="" aria-describedby="basic-addon1">
    <div class="input-group-append">
-    <button class="btn btn-outline-secondary" type="button"  style="margin:0px">Withdraw</button>
+    <button class="btn btn-outline-secondary withdraw" data-address="{{address}}" type="button"  style="margin:0px">Withdraw</button>
   </div>
 </div>
 
