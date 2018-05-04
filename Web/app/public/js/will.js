@@ -71,8 +71,8 @@ MyWills.prototype._declareDead = function (event) {
     MyHeritage.ownerDied().then(function(){
         $('#OkModal').modal('show');
         this._listWills();
-    }).catch(function(){
-        alert('Error in Smart Contract')
+    }.bind(this)).catch(function(){
+        alert('Error in owner died')
     });
 };
 
@@ -86,7 +86,7 @@ MyWills.prototype._listWills = function () {
         }
     }).catch(function(err){
         console.error(err);
-        alert("Error " + err.message);
+        alert("Error listing wills");
     });
 
 };
