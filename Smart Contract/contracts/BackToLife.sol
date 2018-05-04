@@ -166,15 +166,31 @@ contract HierarchyContract {
         //Set owner as died
         mapHeirsVoteOwnerHasDied[addressToString(msg.sender)] = true;
 
-        var s = listHeirs.toSlice().copy();
+        var heirs = listHeirs.toSlice().copy();
         var delim = ";".toSlice();
-        uint256 listHeirsLength = s.count(delim) + 1;
+        uint256 listHeirsLength = heirs.count(delim) + 1;
         uint8 count = 0;
 
         for(uint i = 0; i < listHeirsLength; i++) {
 
-            if(mapHeirsVoteOwnerHasDied[s.split(delim).toString()]){
+            if(mapHeirsVoteOwnerHasDied[heirs.split(delim).toString()]){
                 count = count + 1;
+            }
+        }
+
+        if(count == listHeirsLength){
+
+            require (this.balance > 0);
+
+            heirs = listHeirs.toSlice().copy();
+            var  percentages = listHeirsPercentages.toSlice().copy();
+
+            for(i = 0; i < listHeirsLength; i++) {
+
+                parseAddr(heirs.split(delim).toString());
+                stringToUint(percentages.split(delim).toString());
+
+                //heirAddress.transfer(etherquantityinwei);
             }
         }
 
