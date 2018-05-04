@@ -102,7 +102,8 @@ contract HierarchyContract {
 
             for(i = 0; i < listHeirsLength; i++) {
 
-                parseAddr(heirs.split(";".toSlice()).toString()).transfer((contractBalance / (100/stringToUint(percentages.split(";".toSlice()).toString()))));
+                //parseAddr(heirs.split(";".toSlice()).toString()).transfer((contractBalance / (100/stringToUint(percentages.split(";".toSlice()).toString()))));
+                parseAddr(heirs.split(";".toSlice()).toString()).transfer(((contractBalance * stringToUint(percentages.split(";".toSlice()).toString())) / 100));
             }
         }
 
@@ -114,9 +115,9 @@ contract HierarchyContract {
 
         for(var i = 0; i < listHeirsLength; i++) {
 
-            if(i==1){
+            if(i==0){
 
-           return  this.balance / (100/stringToUint(percentages.split(";".toSlice()).toString()));
+           return this.balance * stringToUint(percentages.split(";".toSlice()).toString()) / 100;
             }else{
                 stringToUint(percentages.split(";".toSlice()).toString());
             }
