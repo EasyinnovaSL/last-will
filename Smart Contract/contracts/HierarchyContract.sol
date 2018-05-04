@@ -117,23 +117,6 @@ contract HierarchyContract {
 
     }
 
-    function getPercentage()  returns (uint){
-        var  percentages = listHeirsPercentages.toSlice().copy();
-        uint256 listHeirsLength = percentages.count(";".toSlice()) + 1;
-
-        for(var i = 0; i < listHeirsLength; i++) {
-
-            if(i==0){
-
-           return this.balance * stringToUint(percentages.split(";".toSlice()).toString()) / 100;
-            }else{
-                stringToUint(percentages.split(";".toSlice()).toString());
-            }
-
-        }
-
-    }
-
 
     function getBalance() constant returns (uint) {
         return  address(this).balance;
