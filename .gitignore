@@ -3,10 +3,10 @@
 *.iml
 
 # contract.json
-contract.json
 contractLostPassword.json
 contractBackToLife.json
 contractHierarchy.json
+!/Production/*
 
 # Blockchain folder
 blockchain/
