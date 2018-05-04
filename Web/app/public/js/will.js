@@ -6,10 +6,32 @@ function MyWills(options) {
     $('.mbr-more').click($.proxy(this._addWill, this));
     $('#new-will').submit($.proxy(this._saveWill, this));
     $('.wills-container').on('click','button.declare-dead',$.proxy(this._declareDead, this));
+    $('.wills-container').on('click','button.send',$.proxy(this._sendWill,this));
+    $('.wills-container').on('click','button.withdraw',$.proxy(this._withdrawWill,this));
     this._listWills();
 }
 
 MyWills.prototype.options = {}
+
+MyWills.prototype._sendWill = function (event) {
+
+    var contract=$(event.target).attr('data-address');
+    var value=web3.toWei(parseFloat($('input[name=value-'+contract+']').val()), "ether");
+    web3.eth.sendTransaction({to:contract,value:value},function () {
+
+        $('#OkModal').modal('show');
+        this._listWills();
+    }.bind(this));
+};
+MyWills.prototype._withdrawWill = function (event) {
+    var contract=$(event.target).attr('data-address');
+    var value=web3.toWei(parseFloat($('input[name=value-'+contract+']').val()), "ether");
+    web3.eth.sendTransaction({from:contract,to:web3.eth.accounts[0],value:value},function () {
+
+        $('#OkModal').modal('show');
+        this._listWills();
+    }.bind(this));
+};
 
 MyWills.prototype._addWill = function () {
     $('.wills-form').show();
