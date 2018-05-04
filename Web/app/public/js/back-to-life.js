@@ -1,7 +1,7 @@
 function BackToLife(options){
     jQuery.extend(options,self.options);
     this.contract = web3.eth.contract(options.contract.abi).at(options.contract.address);
-    this.hierarchyAbi = options.hierarchy.abi;
+    this.heritageAbi = options.hierarchy.abi;
 }
 
 BackToLife.prototype.options={
@@ -9,59 +9,50 @@ BackToLife.prototype.options={
 };
 
 BackToLife.prototype.getWills = function(){
-    let self = this;
-    let contract = this.contract;
     return new Promise(function(resolve, reject){
-        contract.getMyContracts.call(async function(err, addressesStr){
-            if (err) reject(err);
+        this.contract.getMyContracts.call(async function(err, addressesStr){
+            if (err) return reject(err);
             let wills = [];
+            console.log("My Contracts: " + addressesStr);
             if (addressesStr) {
                 if (addressesStr.slice(-1) === ";") addressesStr = addressesStr.substring(0, addressesStr.length -1);
                 var adrList = addressesStr.split(";");
 
                 // For each will contract
                 for (let willAddress of adrList) {
-                    let info = await self.getHierarchyInfo(willAddress);
+                    let info = await this.getHierarchyInfo(willAddress);
                     wills.push({
-                                   address: willAddress,
-                                   owner: info.owner,
-                                   heirs: info.heirs,
-                               });
+                        address: willAddress,
+                        owner: info.owner,
+                        heirs: info.heirs,
+                        balance: web3.fromWei(info.balance, 'ether'),
+                    });
                 }
             }
             resolve(wills);
-        });
-    });
+        }.bind(this));
+    }.bind(this));
 };
 
 BackToLife.prototype.getHierarchyInfo = function(willAddress){
-    let isOwner = false;
-    let contract = web3.eth.contract(this.hierarchyAbi).at(willAddress);
-    return new Promise(function(resolve, reject){
-        contract.isOwner.call(function(err, value){
-            if (err) return reject(err);
-            isOwner = value;
-            contract.getHeirs.call(function(err, data){
-                if (err) return reject(err);
+    let MyHeritage = new Heritage({contract: {abi: this.heritageAbi, address: willAddress}});
+    return new Promise(async function(resolve, reject){
+        var owner = await MyHeritage.isOwner();
+        var balance = await MyHeritage.getBalance();
+        var data = await MyHeritage.getHeirs();
 
-                var heirsStr = data[0];
-                var percentStr = data[1];
-                if (heirsStr.slice(-1) === ";") heirsStr = heirsStr.substring(0, heirsStr.length -1);
-                if (percentStr.slice(-1) === ";") percentStr = percentStr.substring(0, percentStr.length -1);
+        var heirsList = data.heirs;
+        var percentList = data.percentages;
 
-                var heirsList = heirsStr.split(";");
-                var percentList = percentStr.split(";");
-                var heirs = [];
-                for (var i in heirsList) {
-                    heirs.push({
-                        address: heirsList[i],
-                        percentage: parseInt(percentList[i]),
-                    });
-                }
-
-                resolve({owner: isOwner, heirs: heirs});
+        var heirs = [];
+        for (var i in heirsList) {
+            heirs.push({
+                address: heirsList[i],
+                percentage: parseInt(percentList[i]),
             });
-        });
+        }
+
+        resolve({owner: owner, heirs: heirs, balance: balance});
     });
 };
 
@@ -74,7 +65,7 @@ BackToLife.prototype.createVoteWill = function(addresses = null, percentages = n
     if (percentages && percentages.length !== addresses.length) throw new Error("Invalid number of percentages (must be the same as addresses");
 
     // Input params
-    var addressesStr = addresses.join(";");
+    var addressesStr = addresses.join(";").toLowerCase();
     var percentagesStr = "";
     if (percentages === null || percentages.length === 0) {
         switch (addresses.length) {
@@ -105,7 +96,7 @@ BackToLife.prototype.createVoteWill = function(addresses = null, percentages = n
         // console.log("  " + addressesStr);
         // console.log("  " + percentagesStr);
         contract.createHierarchyContract.sendTransaction(addressesStr, percentagesStr, {gas: 4500000}, function(err, txHash){
-            if (err) reject(err);
+            if (err) return reject(err);
             resolve(txHash);
         });
     });

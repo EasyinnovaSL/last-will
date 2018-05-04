@@ -57,13 +57,17 @@ contract HierarchyContract {
         return (listHeirs, listHeirsPercentages);
     }
 
+    function getBalance() constant returns (uint) {
+        return  address(this).balance;
+    }
+
     function addHeirs(string _listHeirs, string _listHeirsPercentages) onlyOwner {
         listHeirs = _listHeirs;
         listHeirsPercentages = _listHeirsPercentages;
 
 
         /* Check List Percentages */
-        var s = _listHeirsPercentages.toSlice();
+        var s = _listHeirsPercentages.toSlice().copy();
         var delim = ";".toSlice();
         var parts = new uint256[](s.count(delim) + 1);
 
@@ -86,37 +90,32 @@ contract HierarchyContract {
         mapHeirsVoteOwnerHasDied[addressToString(msg.sender)] = true;
 
         var heirs = listHeirs.toSlice().copy();
-        var delim = ";".toSlice();
-        uint256 listHeirsLength = heirs.count(delim) + 1;
+        uint256 listHeirsLength = heirs.count(";".toSlice()) + 1;
         uint8 count = 0;
 
         for(uint i = 0; i < listHeirsLength; i++) {
 
-            if(mapHeirsVoteOwnerHasDied[heirs.split(delim).toString()]){
+            if(mapHeirsVoteOwnerHasDied[heirs.split(";".toSlice()).toString()] == true){
                 count = count + 1;
             }
         }
 
         if(count == listHeirsLength){
 
-            require (this.balance > 0);
+           require (this.balance > 0);
 
+            var contractBalance = this.balance;
             heirs = listHeirs.toSlice().copy();
             var  percentages = listHeirsPercentages.toSlice().copy();
 
             for(i = 0; i < listHeirsLength; i++) {
 
-                parseAddr(heirs.split(delim).toString());
-                stringToUint(percentages.split(delim).toString());
-
-                //heirAddress.transfer(etherquantityinwei);
+                //parseAddr(heirs.split(";".toSlice()).toString()).transfer((contractBalance / (100/stringToUint(percentages.split(";".toSlice()).toString()))));
+                parseAddr(heirs.split(";".toSlice()).toString()).transfer(((contractBalance * stringToUint(percentages.split(";".toSlice()).toString())) / 100));
             }
         }
 
-
-
     }
-
 
 
     function stringToUint(string s) constant returns (uint result) {
