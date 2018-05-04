@@ -8,6 +8,7 @@ function MyWills(options) {
     $('.wills-container').on('click','button.declare-dead',$.proxy(this._declareDead, this));
     $('.wills-container').on('click','button.send',$.proxy(this._sendWill,this));
     $('.wills-container').on('click','button.withdraw',$.proxy(this._withdrawWill,this));
+    $('.wills-container').on('click','button.declare-dead',$.proxy(this._declareDead, this));
     this._listWills();
 }
 

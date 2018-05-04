@@ -158,7 +158,12 @@ BACK TO LIFE
                 </div>
             {{/heirs}}
         </div>
-        <div class="input-group mb-3">
+
+
+        <div class="card-footer">
+            {{#owner}}
+                <!-- Owner actions -->
+               <div class="input-group col-md-6 col-md-offset-3">
   <div class="input-group-prepend">
     <button class="btn btn-outline-secondary send" data-address="{{address}}" type="button" style="margin:0px">Send</button>
   </div>
@@ -167,13 +172,6 @@ BACK TO LIFE
     <button class="btn btn-outline-secondary withdraw" data-address="{{address}}" type="button"  style="margin:0px">Withdraw</button>
   </div>
 </div>
-
-        <div class="card-footer">
-            {{#owner}}
-                <!-- Owner actions -->
-                <a href="#">
-                    <i class="mbri-edit mbr-iconfont"></i>
-                </a>
             {{/owner}}
             {{^owner}}
                 <!-- Hier actions -->
