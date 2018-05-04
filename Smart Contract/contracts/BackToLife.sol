@@ -11,6 +11,8 @@ contract BackToLife {
     mapping (address => string) mapOwnerStringContract;
 
 
+    function () payable {}
+
     function createHierarchyContract (string _listHeirs, string _listHeirsPercentages) {
 
         address newHierarchyContract = new HierarchyContract(msg.sender);
@@ -80,6 +82,10 @@ contract BackToLife {
             iaddr += (b1*16+b2);
         }
         return address(iaddr);
+    }
+
+    function getBalance() constant returns (uint) {
+        return  address(this).balance;
     }
 
 }
