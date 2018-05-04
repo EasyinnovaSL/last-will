@@ -138,13 +138,23 @@ BACK TO LIFE
    <div class="card will-card" id="{{address}}">
          <div class="card-body">
              <h5 class="card-title">{{address}}</h5>
-             <!-- <h6 class="card-subtitle mb-2 text-muted">{{type}}</h6> -->
+          <h6 class="card-subtitle mb-2 text-muted">Heirs</h6>
              <p class="card-text">
 
              {{#heirs}}
-              <i class="fa fa-user"></i> {{address}}
+              <i class="fa fa-user"></i> {{address}} <br>
               {{/heirs}}
              </p>
+
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <button class="btn btn-outline-secondary" type="button" style="margin:0px">Send</button>
+  </div>
+  <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
+   <div class="input-group-append">
+    <button class="btn btn-outline-secondary" type="button"  style="margin:0px">Withdraw</button>
+  </div>
+</div>
 
              <a class="edit"  href="">
                  <i class="mbri-edit mbr-iconfont"></i>
