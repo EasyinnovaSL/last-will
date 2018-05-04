@@ -53,6 +53,10 @@ contract HierarchyContract {
         return msg.sender == owner;
     }
 
+    function getHeirs() returns (string, string) {
+        return (listHeirs, listHeirsPercentages);
+    }
+
     function addHeirs(string _listHeirs, string _listHeirsPercentages) onlyOwner {
         listHeirs = _listHeirs;
         listHeirsPercentages = _listHeirsPercentages;

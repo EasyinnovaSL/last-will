@@ -1,39 +1,7 @@
-<script src="/assets/mustache/js/mustache.min.js"></script>
-<script src="/js/will.js"></script>
+<%- contentFor('title') %>
+BACK TO LIFE
+
 <%- contentFor('content') %>
-<section class="cid-qPEgLP71PI"  style="padding-bottom: 0px;" data-bg-video="https://www.youtube.com/embed/iTTrOhEWM-k?rel=0&amp;showinfo=0&amp;autoplay=1&amp;loop=1" id="header2-r">
-
-
-
-    <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(7, 59, 76);"></div>
-
-    <div class="container align-center">
-        <div class="row justify-content-md-center">
-            <div class="mbr-white col-md-10">
-                <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1">BACK TO LIFE</h1>
-
-
-
-            </div>
-        </div>
-    </div>
-
-</section>
-
-<section class="mbr-section content4 cid-qPEmnFU9I2" id="content4-11">
-
-
-
-    <div class="container">
-        <div class="media-container-row">
-            <div class="title col-12 col-md-8">
-
-
-
-            </div>
-        </div>
-    </div>
-</section>
 
 <section class="cid-qPEh09X89D  mbr-fullscreen mbr-parallax-background" id="header15-s">
 
@@ -63,7 +31,7 @@
                             <select class="custom-select" id="inputGroupSelect01" name="type">
                                 <option>Choose...</option>
                              <!--   <option value="1">Keep alive</option> -->
-                                  <option value="2" selected>Hires votes</option>
+                                  <option value="2" selected>Heirs votes</option>
                                 <!--      <option value="3">Notary</option> -->
                                  </select>
                              </div>
@@ -185,23 +153,25 @@
 
 </section>
 
+<script src="/assets/mustache/js/mustache.min.js"></script>
+<script src="/js/will.js"></script>
+
 <script id="will-template" type="x-tmpl-mustache">
    {{#wills}}
    <div class="card will-card" id="{{address}}">
-                         <div class="card-body">
-                             <h5 class="card-title">{{address}}</h5>
-                             <!-- <h6 class="card-subtitle mb-2 text-muted">{{type}}</h6> -->
-                             <p class="card-text">
+         <div class="card-body">
+             <h5 class="card-title">{{address}}</h5>
+             <!-- <h6 class="card-subtitle mb-2 text-muted">{{type}}</h6> -->
+             <p class="card-text">
 
-                             {{#heir}}
-                              <i class="fa fa-user"></i> {{.}}
-                              {{/heir}}
-                             </p>
+             {{#heirs}}
+              <i class="fa fa-user"></i> {{address}}
+              {{/heirs}}
+             </p>
 
-                                 <a href="#">
-                                     <i class="mbri-edit mbr-iconfont"></i>
-                                 </a>
-
+             <a href="#">
+                 <i class="mbri-edit mbr-iconfont"></i>
+             </a>
         </div>
     </div>
     {{/wills}}
@@ -264,11 +234,7 @@
 
 <script>
     $(document).ready(function () {
-var will=new MyWills(
-    {
-        contract_address:"0x079889s9s7ds9df8",
-    });
-
+        var will = new MyWills({contract: contracts.base, hierarchy: contracts.hierarchy});
     });
 
 </script>

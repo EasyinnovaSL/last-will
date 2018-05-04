@@ -23,8 +23,8 @@ BackToLife.prototype.getWills = function(){
                 let info = await self.getHierarchyInfo(willAddress);
                 wills.push({
                     address: willAddress,
-                    owner: info.isOwner,
-                    heirs: info.heirsList,
+                    owner: info.owner,
+                    heirs: info.heirs,
                 });
             }
             resolve(wills);
@@ -33,11 +33,32 @@ BackToLife.prototype.getWills = function(){
 };
 
 BackToLife.prototype.getHierarchyInfo = function(willAddress){
+    let isOwner = false;
     let contract = web3.eth.contract(this.hierarchyAbi).at(willAddress);
     return new Promise(function(resolve, reject){
-        contract.isOwner.call(function(err, isOwner){
-            if (err) reject(err);
-            resolve({isOwner: isOwner, heirsList: ["0x1111", "0x2222"]});
+        contract.isOwner.call(function(err, value){
+            if (err) return reject(err);
+            isOwner = value;
+            contract.getHeirs.call(function(err, data){
+                if (err) return reject(err);
+
+                var heirsStr = data[0];
+                var percentStr = data[1];
+                if (heirsStr.slice(-1) === ";") heirsStr = heirsStr.substring(0, heirsStr.length -1);
+                if (percentStr.slice(-1) === ";") percentStr = percentStr.substring(0, percentStr.length -1);
+
+                var heirsList = heirsStr.split(";");
+                var percentList = percentStr.split(";");
+                var heirs = [];
+                for (var i in heirsList) {
+                    heirs.push({
+                        address: heirsList[i],
+                        percentage: parseInt(percentList[i]),
+                    });
+                }
+
+                resolve({owner: isOwner, heirs: heirs});
+            });
         });
     });
 };
@@ -78,10 +99,10 @@ BackToLife.prototype.createVoteWill = function(addresses = null, percentages = n
     // Do transaction
     let contract = this.contract;
     return new Promise(function(resolve, reject){
-        console.log("Params:");
-        console.log("  " + addressesStr);
-        console.log("  " + percentagesStr);
-        contract.createHierarchyContract.sendTransaction(addressesStr, percentagesStr, {gas: 1500000}, function(err, txHash){
+        // console.log("Params:");
+        // console.log("  " + addressesStr);
+        // console.log("  " + percentagesStr);
+        contract.createHierarchyContract.sendTransaction(addressesStr, percentagesStr, {gas: 4500000}, function(err, txHash){
             if (err) reject(err);
             resolve(txHash);
         });
