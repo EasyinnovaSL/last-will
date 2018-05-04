@@ -1,10 +1,11 @@
 function MyWills(options) {
     jQuery.extend(options, self.options);
     this.back_to_life = new BackToLife(options);
+    this.heritageAbi = options.hierarchy.abi;
 
     $('.mbr-more').click($.proxy(this._addWill, this));
     $('#new-will').submit($.proxy(this._saveWill, this));
-
+    $('.wills-container').on('click','button.declare-dead',$.proxy(this._declareDead, this));
     this._listWills();
 }
 
@@ -41,6 +42,17 @@ MyWills.prototype._saveWill = function (event) {
     });
 };
 
+MyWills.prototype._declareDead = function (event) {
+    var address = $(event.target).data('address');
+    let MyHeritage = new Heritage({contract: {abi: this.heritageAbi, address: address}});
+    MyHeritage.ownerDied().then(function(){
+        $('#OkModal').modal('show');
+        this._listWills();
+    }).catch(function(){
+        alert('Error in Smart Contract')
+    });
+};
+
 MyWills.prototype._listWills = function () {
     this.getWills().then(function(wills){
         if (wills !== null && wills && wills.length !== 0) {
@@ -61,6 +73,7 @@ MyWills.prototype._editWill = {}
 MyWills.prototype._editWill = {}
 
 MyWills.prototype.getWills = function () {
+    console.log(web3.eth.accounts[0]);
     return this.back_to_life.getWills();
 };
 

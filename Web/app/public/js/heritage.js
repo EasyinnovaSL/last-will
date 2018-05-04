@@ -44,4 +44,11 @@ Heritage.prototype.getHeirs = function(){
     }.bind(this));
 };
 
-
+Heritage.prototype.ownerDied = function(){
+    return new Promise(function(resolve, reject){
+        this.contract.ownerDied.sendTransaction(function(err, txHash){
+            if (err) return reject(err);
+            resolve();
+        });
+    }.bind(this));
+};

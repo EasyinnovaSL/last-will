@@ -118,12 +118,6 @@ contract HierarchyContract {
     }
 
 
-    function getBalance() constant returns (uint) {
-        return  address(this).balance;
-    }
-
-
-
     function stringToUint(string s) constant returns (uint result) {
         bytes memory b = bytes(s);
         uint i;

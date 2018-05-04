@@ -13,8 +13,8 @@ BackToLife.prototype.getWills = function(){
         this.contract.getMyContracts.call(async function(err, addressesStr){
             if (err) return reject(err);
             let wills = [];
+            console.log("My Contracts: " + addressesStr);
             if (addressesStr) {
-                console.log("My Contracts: " + addressesStr);
                 if (addressesStr.slice(-1) === ";") addressesStr = addressesStr.substring(0, addressesStr.length -1);
                 var adrList = addressesStr.split(";");
 
@@ -25,7 +25,7 @@ BackToLife.prototype.getWills = function(){
                         address: willAddress,
                         owner: info.owner,
                         heirs: info.heirs,
-                        balance: info.balance,
+                        balance: web3.fromWei(info.balance, 'ether'),
                     });
                 }
             }
@@ -65,7 +65,7 @@ BackToLife.prototype.createVoteWill = function(addresses = null, percentages = n
     if (percentages && percentages.length !== addresses.length) throw new Error("Invalid number of percentages (must be the same as addresses");
 
     // Input params
-    var addressesStr = addresses.join(";");
+    var addressesStr = addresses.join(";").toLowerCase();
     var percentagesStr = "";
     if (percentages === null || percentages.length === 0) {
         switch (addresses.length) {
