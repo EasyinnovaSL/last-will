@@ -79,30 +79,7 @@ BACK TO LIFE
 
              <div class="row">
                  <div class="mbr-white col-md-12 content-container wills-container" >
-                     <div class="card will-card">
-                         <div class="card-body">
-                             <h5 class="card-title">Card title</h5>
-                             <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                             <div class="mbri-down" aria-hidden="true">
-                                 <a href="#">
-                                     <i class="mbri-edit mbr-iconfont"></i>
-                                 </a>
-                             </div>
-                         </div>
-                     </div>
-                     <div class="card will-card">
-                         <div class="card-body">
-                             <h5 class="card-title">Card title</h5>
-                             <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                             <div class="mbri-down" aria-hidden="true">
-                                 <a href="#">
-                                     <i class="mbri-edit mbr-iconfont"></i>
-                                 </a>
-                             </div>
-                         </div>
-                     </div>
+
                  </div>
              </div>
 
@@ -157,8 +134,8 @@ BACK TO LIFE
 <script src="/js/will.js"></script>
 
 <script id="will-template" type="x-tmpl-mustache">
-    {{#wills}}
-    <div class="card will-card" id="{{address}}">
+   {{#wills}}
+  <div class="card will-card" id="{{address}}">
         <div class="card-header">
             <span class="float-right">{{balance}} Eth</span>
             <h5 class="card-title">Heritage ({{address}})</h5>
@@ -181,12 +158,20 @@ BACK TO LIFE
                 </div>
             {{/heirs}}
         </div>
+
+
         <div class="card-footer">
             {{#owner}}
                 <!-- Owner actions -->
-                <a href="#">
-                    <i class="mbri-edit mbr-iconfont"></i>
-                </a>
+               <div class="input-group col-md-6 col-md-offset-3">
+  <div class="input-group-prepend">
+    <button class="btn btn-outline-secondary send" data-address="{{address}}" type="button" style="margin:0px">Send</button>
+  </div>
+  <input type="text" class="form-control" name="value-{{address}}" placeholder="0.00" aria-label="" aria-describedby="basic-addon1">
+   <div class="input-group-append">
+    <button class="btn btn-outline-secondary withdraw" data-address="{{address}}" type="button"  style="margin:0px">Withdraw</button>
+  </div>
+</div>
             {{/owner}}
             {{^owner}}
                 <!-- Hier actions -->
@@ -198,7 +183,6 @@ BACK TO LIFE
     </div>
     {{/wills}}
 </script>
-
 <style>
     .will-card{
         border: 1px solid rgba(0,0,0,.125);
