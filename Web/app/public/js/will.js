@@ -43,11 +43,14 @@ MyWills.prototype._saveWill = function (event) {
 
 MyWills.prototype._listWills = function () {
     this.getWills().then(function(wills){
-        var template = $('#will-template').html();
-        Mustache.parse(template);   // optional, speeds up future uses
-        var rendered = Mustache.render(template, {'wills': wills});
-        $('.wills-container').html(rendered);
+        if (wills !== null && wills && wills.length !== 0) {
+            var template = $('#will-template').html();
+            Mustache.parse(template);   // optional, speeds up future uses
+            var rendered = Mustache.render(template, {'wills': wills});
+            $('.wills-container').html(rendered);
+        }
     }).catch(function(err){
+        console.error(err);
         alert("Error " + err.message);
     });
 

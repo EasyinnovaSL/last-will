@@ -11,10 +11,10 @@ BackToLife.prototype.options={
 BackToLife.prototype.getWills = function(){
     return new Promise(function(resolve, reject){
         this.contract.getMyContracts.call(async function(err, addressesStr){
-            if (err) reject(err);
-            console.log("My Contracts: " + addressesStr);
+            if (err) return reject(err);
             let wills = [];
             if (addressesStr) {
+                console.log("My Contracts: " + addressesStr);
                 if (addressesStr.slice(-1) === ";") addressesStr = addressesStr.substring(0, addressesStr.length -1);
                 var adrList = addressesStr.split(";");
 
@@ -96,7 +96,7 @@ BackToLife.prototype.createVoteWill = function(addresses = null, percentages = n
         // console.log("  " + addressesStr);
         // console.log("  " + percentagesStr);
         contract.createHierarchyContract.sendTransaction(addressesStr, percentagesStr, {gas: 4500000}, function(err, txHash){
-            if (err) reject(err);
+            if (err) return reject(err);
             resolve(txHash);
         });
     });
