@@ -160,6 +160,7 @@ BACK TO LIFE
     {{#wills}}
     <div class="card will-card" id="{{address}}">
         <div class="card-header">
+            <span class="float-right">{{balance}} Eth</span>
             <h5 class="card-title">Heritage ({{address}})</h5>
         </div>
         <div class="card-body">
@@ -181,9 +182,18 @@ BACK TO LIFE
             {{/heirs}}
         </div>
         <div class="card-footer">
-            <a href="#">
-                 <i class="mbri-edit mbr-iconfont"></i>
-             </a>
+            {{#owner}}
+                <!-- Owner actions -->
+                <a href="#">
+                    <i class="mbri-edit mbr-iconfont"></i>
+                </a>
+            {{/owner}}
+            {{^owner}}
+                <!-- Hier actions -->
+                <a href="#" class="btn btn-sm btn-primary">
+                    Declare as dead
+                </a>
+            {{/owner}}
         </div>
     </div>
     {{/wills}}
