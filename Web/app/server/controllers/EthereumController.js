@@ -6,7 +6,7 @@ var contract;
 var abi = "";
 var contractAddress = "";
 
-var host = "http://localhost:9595";
+var host = "http://localhost:8545";
 
 // Read contract info
 fs.readFile("../contractLostPassword.json", 'utf8', function (err,data) {
