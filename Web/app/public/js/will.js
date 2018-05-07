@@ -18,7 +18,6 @@ MyWills.prototype._sendWill = function (event) {
     var contract=$(event.target).attr('data-address');
     var value=web3.toWei(parseFloat($('input[name=value-'+contract+']').val()), "ether");
     web3.eth.sendTransaction({to:contract,value:value},function () {
-
         $('#OkModal').modal('show');
         this._listWills();
     }.bind(this));
@@ -27,7 +26,6 @@ MyWills.prototype._withdrawWill = function (event) {
     var contract=$(event.target).attr('data-address');
     var value=web3.toWei(parseFloat($('input[name=value-'+contract+']').val()), "ether");
     web3.eth.sendTransaction({from:contract,to:web3.eth.accounts[0],value:value},function () {
-
         $('#OkModal').modal('show');
         this._listWills();
     }.bind(this));
@@ -60,7 +58,8 @@ MyWills.prototype._saveWill = function (event) {
         this._listWills();
     }.bind(this)).catch(function(err){
         console.error(err);
-        alert("Error creating a will!")
+        $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong.');
+        $('#ErrorModal').modal('show');
     });
 };
 
@@ -70,8 +69,10 @@ MyWills.prototype._declareDead = function (event) {
     MyHeritage.ownerDied().then(function(){
         $('#OkModal').modal('show');
         this._listWills();
-    }.bind(this)).catch(function(){
-        alert('Error in Smart Contract')
+    }.bind(this)).catch(function(err){
+        console.error(err);
+        $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong.');
+        $('#ErrorModal').modal('show');
     });
 };
 
@@ -85,7 +86,8 @@ MyWills.prototype._listWills = function () {
         }
     }).catch(function(err){
         console.error(err);
-        alert("Error " + err.message);
+        $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong listing wills.');
+        $('#ErrorModal').modal('show');
     });
 
 };
@@ -95,7 +97,7 @@ MyWills.prototype._editWill = {}
 MyWills.prototype._editWill = {}
 
 MyWills.prototype.getWills = function () {
-    console.log(web3.eth.accounts[0]);
+    console.log("My Ether address: " + web3.eth.accounts[0]);
     return this.back_to_life.getWills();
 };
 
