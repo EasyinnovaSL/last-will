@@ -11,9 +11,10 @@ contract BackToLife {
     mapping (address => string) mapOwnerStringContract;
 
 
+    /* FallBack Payable function */
     function () payable {}
 
-    function createHierarchyContract (string _listHeirs, string _listHeirsPercentages) {
+    function createHierarchyContract (string _listHeirs, string _listHeirsPercentages, string _listWitnesses) {
 
         address newHierarchyContract = new HierarchyContract(msg.sender);
 
@@ -39,9 +40,65 @@ contract BackToLife {
 
 
         /* Add heirs to the contract */
-        _HierarchyContract.addHeirs(_listHeirs, _listHeirsPercentages);
+        _HierarchyContract.addHeirs(_listHeirs, _listHeirsPercentages, _listWitnesses);
 
     }
+
+
+    function createHierarchyContractPayable (string _listHeirs, string _listHeirsPercentages, string _listWitnesses) payable {
+
+        address newHierarchyContract = new HierarchyContract(msg.sender);
+
+        HierarchyContract _HierarchyContract = HierarchyContract(newHierarchyContract);
+
+        var stringContractAddress = addressToString(newHierarchyContract);
+
+        mapOwnerStringContract[msg.sender] =  mapOwnerStringContract[msg.sender].toSlice().concat(stringContractAddress.toSlice()).toSlice().concat(";".toSlice());
+
+        var s = _listHeirs.toSlice().copy();
+
+        if (!s.endsWith(";".toSlice())){
+            _listHeirs.toSlice().concat(";".toSlice());
+        }
+
+        s = _listWitnesses.toSlice().copy();
+        if (!s.endsWith(";".toSlice())){
+            _listWitnesses.toSlice().concat(";".toSlice());
+        }
+
+        s = _listHeirsPercentages.toSlice().copy();
+        if (!s.endsWith(";".toSlice())){
+            _listHeirsPercentages.toSlice().concat(";".toSlice());
+        }
+
+        /* Add contract to the list of each heirs */
+        s = _listHeirs.toSlice().copy();
+        var delim = ";".toSlice();
+        uint256 listHeirsLength = s.count(delim) + 1;
+        bool itsHeir = false;
+
+        string memory senderStringAddress = addressToString(msg.sender);
+
+        for(uint i = 0; i < listHeirsLength; i++) {
+
+            address heirAddress = parseAddr(s.split(delim).toString());
+            mapOwnerStringContract[heirAddress] =  mapOwnerStringContract[heirAddress].toSlice().concat(stringContractAddress.toSlice()).toSlice().concat(";".toSlice());
+        }
+
+
+        /* Add heirs to the contract */
+        _HierarchyContract.addHeirs(_listHeirs, _listHeirsPercentages, _listWitnesses);
+
+
+        //ms.value is the number of wei sent with the message
+        if(!newHierarchyContract.send(msg.value)){
+            throw;
+        }
+    }
+
+
+
+
 
     function getMyContracts() returns (string) {
         return mapOwnerStringContract[msg.sender];

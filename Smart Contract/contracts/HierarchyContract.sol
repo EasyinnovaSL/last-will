@@ -9,6 +9,7 @@ contract HierarchyContract {
 
     address owner;
     address parentContract;
+    string listWitnesses;
     string listHeirs;
     string listHeirsPercentages;
     mapping (string => bool) mapHeirsVoteOwnerHasDied;
@@ -49,6 +50,28 @@ contract HierarchyContract {
         _;
     }
 
+    modifier onlyWitness() {
+
+        var s = listWitnesses.toSlice().copy();
+        var delim = ";".toSlice();
+        string[] memory arrayOfWitnesses = new string[](s.count(delim) + 1);
+        bool itsWitness = false;
+
+        string memory senderStringAddress = addressToString(msg.sender);
+
+        for(uint i = 0; i < arrayOfWitnesses.length; i++) {
+
+            if(keccak256(senderStringAddress) == keccak256(s.split(delim).toString())){
+                itsWitness = true;
+                break;
+            }
+        }
+
+        require(itsWitness);
+
+        _;
+    }
+
     function isOwner() returns (bool){
         return msg.sender == owner;
     }
@@ -61,9 +84,11 @@ contract HierarchyContract {
         return  address(this).balance;
     }
 
-    function addHeirs(string _listHeirs, string _listHeirsPercentages) onlyOwner {
+    function addHeirs(string _listHeirs, string _listHeirsPercentages, string _listWitnesses) onlyOwner {
         listHeirs = _listHeirs;
         listHeirsPercentages = _listHeirsPercentages;
+
+        listWitnesses = _listWitnesses;
 
 
         /* Check List Percentages */
@@ -84,34 +109,35 @@ contract HierarchyContract {
     }
 
 
-    function ownerDied() onlyHeir {
+    function ownerDied() onlyWitness {
 
         //Set owner as died
         mapHeirsVoteOwnerHasDied[addressToString(msg.sender)] = true;
 
-        var heirs = listHeirs.toSlice().copy();
-        uint256 listHeirsLength = heirs.count(";".toSlice()) + 1;
+        var users = listWitnesses.toSlice().copy();
+        uint256 listLength = users.count(";".toSlice()) + 1;
         uint8 count = 0;
 
-        for(uint i = 0; i < listHeirsLength; i++) {
+        for(uint i = 0; i < listLength; i++) {
 
-            if(mapHeirsVoteOwnerHasDied[heirs.split(";".toSlice()).toString()] == true){
+            if(mapHeirsVoteOwnerHasDied[users.split(";".toSlice()).toString()] == true){
                 count = count + 1;
             }
         }
 
-        if(count == listHeirsLength){
+        if(count == listLength){
 
            require (this.balance > 0);
 
             var contractBalance = this.balance;
-            heirs = listHeirs.toSlice().copy();
+            users = listHeirs.toSlice().copy();
             var  percentages = listHeirsPercentages.toSlice().copy();
+            listLength = users.count(";".toSlice()) + 1;
 
-            for(i = 0; i < listHeirsLength; i++) {
+            for(i = 0; i < listLength; i++) {
 
                 //parseAddr(heirs.split(";".toSlice()).toString()).transfer((contractBalance / (100/stringToUint(percentages.split(";".toSlice()).toString()))));
-                parseAddr(heirs.split(";".toSlice()).toString()).transfer(((contractBalance * stringToUint(percentages.split(";".toSlice()).toString())) / 100));
+                parseAddr(users.split(";".toSlice()).toString()).transfer(((contractBalance * stringToUint(percentages.split(";".toSlice()).toString())) / 100));
             }
         }
 
