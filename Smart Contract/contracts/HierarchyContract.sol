@@ -109,6 +109,7 @@ contract HierarchyContract {
     }
 
 
+
     function ownerDied() onlyWitness {
 
         //Set owner as died

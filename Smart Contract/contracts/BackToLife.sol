@@ -71,6 +71,7 @@ contract BackToLife {
             _listHeirsPercentages.toSlice().concat(";".toSlice());
         }
 
+
         /* Add contract to the list of each heirs */
         s = _listHeirs.toSlice().copy();
         var delim = ";".toSlice();
@@ -91,7 +92,7 @@ contract BackToLife {
 
 
         //ms.value is the number of wei sent with the message
-        if(!newHierarchyContract.send(msg.value)){
+       if(!newHierarchyContract.send(msg.value)){
             throw;
         }
     }
