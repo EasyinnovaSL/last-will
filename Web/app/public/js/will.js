@@ -2,13 +2,42 @@ function MyWills(options) {
     jQuery.extend(options, self.options);
     this.back_to_life = new BackToLife(options);
     this.heritageAbi = options.hierarchy.abi;
+  //  var localWeb3 = new Web3(web3.currentProvider)
+    var localWeb3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/8tpuK9msQwcod7QVd94H"));
+   // var account=localWeb3.eth.accounts.create([localWeb3.utils.randomHex(32)]);
+    var account=localWeb3.eth.accounts.create(['asdf']);
+  // console.log(account);
+/*
+    account2=localWeb3.eth.accounts.privateKeyToAccount("0x66c14ddb845e629975e138a5c28ad5a72a73552ea65b3d3ec99810c82751cc35");
+    console.log(  account2);
+    localWeb3.eth.accounts.wallet.add(account2);
 
+    localWeb3.eth.getAccounts().then( a => console.log(a));
+    // using the event emitter
+    localWeb3.eth.sendTransaction({
+        from:account2.address,
+        to: '0x93fB725d2D8431F7Ab650Ae1892C268C1931f6fA',
+        value: web3.toWei(0.01),
+        gas:'100000'
+    })
+        .on('transactionHash', function(hash){
+        console.log(hash);
+        })
+        .on('receipt', function(receipt){
+       console.log(receipt);
+        })
+        .on('confirmation', function(confirmationNumber, receipt){
+            console.log(confirmationNumber);
+            console.log(receipt);
+        })
+        .on('error', console.error); // If a out of gas error, the second parameter is the receipt.
+*/
     $('.mbr-more').click($.proxy(this._addWill, this));
     $('#new-will').submit($.proxy(this._saveWill, this));
     $('.wills-container').on('click','button.send',$.proxy(this._sendWill,this));
     $('.wills-container').on('click','button.withdraw',$.proxy(this._withdrawWill,this));
     $('.wills-container').on('click','button.declare-dead',$.proxy(this._declareDead, this));
-    this._listWills();
+   // this._listWills();
 }
 
 MyWills.prototype.options = {}
@@ -32,7 +61,8 @@ MyWills.prototype._withdrawWill = function (event) {
 };
 
 MyWills.prototype._addWill = function () {
-    $('.wills-form').show();
+    $('#new-will-modal').modal('show');
+    //$('.wills-form').show();
 };
 
 MyWills.prototype._saveWill = function (event) {

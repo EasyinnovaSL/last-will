@@ -28,64 +28,65 @@ BACK TO LIFE
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="inputGroupSelect01">Will Type</label>
                             </div>
-                            <select class="custom-select" id="inputGroupSelect01" name="type">
-                                <option>Choose...</option>
-                             <!--   <option value="1">Keep alive</option> -->
+
+                            <!--<select class="custom-select" id="inputGroupSelect01" name="type">
+                               <option>Choose...</option>
+                              <option value="1">Keep alive</option>
                                   <option value="2" selected>Heirs votes</option>
-                                <!--      <option value="3">Notary</option> -->
-                                 </select>
+                                    <option value="3">Notary</option>
+                                 </select> -->
                              </div>
 
                             <label for="hires0">Your heirs</label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="hires0"><i class="fa fa-user"></i></span>
-                            </div>
-                            <input type="text" name="heir0" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="hires1"><i class="fa fa-user"></i></span>
-                            </div>
-                            <input type="text" name="heir1" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="hires2"><i class="fa fa-user"></i></span>
-                            </div>
-                            <input type="text" name="heir2" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="hires3"><i class="fa fa-user"></i></span>
-                            </div>
-                            <input type="text" name="heir3" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="hires4"><i class="fa fa-user"></i></span>
-                            </div>
-                            <input type="text" name="heir4" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
+                                                   <div class="input-group mb-3">
+                                                       <div class="input-group-prepend">
+                                                           <span class="input-group-text" id="hires0"><i class="fa fa-user"></i></span>
+                                                       </div>
+                                                       <input type="text" name="heir0" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
+                                                   </div>
+                                                   <div class="input-group mb-3">
+                                                       <div class="input-group-prepend">
+                                                           <span class="input-group-text" id="hires1"><i class="fa fa-user"></i></span>
+                                                       </div>
+                                                       <input type="text" name="heir1" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
+                                                   </div>
+                                                   <div class="input-group mb-3">
+                                                       <div class="input-group-prepend">
+                                                           <span class="input-group-text" id="hires2"><i class="fa fa-user"></i></span>
+                                                       </div>
+                                                       <input type="text" name="heir2" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
+                                                   </div>
+                                                   <div class="input-group mb-3">
+                                                       <div class="input-group-prepend">
+                                                           <span class="input-group-text" id="hires3"><i class="fa fa-user"></i></span>
+                                                       </div>
+                                                       <input type="text" name="heir3" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
+                                                   </div>
+                                                   <div class="input-group mb-3">
+                                                       <div class="input-group-prepend">
+                                                           <span class="input-group-text" id="hires4"><i class="fa fa-user"></i></span>
+                                                       </div>
+                                                       <input type="text" name="heir4" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
+                                                   </div>
 
-                        <span class="input-group-btn">
-                                <button href="" type="submit" class="btn btn-secondary btn-form display-4">SAVE</button>
-                        </span>
-                        </form>
-                         </div>
-                     </div>
-                 </div>
-             </div>
+                                                   <span class="input-group-btn">
+                                                           <button href="" type="submit" class="btn btn-secondary btn-form display-4">SAVE</button>
+                                                   </span>
+                                                   </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-             <div class="row">
-                 <div class="mbr-white col-md-12 content-container wills-container" >
+                                        <div class="row">
+                                            <div class="mbr-white col-md-12 content-container wills-container" >
 
-                 </div>
-             </div>
+                                            </div>
+                                        </div>
 
-         </div>
+                                    </div>
 
-         <!--Ok Modal HTML -->
+                                    <!--Ok Modal HTML -->
     <div id="OkModal" class="modal fade">
         <div class="modal-dialog modal-confirm">
             <div class="modal-content">
@@ -106,6 +107,7 @@ BACK TO LIFE
             </div>
         </div>
     </div>
+
 
     <!-- Error Modal HTML -->
     <div id="ErrorModal" class="modal fade">
@@ -131,6 +133,7 @@ BACK TO LIFE
 </section>
 
 <script src="/assets/mustache/js/mustache.min.js"></script>
+<script src="/assets/web3/web3.js"></script>
 <script src="/js/will.js"></script>
 
 <script id="will-template" type="x-tmpl-mustache">
