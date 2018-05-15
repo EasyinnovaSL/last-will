@@ -26,15 +26,15 @@ BACK TO LIFE
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="inputGroupSelect01"><i class="fa fa-user"></i></label>
                             </div>
-                            <select class="custom-select"  style="height: 49px;" id="inputGroupSelect01">
-                                <option value="1" selected>Witness</option>
-                                <option value="2">Heir</option>
+                            <select class="custom-select" onchange="selectChanged()" style="height: 49px;" id="inputGroupSelect01">
+                                <option value="1">Witness</option>
+                                <option value="2" selected>Heir</option>
                                 <option value="3">both</option>
                             </select>
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="inputGroupSelect01">%</label>
                             </div>
-                            <input type="text" class="form-control" style=" padding: 0px;line-height: 23px;font-size: 14px;" aria-label="Amount (to the nearest dollar)">
+                            <input type="text" class="form-control" id="originalPercent" style=" padding: 0px;line-height: 23px;font-size: 14px;" value="0" aria-label="Amount (to the nearest dollar)">
                             <div class="input-group-append">
                                 <div class="input-group-append">
                                     <span class="input-group-text">.00</span>
@@ -43,15 +43,11 @@ BACK TO LIFE
                             </div>
                         </div>
 
-
-
                         <form class="mbr-form" data-form-title="new-will" method="post" id="new-will">
 
                             <span id="divholderBen"></span>
-                            <div><span onclick="addB()" class="mbri-plus mbr-iconfont" style="color: rgb(204, 41, 82);font-size: 44px;display: table; margin: 0 auto;cursor: pointer;"></span></div>
 
                             <span id="divholderTes"></span>
-                            <div><span onclick="addT()" class="mbri-plus mbr-iconfont" style="color: rgb(204, 41, 82);font-size: 44px;display: table; margin: 0 auto;cursor: pointer;"></span></div>
 
 
                         </form>
@@ -115,9 +111,6 @@ BACK TO LIFE
 
 <script src="/assets/mustache/js/mustache.min.js"></script>
 <script src="/js/will.js"></script>
-<script>
-
-</script>
 
 <script id="will-template" type="x-tmpl-mustache">
    {{#wills}}

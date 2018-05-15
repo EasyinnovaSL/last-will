@@ -34,6 +34,49 @@ MyWills.prototype._withdrawWill = function (event) {
 MyWills.prototype._addWill = function () {
     $('.wills-form').show();
 };
+function addRow() {
+    switch($('#inputGroupSelect01 option:selected').val()) {
+        case '1':
+            addW();
+            break;
+        case '2':
+            addH();
+            break;
+        case '3':
+            addW();
+            addH();
+            break;
+    }
+}
+numberOfFields=0;
+function addH(){
+    $("#divholderBen").append("<div id='row"+numberOfFields+"' class='input-group mb-3'><div class='input-group-prepend'><label class='input-group-text' for='inputGroupSelect01'><i class='fa fa-user'></i></label></div><select class='custom-select'  style='height: 49px;' id='inputGroupSelect"+numberOfFields+"' disabled><option value='2' selected>Heir</option></select><div class='input-group-prepend'><label class='input-group-text' for='inputGroupSelect01'>%</label></div><input type='text' id='percent"+numberOfFields+"' class='form-control' style=' padding: 0px;line-height: 23px;font-size: 14px;' aria-label='Amount (to the nearest dollar)'><div class='input-group-append'><div class='input-group-append'><span class='input-group-text'>.00</span></div><button onclick='deleteRow(\"row"+numberOfFields+"\")' class='btn btn-outline-secondary' style='margin: 0px; padding: 0px 10px; font-size: 23px; color: #cc2952;' type='button' >-</button></div></div>");
+    $("#percent"+numberOfFields).val($("#originalPercent").val());
+    numberOfFields++;
+}
+function addW(){
+    $("#divholderTes").append("<div id='row"+numberOfFields+"' class='input-group mb-3'><div class='input-group-prepend'><label class='input-group-text' for='inputGroupSelect01'><i class='fa fa-user'></i></label></div><select class='custom-select'  style='height: 49px;' id='inputGroupSelect"+numberOfFields+"' disabled><option value='1' selected>Witness</option></select><div class='input-group-prepend'></div><button onclick='deleteRow(\"row"+numberOfFields+"\")' class='btn btn-outline-secondary' style='margin: 0px; padding: 0px 10px; font-size: 23px; color: #cc2952;' type='button' >-</button></div></div>");
+    numberOfFields++;
+}
+function deleteRow(rowD){
+    $('#'+rowD).remove();
+}
+function selectChanged(){
+    switch($('#inputGroupSelect01 option:selected').val()) {
+        case '1':
+            $("#originalPercent").attr("disabled", "disabled");
+            $("#originalPercent").val('-');
+            break;
+        case '2':
+            $("#originalPercent").removeAttr("disabled");
+            $("#originalPercent").val('0');
+            break;
+        case '3':
+            $("#originalPercent").removeAttr("disabled");
+            $("#originalPercent").val('0');
+            break;
+    }
+}
 
 MyWills.prototype._saveWill = function (event) {
     event.preventDefault();
