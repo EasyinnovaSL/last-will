@@ -15,6 +15,12 @@ module.exports = function (app) {
     // Render hierarchy contracts list
     app.get('/my-wills', RenderController.renderMyWills);
 
+    // Render witness link
+    app.get('/witness', RenderController.renderWitness);
+
+    // Render heir link
+    app.get('/heir', RenderController.renderHeir);
+
     //Render heir-detail
     app.get('/heir-detail', RenderController.heirDetail);
 

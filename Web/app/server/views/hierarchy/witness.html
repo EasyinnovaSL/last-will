@@ -1,0 +1,26 @@
+<%- contentFor('title') %>
+BACK TO LIFE
+
+<%- contentFor('content') %>
+
+<p> you are a witness </p>
+
+<button id="dead-button">dead button</button>
+
+<script src="/assets/web3/web3.js"></script>
+<script>
+    $(document).ready(function () {
+        var localWeb3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/8tpuK9msQwcod7QVd94H"));
+
+
+        var account=localWeb3.eth.accounts.privateKeyToAccount('<%- pk %>');
+        localWeb3.eth.accounts.wallet.add('<%- pk %>');
+        var MyHeritage = new Heritage({web:localWeb3,contract: {abi: contract.hierarchy.abi, address: willAddress}});
+
+        MyHeritage.ownerDied().then( a => {
+            console.log(a);
+            }
+        )
+
+
+</script>
