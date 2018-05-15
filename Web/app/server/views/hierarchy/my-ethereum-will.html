@@ -21,56 +21,39 @@ BACK TO LIFE
                 <div class="card will-card">
                     <div class="card-body">
                         <h5 class="card-title">New Will</h5>
+                        <br>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01"><i class="fa fa-user"></i></label>
+                            </div>
+                            <select class="custom-select"  style="height: 49px;" id="inputGroupSelect01">
+                                <option value="1" selected>Witness</option>
+                                <option value="2">Heir</option>
+                                <option value="3">both</option>
+                            </select>
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01">%</label>
+                            </div>
+                            <input type="text" class="form-control" style=" padding: 0px;line-height: 23px;font-size: 14px;" aria-label="Amount (to the nearest dollar)">
+                            <div class="input-group-append">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">.00</span>
+                                </div>
+                                <button onclick="addRow()" class="btn btn-outline-secondary" style="margin: 0px; padding: 0px 10px; font-size: 23px; color: #cc2952;" type="button">+</button>
+                            </div>
+                        </div>
 
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+
+
                         <form class="mbr-form" data-form-title="new-will" method="post" id="new-will">
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="inputGroupSelect01">Will Type</label>
-                            </div>
-                            <select class="custom-select" id="inputGroupSelect01" name="type">
-                                <option>Choose...</option>
-                             <!--   <option value="1">Keep alive</option> -->
-                                  <option value="2" selected>Heirs votes</option>
-                                <!--      <option value="3">Notary</option> -->
-                                 </select>
-                             </div>
 
-                            <label for="hires0">Your heirs</label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="hires0"><i class="fa fa-user"></i></span>
-                            </div>
-                            <input type="text" name="heir0" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="hires1"><i class="fa fa-user"></i></span>
-                            </div>
-                            <input type="text" name="heir1" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="hires2"><i class="fa fa-user"></i></span>
-                            </div>
-                            <input type="text" name="heir2" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="hires3"><i class="fa fa-user"></i></span>
-                            </div>
-                            <input type="text" name="heir3" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="hires4"><i class="fa fa-user"></i></span>
-                            </div>
-                            <input type="text" name="heir4" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
+                            <span id="divholderBen"></span>
+                            <div><span onclick="addB()" class="mbri-plus mbr-iconfont" style="color: rgb(204, 41, 82);font-size: 44px;display: table; margin: 0 auto;cursor: pointer;"></span></div>
 
-                        <span class="input-group-btn">
-                                <button href="" type="submit" class="btn btn-secondary btn-form display-4">SAVE</button>
-                        </span>
+                            <span id="divholderTes"></span>
+                            <div><span onclick="addT()" class="mbri-plus mbr-iconfont" style="color: rgb(204, 41, 82);font-size: 44px;display: table; margin: 0 auto;cursor: pointer;"></span></div>
+
+
                         </form>
                          </div>
                      </div>
@@ -132,6 +115,9 @@ BACK TO LIFE
 
 <script src="/assets/mustache/js/mustache.min.js"></script>
 <script src="/js/will.js"></script>
+<script>
+
+</script>
 
 <script id="will-template" type="x-tmpl-mustache">
    {{#wills}}
