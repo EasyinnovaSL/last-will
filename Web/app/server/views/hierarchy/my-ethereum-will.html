@@ -17,75 +17,55 @@ BACK TO LIFE
 
     <div class="container align-left">
         <div class="row">
-            <div class="mbr-white col-md-12 content-container wills-form" style="display: none">
+            <div class="mbr-white col-md-12 content-container wills-form">
                 <div class="card will-card">
                     <div class="card-body">
                         <h5 class="card-title">New Will</h5>
+                        <br>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="will-role"><i class="fa fa-user"></i></label>
+                            </div>
+                            <select class="custom-select" onchange="selectChanged()" style="height: 49px;" id="inputGroupSelect01">
+                                <option value="1">Witness</option>
+                                <option value="2" selected>Heir</option>
+                                <option value="3">both</option>
+                            </select>
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01">%</label>
+                            </div>
+                            <input type="text" class="form-control" id="originalPercent" style=" padding: 0px;line-height: 23px;font-size: 14px;" value="0" aria-label="Amount (to the nearest dollar)">
+                            <div class="input-group-append">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">.00</span>
+                                </div>
+                                <button onclick="addRow()" class="btn btn-outline-secondary" style="margin: 0px; padding: 0px 10px; font-size: 23px; color: #cc2952;" type="button">+</button>
+                            </div>
+                        </div>
 
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         <form class="mbr-form" data-form-title="new-will" method="post" id="new-will">
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="inputGroupSelect01">Will Type</label>
-                            </div>
-                            <select class="custom-select" id="inputGroupSelect01" name="type">
-                                <option>Choose...</option>
-                             <!--   <option value="1">Keep alive</option> -->
-                                  <option value="2" selected>Heirs votes</option>
-                                <!--      <option value="3">Notary</option> -->
-                                 </select>
-                             </div>
 
-                            <label for="hires0">Your heirs</label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="hires0"><i class="fa fa-user"></i></span>
-                            </div>
-                            <input type="text" name="heir0" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="hires1"><i class="fa fa-user"></i></span>
-                            </div>
-                            <input type="text" name="heir1" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="hires2"><i class="fa fa-user"></i></span>
-                            </div>
-                            <input type="text" name="heir2" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="hires3"><i class="fa fa-user"></i></span>
-                            </div>
-                            <input type="text" name="heir3" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="hires4"><i class="fa fa-user"></i></span>
-                            </div>
-                            <input type="text" name="heir4" class="form-control" placeholder="heir address" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
+                            <span id="divholderBen"></span>
 
-                        <span class="input-group-btn">
-                                <button href="" type="submit" class="btn btn-secondary btn-form display-4">SAVE</button>
-                        </span>
+                            <span id="divholderTes"></span>
+                            <div class="input-group-btn" style="display: flex;justify-content: center;">
+                                <button type="submit" class="btn btn-secondary btn-form display-4">Send</button>
+                            </div>
                         </form>
                          </div>
                      </div>
                  </div>
              </div>
 
-             <div class="row">
-                 <div class="mbr-white col-md-12 content-container wills-container" >
+                                        <div class="row">
+                                            <div class="mbr-white col-md-12 content-container wills-container" >
 
-                 </div>
-             </div>
+                                            </div>
+                                        </div>
 
-         </div>
+                                    </div>
 
-         <!--Ok Modal HTML -->
+                                    <!--Ok Modal HTML -->
     <div id="OkModal" class="modal fade">
         <div class="modal-dialog modal-confirm">
             <div class="modal-content">
@@ -131,6 +111,7 @@ BACK TO LIFE
 </section>
 
 <script src="/assets/mustache/js/mustache.min.js"></script>
+<script src="/assets/web3/web3.js"></script>
 <script src="/js/will.js"></script>
 
 <script id="will-template" type="x-tmpl-mustache">
