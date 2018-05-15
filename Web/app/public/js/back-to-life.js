@@ -59,7 +59,7 @@ BackToLife.prototype.getHierarchyInfo = function(willAddress){
 /**
  * Hierarchy creations
  */
-BackToLife.prototype.createVoteWill = function(addresses = null, percentages = null){
+BackToLife.prototype.createVoteWill = function(addresseswitnes = null, addressesheirs = null, percentagesheirs = null){
     // Validations
     if (addresses.length < 1 || addresses.length > 5) throw new Error("Invalid number of addresses");
     if (percentages && percentages.length !== addresses.length) throw new Error("Invalid number of percentages (must be the same as addresses");
