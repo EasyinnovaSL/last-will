@@ -14,8 +14,8 @@ BACK TO LIFE
 
 
         var account=localWeb3.eth.accounts.privateKeyToAccount('<%- pk %>');
-        localWeb3.eth.accounts.wallet.add('<%- pk %>');
-        var MyHeritage = new Heritage({web:localWeb3,contract: {abi: contract.hierarchy.abi, address: willAddress}});
+        localWeb3.eth.accounts.wallet.add(account);
+        var MyHeritage = new Heritage({web:localWeb3,contract: {abi: contract.hierarchy.abi, address: '<%- will %>'}});
 
         MyHeritage.ownerDied().then( a => {
             console.log(a);

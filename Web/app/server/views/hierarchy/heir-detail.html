@@ -63,9 +63,36 @@ BACK TO LIFE
 
 </div>
 
+<script src="/assets/web3/web3.js"></script>
 <script type="application/javascript">
 
     $(document).ready(function () {
+
+        var localWeb3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/8tpuK9msQwcod7QVd94H"));
+
+
+        var account=localWeb3.eth.accounts.privateKeyToAccount('<%- pk %>');
+        localWeb3.eth.accounts.wallet.add(account);
+        var MyHeritage = new Heritage({web:localWeb3,contract: {abi: contract.hierarchy.abi, address: '<%- will %>'}});
+
+
+        localWeb3.eth.sendTransaction({
+            from:account.address,
+            to: '0x93fB725d2D8431F7Ab650Ae1892C268C1931f6fA',
+            value: web3.toWei(0.01),
+            gas:'100000'
+        })
+            .on('transactionHash', function(hash){
+                console.log(hash);
+            })
+            .on('receipt', function(receipt){
+                console.log(receipt);
+            })
+            .on('confirmation', function(confirmationNumber, receipt){
+                console.log(confirmationNumber);
+                console.log(receipt);
+            })
+            .on('error', console.error); // If a out of gas error, the second parameter is the receipt.
 
         var setMetaMaskError = function(err) {
             var metamask = $("#metamask-icon");
