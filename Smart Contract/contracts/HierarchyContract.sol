@@ -145,6 +145,18 @@ contract HierarchyContract {
     }
 
 
+    function transferBalance (address address_to_transfer) onlyOwner{
+        address_to_transfer.transfer(this.balance);
+    }
+
+    function transferBalanceWithAmount (address address_to_transfer,  uint256 _amount) onlyOwner{
+
+        if (this.balance >= _amount && _amount > 0){
+            address_to_transfer.transfer(this.balance);
+        }
+    }
+
+
     function stringToUint(string s) constant returns (uint result) {
         bytes memory b = bytes(s);
         uint i;
