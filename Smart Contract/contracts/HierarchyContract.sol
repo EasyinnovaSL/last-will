@@ -13,6 +13,7 @@ contract HierarchyContract {
     string listHeirs;
     string listHeirsPercentages;
     mapping (string => bool) mapHeirsVoteOwnerHasDied;
+    bool isDied = false;
 
 
     function () payable {}
@@ -130,6 +131,8 @@ contract HierarchyContract {
 
            require (this.balance > 0);
 
+            isDied = true;
+
             var contractBalance = this.balance;
             users = listHeirs.toSlice().copy();
             var  percentages = listHeirsPercentages.toSlice().copy();
@@ -154,6 +157,10 @@ contract HierarchyContract {
         if (this.balance >= _amount && _amount > 0){
             address_to_transfer.transfer(this.balance);
         }
+    }
+
+    function hasDied() returns (bool){
+        return isDied;
     }
 
 
