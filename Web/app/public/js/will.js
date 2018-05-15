@@ -47,6 +47,8 @@ function addRow() {
             addH();
             break;
     }
+    $("#originalPercent").val('0');
+    $('#inputGroupSelect01 option:first').prop('selectedIndex',-1);
 }
 $('.wills-form').show();
 numberOfFields=0;
@@ -59,11 +61,16 @@ function addW(){
     $("#divholderTes").append("<div id='row"+numberOfFields+"' class='input-group mb-3'><div class='input-group-prepend'><label class='input-group-text' for='inputGroupSelect01'><i class='fa fa-user'></i></label></div><select class='custom-select'  style='height: 49px;' id='inputGroupSelect"+numberOfFields+"' disabled><option value='1' selected>Witness</option></select><div class='input-group-prepend'></div><button onclick='deleteRow(\"row"+numberOfFields+"\")' class='btn btn-outline-secondary' style='margin: 0px; padding: 0px 10px; font-size: 23px; color: #cc2952;' type='button' >-</button></div></div>");
     numberOfFields++;
 }
+function addRowGeneric(){
+    $("#divholderBen").append("<div id='row"+numberOfFields+"' class='input-group mb-3'><div class='input-group-prepend'><label class='input-group-text' for='inputGroupSelect01'><i class='fa fa-user'></i></label></div><select class='custom-select'  onchange='selectChanged(\""+numberOfFields+"\")' style='height: 49px;' id='inputGroupSelect"+numberOfFields+"'><option value='1'>Witness</option><option value='2' selected>Heir</option><option value='3'>both</option></select><div class='input-group-prepend'><label class='input-group-text' for='inputGroupSelect01'>%</label></div><input type='text' id='percent"+numberOfFields+"' class='form-control percentatgeRepartir' style=' padding: 0px;line-height: 23px;font-size: 14px;' aria-label='Amount (to the nearest dollar)' value='0'><div class='input-group-append'><div class='input-group-append'><span class='input-group-text'>.00</span></div><button onclick='deleteRow(\"row"+numberOfFields+"\")' class='btn btn-outline-secondary' style='margin: 0px; padding: 0px 10px; font-size: 23px; color: #cc2952;' type='button' ><span class='mbri-trash'></span></button></div></div>");
+    numberOfFields++;
+}
 function checkIfAllIn(){
-    return true;
     $i=0;
     $( ".percentatgeRepartir" ).each(function( index ) {
-        $i=$i+$( this ).val();
+        if($( this ).val()!='-'){
+            $i=$i+parseInt($( this ).val());
+        }
     });
     if($i!=100){
         alert('Percentage must sum 100');
@@ -74,26 +81,26 @@ function checkIfAllIn(){
 function deleteRow(rowD){
     $('#'+rowD).remove();
 }
-function selectChanged(){
-    switch($('#inputGroupSelect01 option:selected').val()) {
+function selectChanged(rowNumber){
+    switch($('#inputGroupSelect'+rowNumber+' option:selected').val()) {
         case '1':
-            $("#originalPercent").attr("disabled", "disabled");
-            $("#originalPercent").val('-');
+            $("#percent"+rowNumber).attr("disabled", "disabled");
+            $("#percent"+rowNumber).val('-');
             break;
         case '2':
-            $("#originalPercent").removeAttr("disabled");
-            $("#originalPercent").val('0');
+            $("#percent"+rowNumber).removeAttr("disabled");
+            $("#percent"+rowNumber).val('0');
             break;
         case '3':
-            $("#originalPercent").removeAttr("disabled");
-            $("#originalPercent").val('0');
+            $("#percent"+rowNumber).removeAttr("disabled");
+            $("#percent"+rowNumber).val('0');
             break;
     }
 }
 
 MyWills.prototype._saveWill = function (event) {
+    event.preventDefault();
     if(checkIfAllIn()) {
-        event.preventDefault();
         var formData = $('#new-will').serializeArray();
         var data = {};
 
