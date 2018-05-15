@@ -104,3 +104,10 @@ MyWills.prototype.getWills = function () {
 MyWills.prototype.postWill = function (will) {
     return this.back_to_life.createVoteWill(will.heirs);
 };
+
+
+MyWills.prototype.hasOwnerDied = function (event) {
+    var address = $(event.target).data('address');
+    let MyHeritage = new Heritage({contract: {abi: this.heritageAbi, address: address}});
+    return MyHeritage.hasDied();
+};

@@ -12,4 +12,7 @@ exports.renderMyWills = function (req, res) {
 exports.renderRequirements = function(req,res){
     return res.render('hierarchy/requirements');
 };
+exports.heirDetail = function(req,res){
+    return res.render('hierarchy/heir-detail');
+};
 

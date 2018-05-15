@@ -15,6 +15,9 @@ module.exports = function (app) {
     // Render hierarchy contracts list
     app.get('/my-wills', RenderController.renderMyWills);
 
+    //Render heir-detail
+    app.get('/heir-detail', RenderController.heirDetail);
+
     // Error fallback //
     // app.get('*', RenderController.renderError);
 
