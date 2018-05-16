@@ -7,8 +7,8 @@ MY WILLS
 
     <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(7, 59, 76);"></div>
 
-
     <div class="container align-left">
+
         <div class="row">
             <div class="mbr-white col-md-12 content-container wills-form">
                 <div class="card will-card">
@@ -31,38 +31,10 @@ MY WILLS
             </div>
         </div>
 
-        <div class="row" id="lastWillAdded">
-            <div class="mbr-white col-md-12 content-container wills-form">
-                <div class="card will-card">
-                    <div class="card-body">
-                        <h5 class="card-title" style="color:#cc2952;">Last Will Added</h5>
-                        <br>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="will-role"><i class="fa fa-user"></i></label>
-                            </div>
-                            <select class="custom-select" onchange="selectChanged()" style="height: 49px;" id="inputGroupSelect01">
-                                <option value="1">Witness</option>
-                                <option value="2" selected>Heir</option>
-                                <option value="3">both</option>
-                            </select>
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="inputGroupSelect01">%</label>
-                            </div>
-                            <input type="text" class="form-control" id="originalPercent" style=" padding: 0px;line-height: 23px;font-size: 14px;" value="0" aria-label="Amount (to the nearest dollar)">
-                            <div class="input-group-append">
-                                <div class="input-group-append">
-                                    <span class="input-group-text">.00</span>
-                                </div>
-                                <button onclick="addRow()" class="btn btn-outline-secondary" style="margin: 0px; padding: 0px 10px; font-size: 23px; color: #cc2952;" type="button">+</button>
-                            </div>
-                        </div>
+        <div class="row" id="last-will-links">
 
-
-                    </div>
-                </div>
-            </div>
         </div>
+
 
         <div class="row">
             <div id="transactions-container" class="mbr-white col-md-12"></div>
@@ -83,37 +55,63 @@ MY WILLS
  <div class="mbr-white col-md-12 content-container wills-form">
     <div class="card will-card">
         <div class="card-body">
-            <h5 class="card-title" style="color:#cc2952;">Last Will Added</h5>
+            <h5 class="card-title" style="color:#cc2952;">Last Will</h5>
             <br>
-             <div class="row">
-                <div class="col-md-12">
-                    <h6 class="text-muted">Heirs:</h6>
-                </div>
-             </div>
             {{#heirs}}
-            <div class="row">
-                <div class="col-md-12">
-                    <p class="card-text">
-                        <i class="fa fa-user"></i>Heir with {{percentage}} % <a href="{{link}}">heir</a> share button
-                    </p>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend" style="width: 100px;">
+                        <label class="input-group-text" for="will-role" style="width: 100%;">
+                            <i class="fa fa-user" style="margin-right: 5px;"></i> Heir
+                        </label>
+                    </div>
+                    <div class="input-group-prepend" style="width: 80px;">
+                        <label class="input-group-text" for="will-role" style="width: 100%;">
+                            <i class="fas fa-percentage" style="margin-right: 5px;"></i> {{percentage}}
+                        </label>
+                    </div>
+                    <div class="input-group-prepend">
+                        <label class="input-group-text"><i class="fa fa-link"></i></label>
+                    </div>
+                    <input type="text" class="form-control" style="padding: 8px;line-height: 23px;font-size: 14px; border: 1px solid #ced4da;" value="{{url}}" disabled>
+                    <div class="input-group-append" style="border: 1px solid #ced4da; background-color: white;">
+                        <a class="btn btn-sm btn-share" href="whatsapp://send?text=I share you the following link: {{url}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp">
+                            <i class="fab fa-whatsapp-square" style="color: green"></i>
+                        </a>
+                        <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=I share you the following link: {{url}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Share via Email">
+                            <i class="fas fa-envelope-square" style="color: grey"></i>
+                        </a>
+                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copy to clipboard!">
+                            <i class="fas fa-clipboard" style="color: deepskyblue; font-size: 40px;"></i>
+                        </a>
+                    </div>
                 </div>
-            </div>
             {{/heirs}}
-             <br>
-             <div class="row">
-                <div class="col-md-12">
-                    <h6 class="text-muted">witness:</h6>
+
+            {{#witnesses}}
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend" style="width: 180px;">
+                        <label class="input-group-text" for="will-role" style="width: 100%;">
+                            <i class="fa fa-user" style="margin-right: 5px;"></i> Witness
+                        </label>
+                    </div>
+                    <div class="input-group-prepend">
+                        <label class="input-group-text"><i class="fa fa-link"></i></label>
+                    </div>
+                    <input type="text" class="form-control" style="padding: 8px;line-height: 23px;font-size: 14px; border: 1px solid #ced4da;" value="{{url}}" disabled>
+                    <div class="input-group-append" style="border: 1px solid #ced4da; background-color: white;">
+                        <a class="btn btn-sm btn-share" href="whatsapp://send?text=I share you the following link: {{url}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp">
+                            <i class="fab fa-whatsapp-square" style="color: green"></i>
+                        </a>
+                        <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=I share you the following link: {{url}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Share via Email">
+                            <i class="fas fa-envelope-square" style="color: grey"></i>
+                        </a>
+                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copy to clipboard!">
+                            <i class="fas fa-clipboard" style="color: deepskyblue; font-size: 40px;"></i>
+                        </a>
+                    </div>
                 </div>
-             </div>
-            {{#witness}}
-            <div class="row">
-                <div class="col-md-12">
-                    <p class="card-text">
-                        <i class="fa fa-user"></i>witness <a href="{{link}}">heir</a> share button
-                    </p>
-                </div>
-            </div>
-            {{/witness}}
+            {{/witnesses}}
+
         </div>
     </div>
  </div>
@@ -263,8 +261,12 @@ MY WILLS
     $(document).ready(function () {
         // Load wills plugin
         var will = new MyWills({contract: contracts.base, hierarchy: contracts.hierarchy});
-        // Test
-        // Transactions.addTransaction("0x4ff0941f6fabaf6a1b0ef84e81959bae9967e9f12607a2cedf14f3af2991b6d7", "Contract creation");
+
+        // Load Previous Last Will
+        var jsonWill = localStorage.getItem("lastwill");
+        if (jsonWill) {
+            will.renderLastWill(JSON.parse(jsonWill));
+        }
     });
 
 </script>

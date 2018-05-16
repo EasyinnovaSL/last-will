@@ -188,21 +188,17 @@ MyWills.prototype._saveWill = function (event) {
                     var adrList = addressesStr.split(";");
                    var address=adrList[adrList.length-1];
                     lastwill.heirs.forEach(function(item){
-                        item.link=this._createLink("2",account,address)
+                        item.url=this._createLink("2",account,address)
                     }.bind(this));
 
                     lastwill.witness.forEach(function(item){
-                        item.link=this._createLink("1",account,address)
+                        item.url=this._createLink("1",account,address)
                     }.bind(this));
 
                     this.lastwill=lastwill;
                     localStorage.setItem("lastwill",JSON.stringify(this.lastwill));
                     $('#OkModal').modal('show');
-                    var template = $('#last-will-added-template').html();
-                    Mustache.parse(template);   // optional, speeds up future uses
-
-                    var rendered = Mustache.render(template,  this.lastwill);
-                    $('#lastWillAdded').html(rendered);
+                    this.renderLastWill(this.lastwill)
                     this._listWills();
 
                 }.bind(this))
@@ -291,4 +287,12 @@ MyWills.prototype.getWills = function () {
 
 MyWills.prototype.postWill = function (addresseswitnes, addressesheirs, percentagesheirs ) {
     return this.back_to_life.createVoteWill(addresseswitnes, addressesheirs, percentagesheirs);
+};
+
+MyWills.prototype.renderLastWill = function (lastWill) {
+    var template = $('#last-will-added-template').html();
+    Mustache.parse(template);
+    var rendered = Mustache.render(template, lastWill);
+    $('#last-will-links').html(rendered);
+    $('[data-toggle="tooltip"]').tooltip();
 };

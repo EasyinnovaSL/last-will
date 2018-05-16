@@ -24,6 +24,37 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
+	<style>
+		.dropdown-menu.show{
+			display: block;
+		}
+		.my-loader {
+			border: 16px solid #f3f3f3; /* Light grey */
+			border-top: 16px solid #3498db; /* Blue */
+			border-radius: 50%;
+			width: 120px;
+			height: 120px;
+			animation: spin 2s linear infinite;
+			margin-left: auto;
+			margin-right: auto;
+			position: relative;
+		}
+
+		@keyframes spin {
+			0% { transform: rotate(0deg); }
+			100% { transform: rotate(360deg); }
+		}
+		.btn-share{
+			margin: 0;
+			padding: 0;
+			margin-left: 5px;
+			margin-right: 5px;
+		}
+		.btn-share i {
+			font-size: 45px;
+		}
+	</style>
 </head>
 
 <body>
@@ -233,29 +264,18 @@
         var contracts = JSON.parse('<%- JSON.stringify(contracts); %>');
     </script>
 <% } %>
-<style>
-	.dropdown-menu.show{
-		display: block;
-	}
-	.my-loader {
-		border: 16px solid #f3f3f3; /* Light grey */
-		border-top: 16px solid #3498db; /* Blue */
-		border-radius: 50%;
-		width: 120px;
-		height: 120px;
-		animation: spin 2s linear infinite;
-		margin-left: auto;
-		margin-right: auto;
-		position: relative;
-	}
-
-	@keyframes spin {
-		0% { transform: rotate(0deg); }
-		100% { transform: rotate(360deg); }
-	}
-</style>
 
 <!--Main JS-->
+<script>
+	function copyToClipBoard(me) {
+        var copyText = $(me).data('text');
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val(copyText).select();
+        document.execCommand("copy");
+        $temp.remove();
+	}
+</script>
 <script src="/js/heritage.js"></script>
 <script src="/js/back-to-life.js"></script>
 <script src="/assets/mustache/js/mustache.min.js"></script>
