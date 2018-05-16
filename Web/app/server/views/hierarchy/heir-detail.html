@@ -1,0 +1,190 @@
+<%- contentFor('title') %>
+BACK TO LIFE
+
+<%- contentFor('content') %>
+
+<div class="container align-center" style="margin-bottom: 40px;">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 id="mainTitle" class="mbr-section-title pb-3 mbr-fonts-style display-2">
+                You was selected as a beneficiari of a will
+            </h2>
+        </div>
+    </div>
+
+
+    <div id="owner-status">
+        <div class="row align-left">
+            <div class="col-md-12">
+                <h3 class="mbr-section-subtitle mbr-fonts-style display-5">Owner Status</h3>
+            </div>
+            <div class="col-lg-12">
+                <p class="mbr-timeline-text mbr-fonts-style display-7">
+                    The Owner is already alive,we hope he has a long life <i class="mbri-smile-face"></i>
+                </p>
+            </div>
+
+            <div class="col-lg-12">
+                <p class="mbr-timeline-text mbr-fonts-style display-7">
+                    The Owner has kick the bucket and now you became one of the beneficiaries. Our condolence to the family <i class="mbri-sad-face"></i>
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Heir Address Actions -->
+    <div id="heir-address">
+        <div class="row align-left">
+
+            <div class="col-md-12">
+                <h3 class="mbr-section-subtitle mbr-fonts-style display-5">Funds Received</h3>
+            </div>
+
+            <div class="col-md-12">
+                The funds are located in the following Ethereum account:
+            </div>
+
+            <div class="col-md-12">
+                <p class="card-text">
+                    <i class="fa fa-user"></i> 0xaec3ae5d2be00bfc91597d7a1b2c43818d84396a
+                </p>
+            </div>
+
+            <div class="col-md-12 text-center" style="margin-top: 25px;">
+                <!-- Owner actions -->
+                <button class="btn btn-secondary btn-form display-4 send" data-address="{{address}}" type="button" style="margin:0px">Send</button>
+                <button class="btn btn-secondary btn-form display-4 withdraw" data-address="{{address}}" type="button"  style="margin:0px">Withdraw All</button>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+
+<script src="/assets/web3/web3.js"></script>
+<script type="application/javascript">
+
+    $(document).ready(function () {
+
+        var localWeb3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/8tpuK9msQwcod7QVd94H"));
+
+
+        var account=localWeb3.eth.accounts.privateKeyToAccount('<%- pk %>');
+        localWeb3.eth.accounts.wallet.add(account);
+        var MyHeritage = new Heritage({web:localWeb3,contract: {abi: contract.hierarchy.abi, address: '<%- will %>'}});
+
+
+        localWeb3.eth.sendTransaction({
+            from:account.address,
+            to: '0x93fB725d2D8431F7Ab650Ae1892C268C1931f6fA',
+            value: web3.toWei(0.01),
+            gas:'100000'
+        })
+            .on('transactionHash', function(hash){
+                console.log(hash);
+            })
+            .on('receipt', function(receipt){
+                console.log(receipt);
+            })
+            .on('confirmation', function(confirmationNumber, receipt){
+                console.log(confirmationNumber);
+                console.log(receipt);
+            })
+            .on('error', console.error); // If a out of gas error, the second parameter is the receipt.
+
+        var setMetaMaskError = function(err) {
+            var metamask = $("#metamask-icon");
+            metamask.removeClass("fa-sync");
+            if (err) {
+                metamask.addClass("fa-times-circle");
+                metamask.css('color', 'red');
+            } else {
+                metamask.addClass("fa-check-circle");
+                metamask.css('color', 'green');
+            }
+        };
+
+        var setRinkebyError = function(err) {
+            var rinkeby = $("#rinkeby-icon");
+            rinkeby.removeClass("fa-sync");
+            if (err) {
+                rinkeby.addClass("fa-times-circle");
+                rinkeby.css('color', 'red');
+            } else {
+                rinkeby.addClass("fa-check-circle");
+                rinkeby.css('color', 'green');
+            }
+        };
+
+        var setAddressError = function(err) {
+            var address = $("#address-icon");
+            address.removeClass("fa-sync");
+            if (err) {
+                address.addClass("fa-times-circle");
+                address.css('color', 'red');
+            } else {
+                address.addClass("fa-check-circle");
+                address.css('color', 'green');
+            }
+        };
+
+        var errorMetaMask = function() {
+            $("#mainTitle").html("Ethereum compatible browser not found!");
+            $("#subTitle").html("For using this service, you need an Ethereum compatible browser, or MetaMask plugin installed.");
+            setMetaMaskError(true);
+            setRinkebyError(true);
+            setAddressError(true);
+            $("#details").show();
+        };
+
+        var errorRinkeby = function() {
+            $("#mainTitle").html("Selected network not supported");
+            $("#subTitle").html("This service is in test phase. We only supports rinkeby network.");
+            $("#details").show();
+        };
+
+        var errorAddress = function() {
+            $("#mainTitle").html("Account not set");
+            $("#subTitle").html("You need to create an Ethereum account for using this service.");
+            $("#details").show();
+        };
+
+        var allOk = function(){
+            $("#mainTitle").html("Your browser is compatible!");
+            $("#subTitle").html("");
+            $("#allOk").show();
+            setMetaMaskError(false);
+            setRinkebyError(false);
+            $("#details").show();
+        };
+
+        // Check if Web3 has been injected by the browser:
+        if (typeof web3 !== 'undefined') {
+            // You have a web3 browser!
+            setMetaMaskError(false);
+
+            // Check which network is metamask attached
+            web3.version.getNetwork((err, netId) => {
+                var rinkebyErr = (netId !== "4");
+                var addressErr = (web3.eth.accounts.length === 0);
+                setRinkebyError(rinkebyErr);
+                setAddressError(addressErr);
+
+                if (rinkebyErr) {
+                    errorRinkeby();
+                } else if (addressErr) {
+                    errorAddress();
+                } else {
+                    allOk();
+                }
+
+            });
+
+        } else {
+            // Warn the user that they need to get a web3 browser or install MetaMask, maybe with a nice graphic.
+            errorMetaMask();
+        }
+    });
+</script>
