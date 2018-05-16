@@ -182,14 +182,20 @@ MyWills.prototype._saveWill = function (event) {
             .on('receipt', function(receipt){
                 console.log('receipt');
                 console.log(receipt);
-                this.lastwill=lastwill;
+
                 contract.methods.getMyContracts.call(function(err, addressesStr){
                     if (addressesStr.slice(-1) === ";") addressesStr = addressesStr.substring(0, addressesStr.length -1);
                     var adrList = addressesStr.split(";");
                    var address=adrList[adrList.length-1];
                     lastwill.heirs.forEach(function(item){
-                        item.link=this._createLink(,account,_createLink)
+                        item.link=this._createLink("2",account,_createLink)
                     }.bind(this));
+
+                    lastwill.witness.forEach(function(item){
+                        item.link=this._createLink("1",account,_createLink)
+                    }.bind(this));
+
+                    this.lastwill=lastwill;
 
 
                 }.bind(this))
