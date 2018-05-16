@@ -75,6 +75,9 @@ BACK TO LIFE
 </section>
 
 <script src="/assets/web3/web3.js"></script>
+
+<script src="/js/transactions-alerts.js"></script>
+
 <script type="application/javascript">
 
     var localWeb3 = null;
@@ -99,8 +102,8 @@ BACK TO LIFE
         contract.methods.hasDied().call(function(err, hasDied){
             if (err) return reject(err);
 
-            //if(hasDied){
-            if(true){
+            if(hasDied){
+            //if(true){
                 $("#text-died").fadeIn("slow");
                 $("#heir-address").fadeIn("slow");
 
