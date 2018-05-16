@@ -3,80 +3,95 @@ BACK TO LIFE
 
 <%- contentFor('content') %>
 
-<div class="container align-center" style="margin-bottom: 40px;">
-    <div class="row">
-        <div class="col-lg-12">
-            <h2 id="mainTitle" class="mbr-section-title pb-3 mbr-fonts-style display-2">
-                You was selected as a beneficiari of a will
-            </h2>
+<section class="cid-qPEl4VRv2L mbr-parallax-background" id="header15-z" style="padding-top: 60px; padding-bottom: 60px;">
+
+    <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(7, 59, 76);"></div>
+
+    <div class="container align-center" style="margin-bottom: 40px;">
+        <div class="row">
+            <div class="mbr-white col-lg-12">
+                <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1">
+                    You was selected as a beneficiary of a will
+                </h1>
+            </div>
         </div>
+
+
+        <div id="owner-status">
+            <div class="row align-left">
+                <div class="mbr-white col-md-12">
+                    <h3 class="mbr-section-subtitle mbr-fonts-style display-5">Owner Status</h3>
+                </div>
+                <div class="mbr-white col-lg-12">
+                    <p class="mbr-timeline-text mbr-fonts-style display-7">
+                        The Owner is already alive,we hope he has a long life <i class="mbri-smile-face"></i>
+                    </p>
+                </div>
+
+                <div class="mbr-white col-lg-12">
+                    <p class="mbr-timeline-text mbr-fonts-style display-7">
+                        The Owner has kick the bucket and now you became one of the beneficiaries. Our condolence to the family <i class="mbri-sad-face"></i>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Heir Address Actions -->
+        <div id="heir-address">
+            <div class="row align-left">
+
+                <div class="mbr-white col-md-12">
+                    <h3 class="mbr-section-subtitle mbr-fonts-style display-5">Funds Received</h3>
+                </div>
+
+                <div class="mbr-white col-md-12">
+                    This is the actual balance you have :
+                </div>
+
+                <div class="mbr-white col-md-12">
+                    <p class="card-text">
+                        <i class="mbri-cash"></i>
+                    </p>
+                </div>
+
+                <div class="mbr-white col-md-12 text-center" style="margin-top: 25px;">
+                    <!-- Owner actions -->
+                    <button class="btn btn-secondary btn-form display-4 send" data-address="{{address}}" type="button" style="margin:0px">Send</button>
+                </div>
+
+
+            </div>
+        </div>
+
     </div>
 
-
-    <div id="owner-status">
-        <div class="row align-left">
-            <div class="col-md-12">
-                <h3 class="mbr-section-subtitle mbr-fonts-style display-5">Owner Status</h3>
-            </div>
-            <div class="col-lg-12">
-                <p class="mbr-timeline-text mbr-fonts-style display-7">
-                    The Owner is already alive,we hope he has a long life <i class="mbri-smile-face"></i>
-                </p>
-            </div>
-
-            <div class="col-lg-12">
-                <p class="mbr-timeline-text mbr-fonts-style display-7">
-                    The Owner has kick the bucket and now you became one of the beneficiaries. Our condolence to the family <i class="mbri-sad-face"></i>
-                </p>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Heir Address Actions -->
-    <div id="heir-address">
-        <div class="row align-left">
-
-            <div class="col-md-12">
-                <h3 class="mbr-section-subtitle mbr-fonts-style display-5">Funds Received</h3>
-            </div>
-
-            <div class="col-md-12">
-                The funds are located in the following Ethereum account:
-            </div>
-
-            <div class="col-md-12">
-                <p class="card-text">
-                    <i class="fa fa-user"></i> 0xaec3ae5d2be00bfc91597d7a1b2c43818d84396a
-                </p>
-            </div>
-
-            <div class="col-md-12 text-center" style="margin-top: 25px;">
-                <!-- Owner actions -->
-                <button class="btn btn-secondary btn-form display-4 send" data-address="{{address}}" type="button" style="margin:0px">Send</button>
-                <button class="btn btn-secondary btn-form display-4 withdraw" data-address="{{address}}" type="button"  style="margin:0px">Withdraw All</button>
-            </div>
-
-
-        </div>
-    </div>
-
-</div>
+</section>
 
 <script src="/assets/web3/web3.js"></script>
 <script type="application/javascript">
 
     $(document).ready(function () {
 
-        var localWeb3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/8tpuK9msQwcod7QVd94H"));
+        var localWeb3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        // var localWeb3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/8tpuK9msQwcod7QVd94H"));
 
+        //var account = localWeb3.eth.accounts.privateKeyToAccount('<%- pk %>');
+        var account = localWeb3.eth.accounts.privateKeyToAccount("0x66c14ddb845e629975e138a5c28ad5a72a73552ea65b3d3ec99810c82751cc35");
 
-        var account=localWeb3.eth.accounts.privateKeyToAccount('<%- pk %>');
         localWeb3.eth.accounts.wallet.add(account);
-        var MyHeritage = new Heritage({web:localWeb3,contract: {abi: contract.hierarchy.abi, address: '<%- will %>'}});
+
+        //var x = web3.fromWei(localWeb3.eth.getBalance(account.address));
+        var x = localWeb3.eth.getBalance(account.address).then(function (value){
+            console.log("My balance is: " + localWeb3.fromWei(value));
+        });
 
 
-        localWeb3.eth.sendTransaction({
+
+        //var MyHeritage = new Heritage({web:localWeb3,contract: {abi: contract.hierarchy.abi, address: '<%- will %>'}});
+
+
+        /*localWeb3.eth.sendTransaction({
             from:account.address,
             to: '0x93fB725d2D8431F7Ab650Ae1892C268C1931f6fA',
             value: web3.toWei(0.01),
@@ -93,6 +108,8 @@ BACK TO LIFE
                 console.log(receipt);
             })
             .on('error', console.error); // If a out of gas error, the second parameter is the receipt.
+
+        */
 
         var setMetaMaskError = function(err) {
             var metamask = $("#metamask-icon");

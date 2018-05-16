@@ -26,9 +26,6 @@ module.exports = function (app) {
     // Render heir link
     app.get('/heir', RenderController.renderHeir);
 
-    //Render heir-detail
-    app.get('/heir-detail', RenderController.heirDetail);
-
     // Error fallback //
     // app.get('*', RenderController.renderError);
 
