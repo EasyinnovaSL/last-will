@@ -53,9 +53,18 @@ BACK TO LIFE
                      <span id="heir-balance" style="font-size: 25px; display: none"></span>
                 </div>
 
+                <div id="funds-input" style="display: none">
+                    <div class="mbr-white col-md-12">
+                        If you want to send your to funds to specific address enter one in the following field:
+                    </div>
+                    <div class="mbr-white col-md-12">
+                        <input id="fundAddress" type="text" class="form-control">
+                    </div>
+                </div>
+
                 <div class="mbr-white col-md-12 text-center" style="margin-top: 25px;">
                     <!-- Owner actions -->
-                    <button class="btn btn-secondary btn-form display-4 send" data-address="{{address}}" type="button" style="margin:0px">Send</button>
+                    <button id="send-all-funds" class="btn btn-secondary btn-form display-4 send" data-address="{{address}}" type="button" style="margin:0px">Send Funds</button>
                 </div>
 
             </div>
@@ -68,27 +77,32 @@ BACK TO LIFE
 <script src="/assets/web3/web3.js"></script>
 <script type="application/javascript">
 
+    var localWeb3 = null;
+    var account = null;
+    var accountToTransfer = '';
+    var heirAddress = '';
+
+    //var heirAddress = "0x278741d6fe3ab34f2c71dc1f6fbd80db3a88d16c";
+
     $(document).ready(function () {
 
-        var localWeb3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+       localWeb3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
         // var localWeb3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/8tpuK9msQwcod7QVd94H"));
 
-        //var account = localWeb3.eth.accounts.privateKeyToAccount('<%- pk %>');
+        account = localWeb3.eth.accounts.privateKeyToAccount('<%- pk %>');
+        heirAddress = account.address;
 
-
-        // Check if Owner of Will has died or not
-        let MyHeritage = new Heritage({contract: {abi: contracts.hierarchy.abi, address: "0x278741d6fe3ab34f2c71dc1f6fbd80db3a88d16c"}});
-
-        var contract = new localWeb3.eth.Contract( contracts.hierarchy.abi, "0x278741d6fe3ab34f2c71dc1f6fbd80db3a88d16c");
+        var willAddress = "<%- will %>";
+        var contract = new localWeb3.eth.Contract( contracts.hierarchy.abi, willAddress);
+        //var contract = new localWeb3.eth.Contract( contracts.hierarchy.abi, "0x278741d6fe3ab34f2c71dc1f6fbd80db3a88d16c");
 
         contract.methods.hasDied().call(function(err, hasDied){
             if (err) return reject(err);
 
-            if(hasDied){
+            //if(hasDied){
+            if(true){
                 $("#text-died").fadeIn("slow");
                 $("#heir-address").fadeIn("slow");
-
-                var account = localWeb3.eth.accounts.privateKeyToAccount("0x66c14ddb845e629975e138a5c28ad5a72a73552ea65b3d3ec99810c82751cc35");
 
                 localWeb3.eth.accounts.wallet.add(account);
 
@@ -96,127 +110,59 @@ BACK TO LIFE
                     $("#heir-balance").fadeIn("slow").html(localWeb3.utils.fromWei(value, 'ether') + " Ether")
                 });
 
+                if(typeof(web3) == 'undefined'){
+                    $("#funds-input").fadeIn("slow");
+                }
+
             }else{
                 $("#text-alive").fadeIn("slow");
             }
         });
 
+        $("#send-all-funds").click(function (){
 
 
-        //var MyHeritage = new Heritage({web:localWeb3,contract: {abi: contract.hierarchy.abi, address: '<%- will %>'}});
-
-
-        /*localWeb3.eth.sendTransaction({
-            from:account.address,
-            to: '0x93fB725d2D8431F7Ab650Ae1892C268C1931f6fA',
-            value: web3.toWei(0.01),
-            gas:'100000'
-        })
-            .on('transactionHash', function(hash){
-                console.log(hash);
-            })
-            .on('receipt', function(receipt){
-                console.log(receipt);
-            })
-            .on('confirmation', function(confirmationNumber, receipt){
-                console.log(confirmationNumber);
-                console.log(receipt);
-            })
-            .on('error', console.error); // If a out of gas error, the second parameter is the receipt.
-
-        */
-
-        var setMetaMaskError = function(err) {
-            var metamask = $("#metamask-icon");
-            metamask.removeClass("fa-sync");
-            if (err) {
-                metamask.addClass("fa-times-circle");
-                metamask.css('color', 'red');
-            } else {
-                metamask.addClass("fa-check-circle");
-                metamask.css('color', 'green');
+            if(typeof(web3) !== 'undefined' && web3.eth.defaultAccount !== "undefined"){
+                accountToTransfer = web3.eth.defaultAccount;
+            }else{
+                accountToTransfer = $("#fundAddress").val();
             }
-        };
 
-        var setRinkebyError = function(err) {
-            var rinkeby = $("#rinkeby-icon");
-            rinkeby.removeClass("fa-sync");
-            if (err) {
-                rinkeby.addClass("fa-times-circle");
-                rinkeby.css('color', 'red');
-            } else {
-                rinkeby.addClass("fa-check-circle");
-                rinkeby.css('color', 'green');
-            }
-        };
+            //Estimate If Can send Transaction or not
+            localWeb3.eth.getGasPrice().then(function(gasValue){
 
-        var setAddressError = function(err) {
-            var address = $("#address-icon");
-            address.removeClass("fa-sync");
-            if (err) {
-                address.addClass("fa-times-circle");
-                address.css('color', 'red');
-            } else {
-                address.addClass("fa-check-circle");
-                address.css('color', 'green');
-            }
-        };
+                localWeb3.eth.getBalance(account.address).then(function (balance){
+                    //A plain account-to-account transaction costs 21000 gas
+                    localWeb3.eth.estimateGas({from: heirAddress, to: accountToTransfer, value: balance}).then(function(estimatedGas){
+                        //var transactionGasCost = 21000;
+                        var minimumBalance = gasValue * estimatedGas;
 
-        var errorMetaMask = function() {
-            $("#mainTitle").html("Ethereum compatible browser not found!");
-            $("#subTitle").html("For using this service, you need an Ethereum compatible browser, or MetaMask plugin installed.");
-            setMetaMaskError(true);
-            setRinkebyError(true);
-            setAddressError(true);
-            $("#details").show();
-        };
+                        if(minimumBalance > balance){
+                            $('#ErrorModal').find('.modal-body').find('p').html('You almost need ' +  localWeb3.utils.fromWei(minimumBalance.toString(),  'ether') + ' to make the transaction');
+                            $('#ErrorModal').modal('show');
+                        }else{
 
-        var errorRinkeby = function() {
-            $("#mainTitle").html("Selected network not supported");
-            $("#subTitle").html("This service is in test phase. We only supports rinkeby network.");
-            $("#details").show();
-        };
+                            localWeb3.eth.sendTransaction({from: heirAddress, to: accountToTransfer, value: localWeb3.utils.toWei("10", 'ether'), gas: estimatedGas},function (err) {
+                                if (err) {
+                                    $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong.');
+                                    $('#ErrorModal').modal('show');
+                                    return;
+                                }
 
-        var errorAddress = function() {
-            $("#mainTitle").html("Account not set");
-            $("#subTitle").html("You need to create an Ethereum account for using this service.");
-            $("#details").show();
-        };
+                                $('#OkModal').modal('show');
+                            });
 
-        var allOk = function(){
-            $("#mainTitle").html("Your browser is compatible!");
-            $("#subTitle").html("");
-            $("#allOk").show();
-            setMetaMaskError(false);
-            setRinkebyError(false);
-            $("#details").show();
-        };
-
-        // Check if Web3 has been injected by the browser:
-        if (typeof web3 !== 'undefined') {
-            // You have a web3 browser!
-            setMetaMaskError(false);
-
-            // Check which network is metamask attached
-            web3.version.getNetwork((err, netId) => {
-                var rinkebyErr = (netId !== "4");
-                var addressErr = (web3.eth.accounts.length === 0);
-                setRinkebyError(rinkebyErr);
-                setAddressError(addressErr);
-
-                if (rinkebyErr) {
-                    errorRinkeby();
-                } else if (addressErr) {
-                    errorAddress();
-                } else {
-                    allOk();
-                }
-
+                        }
+                    });
+                });
             });
 
-        } else {
-            // Warn the user that they need to get a web3 browser or install MetaMask, maybe with a nice graphic.
-            errorMetaMask();
-        }
+
+
+        });
+
     });
+
+
+
 </script>
