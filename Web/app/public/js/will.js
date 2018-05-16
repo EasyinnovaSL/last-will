@@ -188,7 +188,7 @@ MyWills.prototype._saveWill = function (event) {
                     var adrList = addressesStr.split(";");
                    var address=adrList[adrList.length-1];
                     lastwill.heirs.forEach(function(item){
-                        item.link=this._createLink(,account,_createLink)
+                        item.link=this._createLink(account,_createLink)
                     }.bind(this));
 
 
@@ -288,4 +288,12 @@ MyWills.prototype.getWills = function () {
 
 MyWills.prototype.postWill = function (addresseswitnes, addressesheirs, percentagesheirs ) {
     return this.back_to_life.createVoteWill(addresseswitnes, addressesheirs, percentagesheirs);
+};
+
+MyWills.prototype.renderLastWill = function (lastWill) {
+    var template = $('#last-will-added-template').html();
+    Mustache.parse(template);
+    var rendered = Mustache.render(template, lastWill);
+    $('#last-will-links').html(rendered);
+    $('[data-toggle="tooltip"]').tooltip();
 };

@@ -293,45 +293,6 @@
     </div>
 </script>
 
-<script id="link-template" type="x-tmpl-mustache">
-	<div class="input-group mb-3">
-		{{#percentage}}
-		<div class="input-group-prepend" style="width: 100px;">
-			<label class="input-group-text" for="will-role" style="width: 100%;">
-				<i class="fa fa-user" style="margin-right: 5px;"></i> {{type}}
-			</label>
-		</div>
-		<div class="input-group-prepend" style="width: 80px;">
-			<label class="input-group-text" for="will-role" style="width: 100%;">
-				<i class="fas fa-percentage" style="margin-right: 5px;"></i> {{percentage}}
-			</label>
-		</div>
-		{{/percentage}}
-		{{^percentage}}
-		<div class="input-group-prepend" style="width: 180px;">
-			<label class="input-group-text" for="will-role" style="width: 100%;">
-				<i class="fa fa-user" style="margin-right: 5px;"></i> {{type}}
-			</label>
-		</div>
-		{{/percentage}}
-		<div class="input-group-prepend">
-			<label class="input-group-text"><i class="fa fa-link"></i></label>
-		</div>
-		<input type="text" class="form-control" style="padding: 8px;line-height: 23px;font-size: 14px; border: 1px solid #ced4da;" value="{{link}}" disabled>
-		<div class="input-group-append" style="border: 1px solid #ced4da; background-color: white;">
-			<a class="btn btn-sm btn-share" href="whatsapp://send?text={{text}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp">
-				<i class="fab fa-whatsapp-square" style="color: green"></i>
-			</a>
-			<a class="btn btn-sm btn-share" href="mailto:?subject={{subject}}&body={{text}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Share via Email">
-				<i class="fas fa-envelope-square" style="color: grey"></i>
-			</a>
-			<a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{link}}" data-toggle="tooltip" data-placement="top" title="Copy to clipboard!">
-				<i class="fas fa-clipboard" style="color: deepskyblue; font-size: 40px;"></i>
-			</a>
-		</div>
-	</div>
-</script>
-
 <%- script %>
 
 </body>

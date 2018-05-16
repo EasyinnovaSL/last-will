@@ -31,49 +31,10 @@ MY WILLS
             </div>
         </div>
 
-        <div class="row" id="lastWillAdded">
-            <div class="mbr-white col-md-12 content-container wills-form">
-                <div class="card will-card">
-                    <div class="card-body">
-                        <h5 class="card-title" style="color:#cc2952;">Last Will Added</h5>
-                        <br>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="will-role"><i class="fa fa-user"></i></label>
-                            </div>
-                            <select class="custom-select" onchange="selectChanged()" style="height: 49px;" id="inputGroupSelect01">
-                                <option value="1">Witness</option>
-                                <option value="2" selected>Heir</option>
-                                <option value="3">both</option>
-                            </select>
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="inputGroupSelect01">%</label>
-                            </div>
-                            <input type="text" class="form-control" id="originalPercent" style=" padding: 0px;line-height: 23px;font-size: 14px;" value="0" aria-label="Amount (to the nearest dollar)">
-                            <div class="input-group-append">
-                                <div class="input-group-append">
-                                    <span class="input-group-text">.00</span>
-                                </div>
-                                <button onclick="addRow()" class="btn btn-outline-secondary" style="margin: 0px; padding: 0px 10px; font-size: 23px; color: #cc2952;" type="button">+</button>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-
-            <div id="last-will-links" class="mbr-white col-md-12 content-container wills-form" style="display: none;">
-                <div class="card will-card">
-                    <div class="card-body">
-                        <h5 class="card-title">Last Will Links</h5>
-                        <br>
-                        <div class="links-container"></div>
-                    </div>
-                </div>
-            </div>
+        <div class="row" id="last-will-links">
 
         </div>
+
 
         <div class="row">
             <div id="transactions-container" class="mbr-white col-md-12"></div>
@@ -94,37 +55,63 @@ MY WILLS
  <div class="mbr-white col-md-12 content-container wills-form">
     <div class="card will-card">
         <div class="card-body">
-            <h5 class="card-title" style="color:#cc2952;">Last Will Added</h5>
+            <h5 class="card-title" style="color:#cc2952;">Last Will</h5>
             <br>
-             <div class="row">
-                <div class="col-md-12">
-                    <h6 class="text-muted">Heirs:</h6>
-                </div>
-             </div>
             {{#heirs}}
-            <div class="row">
-                <div class="col-md-12">
-                    <p class="card-text">
-                        <i class="fa fa-user"></i>Heir with {{percentage}} % <a href="{{link}}">heir</a> share button
-                    </p>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend" style="width: 100px;">
+                        <label class="input-group-text" for="will-role" style="width: 100%;">
+                            <i class="fa fa-user" style="margin-right: 5px;"></i> Heir
+                        </label>
+                    </div>
+                    <div class="input-group-prepend" style="width: 80px;">
+                        <label class="input-group-text" for="will-role" style="width: 100%;">
+                            <i class="fas fa-percentage" style="margin-right: 5px;"></i> {{percentage}}
+                        </label>
+                    </div>
+                    <div class="input-group-prepend">
+                        <label class="input-group-text"><i class="fa fa-link"></i></label>
+                    </div>
+                    <input type="text" class="form-control" style="padding: 8px;line-height: 23px;font-size: 14px; border: 1px solid #ced4da;" value="{{url}}" disabled>
+                    <div class="input-group-append" style="border: 1px solid #ced4da; background-color: white;">
+                        <a class="btn btn-sm btn-share" href="whatsapp://send?text=I share you the following link: {{url}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp">
+                            <i class="fab fa-whatsapp-square" style="color: green"></i>
+                        </a>
+                        <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=I share you the following link: {{url}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Share via Email">
+                            <i class="fas fa-envelope-square" style="color: grey"></i>
+                        </a>
+                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copy to clipboard!">
+                            <i class="fas fa-clipboard" style="color: deepskyblue; font-size: 40px;"></i>
+                        </a>
+                    </div>
                 </div>
-            </div>
             {{/heirs}}
-             <br>
-             <div class="row">
-                <div class="col-md-12">
-                    <h6 class="text-muted">witness:</h6>
+
+            {{#witnesses}}
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend" style="width: 180px;">
+                        <label class="input-group-text" for="will-role" style="width: 100%;">
+                            <i class="fa fa-user" style="margin-right: 5px;"></i> Witness
+                        </label>
+                    </div>
+                    <div class="input-group-prepend">
+                        <label class="input-group-text"><i class="fa fa-link"></i></label>
+                    </div>
+                    <input type="text" class="form-control" style="padding: 8px;line-height: 23px;font-size: 14px; border: 1px solid #ced4da;" value="{{url}}" disabled>
+                    <div class="input-group-append" style="border: 1px solid #ced4da; background-color: white;">
+                        <a class="btn btn-sm btn-share" href="whatsapp://send?text=I share you the following link: {{url}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp">
+                            <i class="fab fa-whatsapp-square" style="color: green"></i>
+                        </a>
+                        <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=I share you the following link: {{url}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Share via Email">
+                            <i class="fas fa-envelope-square" style="color: grey"></i>
+                        </a>
+                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copy to clipboard!">
+                            <i class="fas fa-clipboard" style="color: deepskyblue; font-size: 40px;"></i>
+                        </a>
+                    </div>
                 </div>
-             </div>
-            {{#witness}}
-            <div class="row">
-                <div class="col-md-12">
-                    <p class="card-text">
-                        <i class="fa fa-user"></i>witness <a href="{{link}}">heir</a> share button
-                    </p>
-                </div>
-            </div>
-            {{/witness}}
+            {{/witnesses}}
+
         </div>
     </div>
  </div>
@@ -275,59 +262,11 @@ MY WILLS
         // Load wills plugin
         var will = new MyWills({contract: contracts.base, hierarchy: contracts.hierarchy});
 
-        // Simulate save links
-        var testLinks = [];
-        testLinks.push({
-            url: "http://www.centreeasy.com?pk=0xbdf40c2c4048184a26e7916ee50454afe4b7903ee8a6712db17002f4c5a067b5&address=0xbdf40c2c4048184a26e7916ee50454afe4b7903ee8a6712db17002f4c5a067b5",
-            text: "I share you the following link: http://www.centreeasy.com",
-            subject: "Share Link",
-            type: "Witness",
-            percentage: "60",
-        }, {
-            url: "http://www.google.es",
-            text: "Google this: http://www.google.es",
-            subject: "Google Link",
-            type: "Witness",
-            percentage: "40"
-        }, {
-            url: "http://www.google.es",
-            text: "Google this: http://www.google.es",
-            subject: "Google Link",
-            type: "Heir"
-        });
-        localStorage.setItem("links", JSON.stringify(testLinks));
-
-        // Load Previous Links
-        var jsonLinks = localStorage.getItem("links");
-        console.log(jsonLinks);
-        if (jsonLinks) {
-            renderLinks(JSON.parse(jsonLinks));
+        // Load Previous Last Will
+        var jsonWill = localStorage.getItem("lastwill");
+        if (jsonWill) {
+            will.renderLastWill(JSON.parse(jsonWill));
         }
-
     });
-
-    function renderLinks(links) {
-        $('.links-container').html("");
-        var isEmpty = true;
-        for (var link of links) {
-            var template = $('#link-template').html();
-            Mustache.parse(template);   // optional, speeds up future uses
-            var linkRendered = Mustache.render(template, {
-                link: link.url,
-                text: link.text,
-                subject: link.subject,
-                type: link.type,
-                percentage: link.percentage,
-            });
-            $('.links-container').append(linkRendered);
-            isEmpty = false;
-        }
-
-        localStorage.setItem("links", JSON.stringify(links));
-        if (!isEmpty) {
-            $('[data-toggle="tooltip"]').tooltip();
-            $("#last-will-links").show();
-        }
-    }
 
 </script>
