@@ -13,6 +13,7 @@ function TransactoinAlerts(options) {
             web3.eth.getTransaction(txHash, $.proxy(function(err, tx){
                 if ((err || !tx) && this.transactionsInterval[txHash]) {
                     clearInterval(this.transactionsInterval[txHash]);
+                    return;
                 }
                 var confirmations = number - tx.blockNumber;
                 if (confirmations >= this.confirmationsNeeded) {

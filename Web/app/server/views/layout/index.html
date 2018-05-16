@@ -106,7 +106,7 @@
 				</div>
 				<div class="modal-body text-center">
 					<h4>Great!</h4>
-					<p>Operation Succesful!</p>
+					<p>Transaction send successfully!</p>
 					<button class="btn btn-success" data-dismiss="modal">
 						<span>Continue</span> <i class="material-icons">&#xE5C8;</i></button>
 				</div>
@@ -232,9 +232,24 @@
 		display: block;
 	}
 </style>
+
 <!--Main JS-->
 <script src="/js/heritage.js"></script>
 <script src="/js/back-to-life.js"></script>
+<script src="/assets/mustache/js/mustache.min.js"></script>
+<script src="/assets/web3/web3.js"></script>
+
+<script id="alert-template" type="x-tmpl-mustache">
+    <div class="alert alert-info" data-hash="{{ hash }}">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="display: none;">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <p><strong>{{ title }}</strong> {{ message }}</p>
+        <div class="progress">
+            <div class="progress-bar" style="width: 0%;" role="progressbar" data-min="0" data-max="{{ max }}" data-current="0"></div>
+        </div>
+    </div>
+</script>
 
 <%- script %>
 
