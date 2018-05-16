@@ -61,33 +61,18 @@ BackToLife.prototype.getHierarchyInfo = function(willAddress){
  */
 BackToLife.prototype.createVoteWill = function(addresseswitnes = null, addressesheirs = null, percentagesheirs = null){
     // Validations
-    if (addresses.length < 1 || addresses.length > 5) throw new Error("Invalid number of addresses");
-    if (percentages && percentages.length !== addresses.length) throw new Error("Invalid number of percentages (must be the same as addresses");
-
+    if (addresseswitnes.length < 1) throw new Error("Invalid number of addresses");
+    if (addressesheirs.length < 1) throw new Error("Invalid number of addresses");
+    if (percentagesheirs && percentagesheirs.length !== addressesheirs.length) throw new Error("Invalid number of percentages (must be the same as addresses");
+    var totalpercentage=0;
+    percentagesheirs.forEach(function (i){
+        totalpercentage+=parseInt(i);
+    })
+    if (totalpercentage !== 100) throw new Error("Invalid percentage (percentage must sum 100");
     // Input params
-    var addressesStr = addresses.join(";").toLowerCase();
-    var percentagesStr = "";
-    if (percentages === null || percentages.length === 0) {
-        switch (addresses.length) {
-            case 1:
-                percentagesStr = "100";
-                break;
-            case 2:
-                percentagesStr = "50;50";
-                break;
-            case 3:
-                percentagesStr = "33;33;34";
-                break;
-            case 4:
-                percentagesStr = "25;25;25;25";
-                break;
-            case 5:
-                percentagesStr = "20;20;20;20;20";
-                break;
-        }
-    } else {
-        percentagesStr = percentages.join(";");
-    }
+    var addresseswitnesStr = addresseswitnes.join(";").toLowerCase();
+    var addressesheirsStr = addressesheirs.join(";").toLowerCase();
+    var percentagesheirsStr = percentagesheirs.join(";").toLowerCase();
 
     // Do transaction
     let contract = this.contract;
@@ -95,7 +80,7 @@ BackToLife.prototype.createVoteWill = function(addresseswitnes = null, addresses
         // console.log("Params:");
         // console.log("  " + addressesStr);
         // console.log("  " + percentagesStr);
-        contract.createHierarchyContract.sendTransaction(addressesStr, percentagesStr, {gas: 4500000}, function(err, txHash){
+        contract.createHierarchyContractPayable.sendTransaction(addressesheirsStr, percentagesheirsStr,addresseswitnesStr,{gas: 4500000,value: web3.toWei(1,"ether")}, function(err, txHash){
             if (err) return reject(err);
             resolve(txHash);
         });

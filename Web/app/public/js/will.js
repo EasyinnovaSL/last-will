@@ -3,11 +3,10 @@ function MyWills(options) {
     this.back_to_life = new BackToLife(options);
     this.heritageAbi = options.hierarchy.abi;
 
-  //  var localWeb3 = new Web3(web3.currentProvider)
-    var localWeb3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/8tpuK9msQwcod7QVd94H"));
+   // var localWeb3 = new Web3(web3.currentProvider)
+   // var localWeb3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/8tpuK9msQwcod7QVd94H"));
    // var account=localWeb3.eth.accounts.create([localWeb3.utils.randomHex(32)]);
-    var account=localWeb3.eth.accounts.create(['asdf']);
-    this.accounts=[];
+
 
   // console.log(account);
 /*
@@ -39,9 +38,8 @@ function MyWills(options) {
     $('#new-will').submit($.proxy(this._saveWill, this));
     $('.wills-container').on('click','button.send',$.proxy(this._sendWill,this));
     $('.wills-container').on('click','button.withdraw',$.proxy(this._withdrawWill,this));
-    //$('.wills-container').on('click','button.declare-dead',$.proxy(this._declareDead, this));
-  //  $('.wills-container').on('click','button.declare-dead',$.proxy(this._declareDead, this));
-   // this._listWills();
+
+    this._listWills();
 }
 
 MyWills.prototype.options = {}
@@ -58,7 +56,7 @@ MyWills.prototype._sendWill = function (event) {
 MyWills.prototype._withdrawWill = function (event) {
     var contract=$(event.target).attr('data-address');
     var value=web3.toWei(parseFloat($('input[name=value-'+contract+']').val()), "ether");
-    web3.eth.sendTransaction({from:contract,to:web3.eth.accounts[0],value:value},function () {
+    web3.eth.sendTransaction({from:contract,to:web3.eth.defaultAccount,value:value},function () {
         $('#OkModal').modal('show');
         this._listWills();
     }.bind(this));
@@ -122,46 +120,30 @@ function selectChanged(){
     }
 }
 
-MyWills.prototype._addField = function () {
-    // var account=localWeb3.eth.accounts.create([localWeb3.utils.randomHex(32)]);
-    this.accounts[''+this.accountsId]={type:$(will-role).val(),percentage:$('#percentage').val(),account:localWeb3.eth.accounts.create([localWeb3.utils.randomHex(32)])}
-    console.log( this.accounts[''+this.accountsId]);
-    this.accountsId++;
-
-};
-
-MyWills.prototype._removeField = function () {
-
-};
 
 MyWills.prototype._saveWill = function (event) {
     if(checkIfAllIn()) {
         event.preventDefault();
-        var formData = $('#new-will').serializeArray();
-        var data = {};
-
-        for (var i in formData) {
-            data[formData[i].name] = formData[i].value;
-        }
-        var heir = [];
-        var type = data['type'];
-        for (var i = 0; i < 5; i++) {
-            if (data['heir' + i] != "") {
-                heir.push(data['heir' + i]);
-            }
-        }
+        var localWeb3 = new Web3(web3.currentProvider)
+      var heir=[];
+        var heir_percentage=[];
+      var witness=[];
         $('div.field').each(function (){
              var account=localWeb3.eth.accounts.create([localWeb3.utils.randomHex(32)]);
-          if($(this).find('select.custom-select').val() == '2' ){
-              heirs.push()
-          }else{
-
+            var type=$(this).find('select.custom-select').val();
+          if(type == '1' ){
+              witness.push(account.address);
+          }else if(type == '2'){
+              heir.push(account.address);
+              heir_percentage.push($(this).find('input').val());
+          }else if(type == '3'){
+              heir.push(account.address);
+              heir_percentage.push($(this).find('input').val());
+              witness.push(account.address);
           }
-            console.log($(this).find('input').val())
         });
 
-
-        this.postWill({type: type, heirs: heir}).then(function (txHash) {
+        this.postWill(witness, heir, heir_percentage).then(function (txHash) {
             $('#new-will')[0].reset();
             $('.wills-form').hide();
             $('#OkModal').modal('show');
@@ -172,19 +154,6 @@ MyWills.prototype._saveWill = function (event) {
             $('#ErrorModal').modal('show');
         });
     }
-};
-
-MyWills.prototype._declareDead = function (event) {
-    var address = $(event.target).data('address');
-    let MyHeritage = new Heritage({contract: {abi: this.heritageAbi, address: address}});
-    MyHeritage.ownerDied().then(function(){
-        $('#OkModal').modal('show');
-        this._listWills();
-    }.bind(this)).catch(function(err){
-        console.error(err);
-        $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong.');
-        $('#ErrorModal').modal('show');
-    });
 };
 
 MyWills.prototype._listWills = function () {
@@ -203,8 +172,6 @@ MyWills.prototype._listWills = function () {
 
 };
 
-MyWills.prototype._editWill = {}
-
 MyWills.prototype._createLink = function(type,pk){
     if(type=="1"){
         return '/wills-witness?pk='+pk;
@@ -214,10 +181,10 @@ MyWills.prototype._createLink = function(type,pk){
 }
 
 MyWills.prototype.getWills = function () {
-    console.log("My Ether address: " + web3.eth.accounts[0]);
+    console.log("My Ether address: " + web3.eth.defaultAccount);
     return this.back_to_life.getWills();
 };
 
-MyWills.prototype.postWill = function (will) {
-    return this.back_to_life.createVoteWill(will.heirs);
+MyWills.prototype.postWill = function (addresseswitnes, addressesheirs, percentagesheirs ) {
+    return this.back_to_life.createVoteWill(addresseswitnes, addressesheirs, percentagesheirs);
 };

@@ -1,6 +1,7 @@
 function Heritage(options){
     jQuery.extend(options,self.options);
-    this.contract = options.web.eth.contract(options.contract.abi).at(options.contract.address);
+    var localWeb3 = new Web3(web3.currentProvider)
+    this.contract = new localWeb3.eth.Contract(options.contract.abi,options.contract.address);
 }
 
 Heritage.prototype.options={
@@ -9,7 +10,7 @@ web:web3
 
 Heritage.prototype.isOwner = function(){
     return new Promise(function(resolve, reject){
-        this.contract.isOwner.call(function(err, value){
+        this.contract.methods.isOwner().call(function(err, value){
             if (err) return reject(err);
             resolve(value);
         });
@@ -18,7 +19,7 @@ Heritage.prototype.isOwner = function(){
 
 Heritage.prototype.getBalance = function(){
     return new Promise(function(resolve, reject){
-        this.contract.getBalance.call(function(err, value){
+        this.contract.methods.getBalance().call(function(err, value){
             if (err) return reject(err);
             resolve(value);
         });
@@ -27,7 +28,7 @@ Heritage.prototype.getBalance = function(){
 
 Heritage.prototype.getHeirs = function(){
     return new Promise(function(resolve, reject){
-        this.contract.getHeirs.call(function(err, data){
+        this.contract.methods.getHeirs().call(function(err, data){
             if (err) return reject(err);
 
             var heirsStr = data[0];

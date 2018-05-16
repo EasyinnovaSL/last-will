@@ -9,17 +9,19 @@ module.exports = function (app) {
     // Error meta mask
     app.get('/requirements', RenderController.renderRequirements);
 
-// Meta Mask must be installed
-    app.use('*', ContractsController.getContractsInfo, ContractsController.checkMetaMask);
-
     // Render hierarchy contracts list
-    app.get('/my-wills', RenderController.renderMyWills);
+    app.get('/my-wills', ContractsController.getContractsInfo, RenderController.renderMyWills);
 
     // Render witness link
     app.get('/witness', RenderController.renderWitness);
 
     // Render heir link
     app.get('/heir', RenderController.renderHeir);
+
+// Meta Mask must be installed
+    app.use('*', ContractsController.getContractsInfo, ContractsController.checkMetaMask);
+
+
 
     // Error fallback //
     // app.get('*', RenderController.renderError);
