@@ -45,6 +45,23 @@ Heritage.prototype.getHeirs = function(){
     }.bind(this));
 };
 
+Heritage.prototype.getWitnesses = function(){
+    return new Promise(function(resolve, reject){
+        this.contract.methods.getWitnesses().call(function(err, witnessesStr){
+            if (err) return reject(err);
+
+            if (witnessesStr.slice(-1) === ";") witnessesStr = witnessesStr.substring(0, witnessesStr.length -1);
+
+            var witnesses = [];
+            for (var address of witnessesStr.split(";")) {
+                witnesses.push({address: address});
+            }
+
+            resolve(witnesses);
+        });
+    }.bind(this));
+};
+
 Heritage.prototype.ownerDied = function(){
     return new Promise(function(resolve, reject){
         this.contract.ownerDied.sendTransaction(function(err, txHash){
