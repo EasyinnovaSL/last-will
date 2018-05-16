@@ -24,6 +24,7 @@ BackToLife.prototype.getWills = function(){
                     wills.push({
                         address: willAddress,
                         owner: info.owner,
+                        witnesses: info.witnesses,
                         heirs: info.heirs,
                         balance: web3.fromWei(info.balance, 'ether'),
                     });
@@ -39,6 +40,7 @@ BackToLife.prototype.getHierarchyInfo = function(willAddress){
     return new Promise(async function(resolve, reject){
         var owner = await MyHeritage.isOwner();
         var balance = await MyHeritage.getBalance();
+        var witnesses = await MyHeritage.getWitnesses();
         var data = await MyHeritage.getHeirs();
 
         var heirsList = data.heirs;
@@ -52,7 +54,7 @@ BackToLife.prototype.getHierarchyInfo = function(willAddress){
             });
         }
 
-        resolve({owner: owner, heirs: heirs, balance: balance});
+        resolve({owner: owner, heirs: heirs, balance: balance, witnesses: witnesses});
     });
 };
 
