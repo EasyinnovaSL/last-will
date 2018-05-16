@@ -1,10 +1,10 @@
 function Heritage(options){
     jQuery.extend(options,self.options);
-    this.contract = options.web.eth.contract(options.contract.abi).at(options.contract.address);
+    this.contract = options.contract;
 }
 
-Heritage.prototype.options={
-web:web3
+Heritage.prototype.options = {
+    contract: null
 };
 
 Heritage.prototype.isOwner = function(){

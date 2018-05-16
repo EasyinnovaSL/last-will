@@ -13,7 +13,7 @@ exports.renderRequirements = function(req,res){
     return res.render('hierarchy/requirements');
 };
 exports.renderWitness = function(req,res){
-    return res.render('hierarchy/witness',{pk: req.query.pk, will:  req.query.will});
+    return res.render('hierarchy/witness',{pk:req.query.pk, will:req.query.will});
 };
 exports.renderHeir = function(req,res){
     return res.render('hierarchy/heir-detail',{pk: req.query.pk, will: req.query.will});
