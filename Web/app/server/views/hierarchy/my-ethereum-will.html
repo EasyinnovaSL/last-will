@@ -6,11 +6,6 @@ MY WILLS
 <section class="cid-qPEh09X89D  mbr-fullscreen mbr-parallax-background" id="header15-s">
 
     <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(7, 59, 76);"></div>
-    <div class="mbr-more hidden-sm-down" aria-hidden="true">
-        <a href="#next">
-            <i class="mbri-plus mbr-iconfont"></i>
-        </a>
-    </div>
 
     <div class="container align-left">
         <div class="row">
@@ -18,33 +13,15 @@ MY WILLS
                 <div class="card will-card">
                     <div class="card-body">
                         <h5 class="card-title">New Will</h5>
+                        <p>Add people to be your heir and/or witness. You'll need to share a link with them.</p>
                         <br>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="will-role"><i class="fa fa-user"></i></label>
-                            </div>
-                            <select class="custom-select" onchange="selectChanged()" style="height: 49px;" id="inputGroupSelect01">
-                                <option value="1">Witness</option>
-                                <option value="2" selected>Heir</option>
-                                <option value="3">both</option>
-                            </select>
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="inputGroupSelect01">%</label>
-                            </div>
-                            <input type="text" class="form-control" id="originalPercent" style=" padding: 0px;line-height: 23px;font-size: 14px;" value="0" aria-label="Amount (to the nearest dollar)">
-                            <div class="input-group-append">
-                                <div class="input-group-append">
-                                    <span class="input-group-text">.00</span>
-                                </div>
-                                <button onclick="addRow()" class="btn btn-outline-secondary" style="margin: 0px; padding: 0px 10px; font-size: 23px; color: #cc2952;" type="button">+</button>
-                            </div>
-                        </div>
-
                         <form class="mbr-form" data-form-title="new-will" method="post" id="new-will">
 
-                            <span id="divholderBen"></span>
+                            <span id="divholder"></span>
 
-                            <span id="divholderTes"></span>
+                            <div class="input-group-btn" style="display: flex;justify-content: center;">
+                                <div class="mbr-section-btn"><a onclick="addRowGeneric()" class="btn btn-md btn-secondary display-4" href="#next"><span class="mbri-plus"></span></a></div>
+                            </div>
                             <div class="input-group-btn" style="display: flex;justify-content: center;">
                                 <button type="submit" class="btn btn-secondary btn-form display-4">Send</button>
                             </div>
