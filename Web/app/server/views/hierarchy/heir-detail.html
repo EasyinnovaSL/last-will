@@ -23,13 +23,13 @@ BACK TO LIFE
                     <h3 class="mbr-section-subtitle mbr-fonts-style display-5">Owner Status</h3>
                 </div>
                 <div class="mbr-white col-lg-12">
-                    <p class="mbr-timeline-text mbr-fonts-style display-7">
+                    <p id="text-alive" class="mbr-timeline-text mbr-fonts-style display-7" style="display: none">
                         The Owner is already alive,we hope he has a long life <i class="mbri-smile-face"></i>
                     </p>
                 </div>
 
                 <div class="mbr-white col-lg-12">
-                    <p class="mbr-timeline-text mbr-fonts-style display-7">
+                    <p id="text-died" class="mbr-timeline-text mbr-fonts-style display-7" style="display: none">
                         The Owner has kick the bucket and now you became one of the beneficiaries. Our condolence to the family <i class="mbri-sad-face"></i>
                     </p>
                 </div>
@@ -38,7 +38,7 @@ BACK TO LIFE
         </div>
 
         <!-- Heir Address Actions -->
-        <div id="heir-address">
+        <div id="heir-address" style="display: none">
             <div class="row align-left">
 
                 <div class="mbr-white col-md-12">
@@ -50,16 +50,13 @@ BACK TO LIFE
                 </div>
 
                 <div class="mbr-white col-md-12">
-                    <p class="card-text">
-                        <i class="mbri-cash"></i>
-                    </p>
+                     <span id="heir-balance" style="font-size: 25px; display: none"></span>
                 </div>
 
                 <div class="mbr-white col-md-12 text-center" style="margin-top: 25px;">
                     <!-- Owner actions -->
                     <button class="btn btn-secondary btn-form display-4 send" data-address="{{address}}" type="button" style="margin:0px">Send</button>
                 </div>
-
 
             </div>
         </div>
@@ -77,13 +74,31 @@ BACK TO LIFE
         // var localWeb3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/8tpuK9msQwcod7QVd94H"));
 
         //var account = localWeb3.eth.accounts.privateKeyToAccount('<%- pk %>');
-        var account = localWeb3.eth.accounts.privateKeyToAccount("0x66c14ddb845e629975e138a5c28ad5a72a73552ea65b3d3ec99810c82751cc35");
 
-        localWeb3.eth.accounts.wallet.add(account);
 
-        //var x = web3.fromWei(localWeb3.eth.getBalance(account.address));
-        var x = localWeb3.eth.getBalance(account.address).then(function (value){
-            console.log("My balance is: " + localWeb3.fromWei(value));
+        // Check if Owner of Will has died or not
+        let MyHeritage = new Heritage({contract: {abi: contracts.hierarchy.abi, address: "0x278741d6fe3ab34f2c71dc1f6fbd80db3a88d16c"}});
+
+        var contract = new localWeb3.eth.Contract( contracts.hierarchy.abi, "0x278741d6fe3ab34f2c71dc1f6fbd80db3a88d16c");
+
+        contract.methods.hasDied().call(function(err, hasDied){
+            if (err) return reject(err);
+
+            if(hasDied){
+                $("#text-died").fadeIn("slow");
+                $("#heir-address").fadeIn("slow");
+
+                var account = localWeb3.eth.accounts.privateKeyToAccount("0x66c14ddb845e629975e138a5c28ad5a72a73552ea65b3d3ec99810c82751cc35");
+
+                localWeb3.eth.accounts.wallet.add(account);
+
+                localWeb3.eth.getBalance(account.address).then(function (value){
+                    $("#heir-balance").fadeIn("slow").html(localWeb3.utils.fromWei(value, 'ether') + " Ether")
+                });
+
+            }else{
+                $("#text-alive").fadeIn("slow");
+            }
         });
 
 

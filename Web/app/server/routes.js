@@ -21,7 +21,7 @@ module.exports = function (app) {
     app.get('/witness', RenderController.renderWitness);
 
     // Render heir link
-    app.get('/heir', RenderController.renderHeir);
+    app.get('/heir', ContractsController.getContractsInfo, RenderController.renderHeir);
 
 // Meta Mask must be installed
     app.use('*', ContractsController.getContractsInfo, ContractsController.checkMetaMask);
