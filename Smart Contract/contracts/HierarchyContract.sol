@@ -97,7 +97,7 @@ contract HierarchyContract {
         var delim = ";".toSlice();
         var parts = new uint256[](s.count(delim) + 1);
 
-        require(parts.length <= 5);
+        //require(parts.length <= 5);
 
         uint256 countPercentage;
         for(uint i = 0; i < parts.length; i++) {
@@ -109,6 +109,9 @@ contract HierarchyContract {
 
     }
 
+    function hasVoted() returns (bool){
+        return mapHeirsVoteOwnerHasDied[addressToString(msg.sender)];
+    }
 
 
     function ownerDied() onlyWitness {

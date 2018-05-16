@@ -12,9 +12,6 @@ MY WILLS
         </a>
     </div>
 
-
-
-
     <div class="container align-left">
         <div class="row">
             <div class="mbr-white col-md-12 content-container wills-form">
@@ -52,67 +49,25 @@ MY WILLS
                                 <button type="submit" class="btn btn-secondary btn-form display-4">Send</button>
                             </div>
                         </form>
-                         </div>
-                     </div>
-                 </div>
-             </div>
-
-                                        <div class="row">
-                                            <div class="mbr-white col-md-12 content-container wills-container" >
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <!--Ok Modal HTML -->
-    <div id="OkModal" class="modal fade">
-        <div class="modal-dialog modal-confirm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="icon-box">
-                        <i class="material-icons">&#xE876;</i>
                     </div>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        &times;
-                    </button>
-                </div>
-                <div class="modal-body text-center">
-                    <h4>Great!</h4>
-                    <p>Operation Succesful!</p>
-                    <button class="btn btn-success" data-dismiss="modal">
-                        <span>Continue</span> <i class="material-icons">&#xE5C8;</i></button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Error Modal HTML -->
-    <div id="ErrorModal" class="modal fade">
-        <div class="modal-dialog modal-error">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="icon-box">
-                        <i class="material-icons">&#xE5CD;</i>
-                    </div>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        &times;
-                    </button>
-                </div>
-                <div class="modal-body text-center">
-                    <h4>Ooops!</h4>
-                    <p></p>
-                    <button class="btn btn-success" data-dismiss="modal">Try Again</button>
-                </div>
-            </div>
+        <div class="row">
+            <div id="transactions-container" class="mbr-white col-md-12 content-container"></div>
         </div>
+
+        <div class="row">
+            <div class="mbr-white col-md-12 content-container wills-container"></div>
+        </div>
+
     </div>
 
 </section>
 
-<script src="/assets/mustache/js/mustache.min.js"></script>
-<script src="/assets/web3/web3.js"></script>
 <script src="/js/will.js"></script>
+<script src="/js/transactions-alerts.js"></script>
 
 <script id="will-template" type="x-tmpl-mustache">
    {{#wills}}
@@ -163,27 +118,29 @@ MY WILLS
         </div>
     </div>
     {{/wills}}
+
 </script>
 <style>
-    .will-card{
-        border: 1px solid rgba(0,0,0,.125);
+    .will-card {
+        border: 1px solid rgba(0, 0, 0, .125);
         background-color: #fff;
         margin-bottom: 5px;
         color: #333333;
     }
 
-    .mbr-more{
+    .mbr-more {
         position: absolute;
         top: 10px;
         left: 50%;
         width: 60px;
         height: 60px;
         cursor: pointer;
-        background-color:rgba(204, 41, 82,0.8);
+        background-color: rgba(204, 41, 82, 0.8);
         border-radius: 50%;
         -webkit-transform: translateX(-50%);
         transform: translateX(-50%);
     }
+
     .mbr-more > a {
         display: inline-block;
         text-decoration: none;
@@ -191,28 +148,33 @@ MY WILLS
         -webkit-animation: arrowdown 1.7s ease-in-out infinite;
         animation: arrowdown 1.7s ease-in-out infinite;
     }
+
     .mbr-more a {
         color: #ffffff;
     }
+
     .mbr-more > a > i {
         position: absolute;
         top: -2px;
         left: 15px;
         font-size: 2rem;
     }
+
     @media (min-width: 768px) {
-        .content-container.wills-container , .content-container.wills-form{
+        .content-container.wills-container, .content-container.wills-form {
             padding-right: 10px;
         }
 
     }
-    .wills-container{
+
+    .wills-container {
         padding: 10px;
-        border: 1px solid rgba(0,0,0,.125);
+        border: 1px solid rgba(0, 0, 0, .125);
         background-color: #78929bc4;
         border-radius: .25rem;
     }
-    .wills-form{
+
+    .wills-form {
         padding: 10px;
 
         border-radius: .25rem;
@@ -220,8 +182,15 @@ MY WILLS
 </style>
 
 <script>
+
+    // Load transaction plugin globally
+    var Transactions = new TransactoinAlerts({container: "#transactions-container"});
+
     $(document).ready(function () {
+        // Load wills plugin
         var will = new MyWills({contract: contracts.base, hierarchy: contracts.hierarchy});
+        // Test
+        // Transactions.addTransaction("0x4ff0941f6fabaf6a1b0ef84e81959bae9967e9f12607a2cedf14f3af2991b6d7", "Contract creation");
     });
 
 </script>

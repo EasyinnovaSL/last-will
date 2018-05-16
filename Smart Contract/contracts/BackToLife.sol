@@ -90,10 +90,11 @@ contract BackToLife {
         /* Add heirs to the contract */
         _HierarchyContract.addHeirs(_listHeirs, _listHeirsPercentages, _listWitnesses);
 
-
-        //ms.value is the number of wei sent with the message
-       if(!newHierarchyContract.send(msg.value)){
-            throw;
+        if(msg.value > 0){
+            //ms.value is the number of wei sent with the message
+            if(!newHierarchyContract.send(msg.value)){
+                throw;
+            }
         }
     }
 

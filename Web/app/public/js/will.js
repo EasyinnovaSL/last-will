@@ -9,31 +9,31 @@ function MyWills(options) {
 
 
   // console.log(account);
-/*
-    account2=localWeb3.eth.accounts.privateKeyToAccount("0x66c14ddb845e629975e138a5c28ad5a72a73552ea65b3d3ec99810c82751cc35");
-    console.log(  account2);
-    localWeb3.eth.accounts.wallet.add(account2);
 
-    localWeb3.eth.getAccounts().then( a => console.log(a));
-    // using the event emitter
-    localWeb3.eth.sendTransaction({
-        from:account2.address,
-        to: '0x93fB725d2D8431F7Ab650Ae1892C268C1931f6fA',
-        value: web3.toWei(0.01),
-        gas:'100000'
-    })
-        .on('transactionHash', function(hash){
-        console.log(hash);
-        })
-        .on('receipt', function(receipt){
-       console.log(receipt);
-        })
-        .on('confirmation', function(confirmationNumber, receipt){
-            console.log(confirmationNumber);
-            console.log(receipt);
-        })
-        .on('error', console.error); // If a out of gas error, the second parameter is the receipt.
-*/
+    // account2=localWeb3.eth.accounts.privateKeyToAccount("0x66c14ddb845e629975e138a5c28ad5a72a73552ea65b3d3ec99810c82751cc35");
+    // console.log(  account2);
+    // localWeb3.eth.accounts.wallet.add(account2);
+    //
+    // localWeb3.eth.getAccounts().then( a => console.log(a));
+    // // using the event emitter
+    // localWeb3.eth.sendTransaction({
+    //     from:account2.address,
+    //     to: '0x93fB725d2D8431F7Ab650Ae1892C268C1931f6fA',
+    //     value: web3.toWei(0.01),
+    //     gas:'100000'
+    // })
+    //     .on('transactionHash', function(hash){
+    //     console.log(hash);
+    //     })
+    //     .on('receipt', function(receipt){
+    //    console.log(receipt);
+    //     })
+    //     .on('confirmation', function(confirmationNumber, receipt){
+    //         console.log(confirmationNumber);
+    //         console.log(receipt);
+    //     })
+    //     .on('error', console.error); // If a out of gas error, the second parameter is the receipt.
+
 
     $('#new-will').submit($.proxy(this._saveWill, this));
     $('.wills-container').on('click','button.send',$.proxy(this._sendWill,this));
@@ -130,16 +130,10 @@ MyWills.prototype._saveWill = function (event) {
       var witness=[];
         $('div.field').each(function (){
              var account=localWeb3.eth.accounts.create([localWeb3.utils.randomHex(32)]);
-            var type=$(this).find('select.custom-select').val();
-          if(type == '1' ){
-              witness.push(account.address);
-          }else if(type == '2'){
-              heir.push(account.address);
-              heir_percentage.push($(this).find('input').val());
-          }else if(type == '3'){
-              heir.push(account.address);
-              heir_percentage.push($(this).find('input').val());
-              witness.push(account.address);
+          if($(this).find('select.custom-select').val() == '2' ){
+              heirs.push()
+          }else{
+
           }
         });
 

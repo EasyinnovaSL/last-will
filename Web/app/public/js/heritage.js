@@ -53,3 +53,13 @@ Heritage.prototype.ownerDied = function(){
         });
     }.bind(this));
 };
+
+
+Heritage.prototype.hasDied = function(){
+    return new Promise(function(resolve, reject){
+        this.contract.methods.hasDied().call(function(err, value){
+            if (err) return reject(err);
+            resolve(value);
+        });
+    }.bind(this));
+};

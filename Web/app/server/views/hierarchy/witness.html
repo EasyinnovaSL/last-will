@@ -3,24 +3,87 @@ BACK TO LIFE
 
 <%- contentFor('content') %>
 
-<p> you are a witness </p>
+<section class="cid-qPEl4VRv2L mbr-parallax-background" id="header15-z" style="padding-top: 60px; padding-bottom: 60px;">
 
-<button id="dead-button">dead button</button>
+    <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(7, 59, 76);"></div>
 
-<script src="/assets/web3/web3.js"></script>
+    <div class="container align-center">
+        <div class="row">
+            <div class="mbr-white col-md-12">
+                <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1">
+                    You are a witness
+                </h1>
+                <p class="mbr-text pb-3 mbr-fonts-style display-5 align-left">
+                    If you are here, it means that you are the witness of the person that sent you this link. This person give you the responsibility of deciding whether he/she is dead.
+                    When he/she dies, just press the button, and his/her last will will be executed.
+                </p>
+            </div>
+
+            <div class="col-md-12" id="alive-div" style="display: none;">
+                <button id="dead-button" type="submit" class="btn btn-secondary btn-form display-4" style="border-radius: 50px;">Owner Died</button>
+            </div>
+
+            <div class="col-md-12 mbr-white" id="dead-div" style="display: none;">
+                <p class="mbr-text pb-3 mbr-fonts-style display-5">
+                    <i id="metamask-icon" class="fa fa-check-circle"></i>
+                    You have already declared his/her death.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="row" style="margin-top: 30px;">
+            <div id="transactions-container" class="mbr-white col-md-12 content-container"></div>
+        </div>
+    </div>
+
+</section>
+
+<script src="/js/transactions-alerts.js"></script>
+
 <script>
+
+    var Transactions = new TransactoinAlerts({container: "#transactions-container"});
+
     $(document).ready(function () {
-        var localWeb3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/8tpuK9msQwcod7QVd94H"));
 
+        var localWeb3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        // var localWeb3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/8tpuK9msQwcod7QVd94H"));
 
-        var account=localWeb3.eth.accounts.privateKeyToAccount('<%- pk %>');
-        localWeb3.eth.accounts.wallet.add('<%- pk %>');
-        var MyHeritage = new Heritage({web:localWeb3,contract: {abi: contract.hierarchy.abi, address: willAddress}});
+        var account = localWeb3.eth.accounts.wallet.add('<%- pk %>');
 
-        MyHeritage.ownerDied().then( a => {
-            console.log(a);
+        var willAddress = "<%- will %>";
+
+        var contract = new localWeb3.eth.Contract(contracts.hierarchy.abi, willAddress);
+
+        contract.methods.hasVoted().call({from: account.address.toLowerCase(), to: willAddress.toLowerCase()}, function(err, iVoted){
+            if (err) {
+                console.error(err);
+                $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong.');
+                $('#ErrorModal').modal('show');
+                return;
             }
-        )
 
+            console.log(iVoted);
+            if (iVoted) {
+                $("#dead-div").show();
+            } else {
+                $("#alive-div").show();
+                $("#dead-button").on('click', function(){
+                    contract.methods.ownerDied().send({from: account.address.toLowerCase(), to: willAddress.toLowerCase(), gas: '1000000'}, function(err, tx){
+                        if (err) {
+                            console.error(err);
+                            $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong.');
+                            $('#ErrorModal').modal('show');
+                            return;
+                        }
+                        $('#OkModal').modal('show');
+                        Transactions.addTransaction(tx, "Owner Died");
+                    });
+                })
+            }
+        });
+
+    });
 
 </script>

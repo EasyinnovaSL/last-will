@@ -1,0 +1,207 @@
+<%- contentFor('title') %>
+BACK TO LIFE
+
+<%- contentFor('content') %>
+
+<section class="cid-qPEl4VRv2L mbr-parallax-background" id="header15-z" style="padding-top: 60px; padding-bottom: 60px;">
+
+    <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(7, 59, 76);"></div>
+
+    <div class="container align-center" style="margin-bottom: 40px;">
+        <div class="row">
+            <div class="mbr-white col-lg-12">
+                <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1">
+                    You was selected as a beneficiary of a will
+                </h1>
+            </div>
+        </div>
+
+
+        <div id="owner-status">
+            <div class="row align-left">
+                <div class="mbr-white col-md-12">
+                    <h3 class="mbr-section-subtitle mbr-fonts-style display-5">Owner Status</h3>
+                </div>
+                <div class="mbr-white col-lg-12">
+                    <p class="mbr-timeline-text mbr-fonts-style display-7">
+                        The Owner is already alive,we hope he has a long life <i class="mbri-smile-face"></i>
+                    </p>
+                </div>
+
+                <div class="mbr-white col-lg-12">
+                    <p class="mbr-timeline-text mbr-fonts-style display-7">
+                        The Owner has kick the bucket and now you became one of the beneficiaries. Our condolence to the family <i class="mbri-sad-face"></i>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Heir Address Actions -->
+        <div id="heir-address">
+            <div class="row align-left">
+
+                <div class="mbr-white col-md-12">
+                    <h3 class="mbr-section-subtitle mbr-fonts-style display-5">Funds Received</h3>
+                </div>
+
+                <div class="mbr-white col-md-12">
+                    This is the actual balance you have :
+                </div>
+
+                <div class="mbr-white col-md-12">
+                    <p class="card-text">
+                        <i class="mbri-cash"></i>
+                    </p>
+                </div>
+
+                <div class="mbr-white col-md-12 text-center" style="margin-top: 25px;">
+                    <!-- Owner actions -->
+                    <button class="btn btn-secondary btn-form display-4 send" data-address="{{address}}" type="button" style="margin:0px">Send</button>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<script src="/assets/web3/web3.js"></script>
+<script type="application/javascript">
+
+    $(document).ready(function () {
+
+        var localWeb3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        // var localWeb3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/8tpuK9msQwcod7QVd94H"));
+
+        //var account = localWeb3.eth.accounts.privateKeyToAccount('<%- pk %>');
+        var account = localWeb3.eth.accounts.privateKeyToAccount("0x66c14ddb845e629975e138a5c28ad5a72a73552ea65b3d3ec99810c82751cc35");
+
+        localWeb3.eth.accounts.wallet.add(account);
+
+        //var x = web3.fromWei(localWeb3.eth.getBalance(account.address));
+        var x = localWeb3.eth.getBalance(account.address).then(function (value){
+            console.log("My balance is: " + localWeb3.fromWei(value));
+        });
+
+
+
+        //var MyHeritage = new Heritage({web:localWeb3,contract: {abi: contract.hierarchy.abi, address: '<%- will %>'}});
+
+
+        /*localWeb3.eth.sendTransaction({
+            from:account.address,
+            to: '0x93fB725d2D8431F7Ab650Ae1892C268C1931f6fA',
+            value: web3.toWei(0.01),
+            gas:'100000'
+        })
+            .on('transactionHash', function(hash){
+                console.log(hash);
+            })
+            .on('receipt', function(receipt){
+                console.log(receipt);
+            })
+            .on('confirmation', function(confirmationNumber, receipt){
+                console.log(confirmationNumber);
+                console.log(receipt);
+            })
+            .on('error', console.error); // If a out of gas error, the second parameter is the receipt.
+
+        */
+
+        var setMetaMaskError = function(err) {
+            var metamask = $("#metamask-icon");
+            metamask.removeClass("fa-sync");
+            if (err) {
+                metamask.addClass("fa-times-circle");
+                metamask.css('color', 'red');
+            } else {
+                metamask.addClass("fa-check-circle");
+                metamask.css('color', 'green');
+            }
+        };
+
+        var setRinkebyError = function(err) {
+            var rinkeby = $("#rinkeby-icon");
+            rinkeby.removeClass("fa-sync");
+            if (err) {
+                rinkeby.addClass("fa-times-circle");
+                rinkeby.css('color', 'red');
+            } else {
+                rinkeby.addClass("fa-check-circle");
+                rinkeby.css('color', 'green');
+            }
+        };
+
+        var setAddressError = function(err) {
+            var address = $("#address-icon");
+            address.removeClass("fa-sync");
+            if (err) {
+                address.addClass("fa-times-circle");
+                address.css('color', 'red');
+            } else {
+                address.addClass("fa-check-circle");
+                address.css('color', 'green');
+            }
+        };
+
+        var errorMetaMask = function() {
+            $("#mainTitle").html("Ethereum compatible browser not found!");
+            $("#subTitle").html("For using this service, you need an Ethereum compatible browser, or MetaMask plugin installed.");
+            setMetaMaskError(true);
+            setRinkebyError(true);
+            setAddressError(true);
+            $("#details").show();
+        };
+
+        var errorRinkeby = function() {
+            $("#mainTitle").html("Selected network not supported");
+            $("#subTitle").html("This service is in test phase. We only supports rinkeby network.");
+            $("#details").show();
+        };
+
+        var errorAddress = function() {
+            $("#mainTitle").html("Account not set");
+            $("#subTitle").html("You need to create an Ethereum account for using this service.");
+            $("#details").show();
+        };
+
+        var allOk = function(){
+            $("#mainTitle").html("Your browser is compatible!");
+            $("#subTitle").html("");
+            $("#allOk").show();
+            setMetaMaskError(false);
+            setRinkebyError(false);
+            $("#details").show();
+        };
+
+        // Check if Web3 has been injected by the browser:
+        if (typeof web3 !== 'undefined') {
+            // You have a web3 browser!
+            setMetaMaskError(false);
+
+            // Check which network is metamask attached
+            web3.version.getNetwork((err, netId) => {
+                var rinkebyErr = (netId !== "4");
+                var addressErr = (web3.eth.accounts.length === 0);
+                setRinkebyError(rinkebyErr);
+                setAddressError(addressErr);
+
+                if (rinkebyErr) {
+                    errorRinkeby();
+                } else if (addressErr) {
+                    errorAddress();
+                } else {
+                    allOk();
+                }
+
+            });
+
+        } else {
+            // Warn the user that they need to get a web3 browser or install MetaMask, maybe with a nice graphic.
+            errorMetaMask();
+        }
+    });
+</script>
