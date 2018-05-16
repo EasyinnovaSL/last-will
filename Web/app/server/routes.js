@@ -9,24 +9,19 @@ module.exports = function (app) {
     });
 
     // Home
-    app.get('/', ContractsController.getContractsInfo, RenderController.renderHome);
+    app.get('/', RenderController.renderHome);
 
     // Error meta mask
     app.get('/requirements', RenderController.renderRequirements);
 
     // Render hierarchy contracts list
-    app.get('/my-wills', ContractsController.getContractsInfo, RenderController.renderMyWills);
+    app.get('/my-wills', ContractsController.getContractsInfo, ContractsController.checkMetaMask, RenderController.renderMyWills);
 
     // Render witness link
-    app.get('/witness', RenderController.renderWitness);
+    app.get('/witness', ContractsController.getContractsInfo, RenderController.renderWitness);
 
     // Render heir link
-    app.get('/heir', RenderController.renderHeir);
-
-// Meta Mask must be installed
-    app.use('*', ContractsController.getContractsInfo, ContractsController.checkMetaMask);
-
-
+    app.get('/heir', ContractsController.getContractsInfo, RenderController.renderHeir);
 
     // Error fallback //
     // app.get('*', RenderController.renderError);
