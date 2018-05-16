@@ -7,7 +7,7 @@ BACK TO LIFE
 
     <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(7, 59, 76);"></div>
 
-    <div class="container align-center" style="margin-bottom: 40px;">
+    <div id="main-container" class="container align-center" style="margin-bottom: 40px;">
         <div class="row">
             <div class="mbr-white col-lg-12">
                 <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1">
@@ -65,6 +65,8 @@ BACK TO LIFE
                 <div class="mbr-white col-md-12 text-center" style="margin-top: 25px;">
                     <!-- Owner actions -->
                     <button id="send-all-funds" class="btn btn-secondary btn-form display-4 send" data-address="{{address}}" type="button" style="margin:0px">Send Funds</button>
+
+                    <p id="metamask-advice" style="display: none;">*The funds will be send to your current metamask account</p>
                 </div>
 
             </div>
@@ -72,9 +74,27 @@ BACK TO LIFE
 
     </div>
 
+    <div id="no-params-container" class="container align-center" style="margin-bottom: 40px; display: none;">
+        <div class="row align-left">
+            <div class="mbr-white col-md-12">
+                <h3 class="mbr-section-subtitle mbr-fonts-style display-5">Error: Missing Parameters</h3>
+            </div>
+            <div class="mbr-white col-lg-12">
+                <p class="mbr-timeline-text mbr-fonts-style display-7" >
+                    Please, pass the correct parameters in the Url
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+
 </section>
 
 <script src="/assets/web3/web3.js"></script>
+
+<script src="/js/transactions-alerts.js"></script>
+
 <script type="application/javascript">
 
     var localWeb3 = null;
@@ -89,80 +109,86 @@ BACK TO LIFE
        localWeb3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
         // var localWeb3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/8tpuK9msQwcod7QVd94H"));
 
-        account = localWeb3.eth.accounts.privateKeyToAccount('<%- pk %>');
-        heirAddress = account.address;
-
+        var privateKey = "<%- pk %>";
         var willAddress = "<%- will %>";
-        var contract = new localWeb3.eth.Contract( contracts.hierarchy.abi, willAddress);
-        //var contract = new localWeb3.eth.Contract( contracts.hierarchy.abi, "0x278741d6fe3ab34f2c71dc1f6fbd80db3a88d16c");
 
-        contract.methods.hasDied().call(function(err, hasDied){
-            if (err) return reject(err);
+        if(privateKey == "" || willAddress == ""){
+            $("#no-params-container").fadeIn("slow");
+            $("#main-container").hide();
+        }else{
 
-            //if(hasDied){
-            if(true){
-                $("#text-died").fadeIn("slow");
-                $("#heir-address").fadeIn("slow");
+            account = localWeb3.eth.accounts.privateKeyToAccount(privateKey);
+            heirAddress = account.address;
 
-                localWeb3.eth.accounts.wallet.add(account);
+            var contract = new localWeb3.eth.Contract( contracts.hierarchy.abi, willAddress);
+            //var contract = new localWeb3.eth.Contract( contracts.hierarchy.abi, "0x278741d6fe3ab34f2c71dc1f6fbd80db3a88d16c");
 
-                localWeb3.eth.getBalance(account.address).then(function (value){
-                    $("#heir-balance").fadeIn("slow").html(localWeb3.utils.fromWei(value, 'ether') + " Ether")
-                });
+            contract.methods.hasDied().call(function(err, hasDied){
+                if (err) return reject(err);
 
-                if(typeof(web3) == 'undefined'){
-                    $("#funds-input").fadeIn("slow");
+                //if(hasDied){
+                    if(true){
+                    $("#text-died").fadeIn("slow");
+                    $("#heir-address").fadeIn("slow");
+
+                    localWeb3.eth.accounts.wallet.add(account);
+
+                    localWeb3.eth.getBalance(account.address).then(function (value){
+                        $("#heir-balance").fadeIn("slow").html(localWeb3.utils.fromWei(value, 'ether') + " Ether")
+                    });
+
+                    if(typeof(web3) == 'undefined'){
+                        $("#funds-input").fadeIn("slow");
+                    }else{
+                        $("#metamask-advice").show();
+                    }
+
+                }else{
+                    $("#text-alive").fadeIn("slow");
+                }
+            });
+
+            $("#send-all-funds").click(function (){
+
+
+                if(typeof(web3) !== 'undefined' && web3.eth.defaultAccount !== "undefined"){
+                    accountToTransfer = web3.eth.defaultAccount;
+                }else{
+                    accountToTransfer = $("#fundAddress").val();
                 }
 
-            }else{
-                $("#text-alive").fadeIn("slow");
-            }
-        });
+                //Estimate If Can send Transaction or not
+                localWeb3.eth.getGasPrice().then(function(gasValue){
 
-        $("#send-all-funds").click(function (){
+                    localWeb3.eth.getBalance(account.address).then(function (balance){
+                        //A plain account-to-account transaction costs 21000 gas
+                        localWeb3.eth.estimateGas({from: heirAddress, to: accountToTransfer, value: balance}).then(function(estimatedGas){
+                            //var transactionGasCost = 21000;
+                            var minimumBalance = gasValue * estimatedGas;
 
+                            if(minimumBalance > balance){
+                                $('#ErrorModal').find('.modal-body').find('p').html('You almost need ' +  localWeb3.utils.fromWei(minimumBalance.toString(),  'ether') + ' to make the transaction');
+                                $('#ErrorModal').modal('show');
+                            }else{
 
-            if(typeof(web3) !== 'undefined' && web3.eth.defaultAccount !== "undefined"){
-                accountToTransfer = web3.eth.defaultAccount;
-            }else{
-                accountToTransfer = $("#fundAddress").val();
-            }
+                                localWeb3.eth.sendTransaction({from: heirAddress, to: accountToTransfer, value: localWeb3.utils.toWei("10", 'ether'), gas: estimatedGas},function (err) {
+                                    if (err) {
+                                        $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong.');
+                                        $('#ErrorModal').modal('show');
+                                        return;
+                                    }
 
-            //Estimate If Can send Transaction or not
-            localWeb3.eth.getGasPrice().then(function(gasValue){
+                                    $('#OkModal').modal('show');
+                                });
 
-                localWeb3.eth.getBalance(account.address).then(function (balance){
-                    //A plain account-to-account transaction costs 21000 gas
-                    localWeb3.eth.estimateGas({from: heirAddress, to: accountToTransfer, value: balance}).then(function(estimatedGas){
-                        //var transactionGasCost = 21000;
-                        var minimumBalance = gasValue * estimatedGas;
-
-                        if(minimumBalance > balance){
-                            $('#ErrorModal').find('.modal-body').find('p').html('You almost need ' +  localWeb3.utils.fromWei(minimumBalance.toString(),  'ether') + ' to make the transaction');
-                            $('#ErrorModal').modal('show');
-                        }else{
-
-                            localWeb3.eth.sendTransaction({from: heirAddress, to: accountToTransfer, value: localWeb3.utils.toWei("10", 'ether'), gas: estimatedGas},function (err) {
-                                if (err) {
-                                    $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong.');
-                                    $('#ErrorModal').modal('show');
-                                    return;
-                                }
-
-                                $('#OkModal').modal('show');
-                            });
-
-                        }
+                            }
+                        });
                     });
                 });
             });
-
-
-
-        });
+        }
 
     });
-
 
 
 </script>
