@@ -16,10 +16,10 @@ module.exports = function(callback) {
         var contracts = result.valueOf().slice(0, -1).split(";");
         var contractAddress = contracts[contracts.length-1];
         console.log("Contract address: " + contractAddress);
-        HierarchyContractInstance = HierarchyContract.at(contractAddress);
-        return HierarchyContractInstance.ownerDied({from: "0xc0Eb469a948C5b7A163Df6e9bCa0a7115a74B7a9".toLowerCase()});
-    }).then(function (tx) {
-        console.log("TX Hash: " + tx.tx);
+    //     HierarchyContractInstance = HierarchyContract.at(contractAddress);
+    //     return HierarchyContractInstance.ownerDied({from: "0xc0Eb469a948C5b7A163Df6e9bCa0a7115a74B7a9".toLowerCase()});
+    // }).then(function (tx) {
+    //     console.log("TX Hash: " + tx.tx);
     }).catch(function(err){
         console.error(err);
     });

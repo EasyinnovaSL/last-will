@@ -56,25 +56,33 @@ BACK TO LIFE
 
         var contract = new localWeb3.eth.Contract(contracts.hierarchy.abi, willAddress);
 
-        var iVoted = true;
+        contract.methods.hasVoted().call({from: account.address.toLowerCase(), to: willAddress.toLowerCase()}, function(err, iVoted){
+            if (err) {
+                console.error(err);
+                $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong.');
+                $('#ErrorModal').modal('show');
+                return;
+            }
 
-        if (iVoted) {
-            $("#dead-div").show();
-        } else {
-            $("#alive-div").show();
-            $("#dead-button").on('click', function(){
-                contract.methods.ownerDied().send({from: account.address.toLowerCase(), to: willAddress.toLowerCase(), gas: '1000000'}, function(err, tx){
-                    if (err) {
-                        console.error(err);
-                        $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong.');
-                        $('#ErrorModal').modal('show');
-                        return;
-                    }
-                    $('#OkModal').modal('show');
-                    Transactions.addTransaction(tx, "Owner Died");
-                });
-            })
-        }
+            console.log(iVoted);
+            if (iVoted) {
+                $("#dead-div").show();
+            } else {
+                $("#alive-div").show();
+                $("#dead-button").on('click', function(){
+                    contract.methods.ownerDied().send({from: account.address.toLowerCase(), to: willAddress.toLowerCase(), gas: '1000000'}, function(err, tx){
+                        if (err) {
+                            console.error(err);
+                            $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong.');
+                            $('#ErrorModal').modal('show');
+                            return;
+                        }
+                        $('#OkModal').modal('show');
+                        Transactions.addTransaction(tx, "Owner Died");
+                    });
+                })
+            }
+        });
 
     });
 
