@@ -7,13 +7,13 @@ MY WILLS
 
     <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(7, 59, 76);"></div>
 
+
     <div class="container align-left">
         <div class="row">
             <div class="mbr-white col-md-12 content-container wills-form">
                 <div class="card will-card">
                     <div class="card-body">
-                        <h5 class="card-title">New Will</h5>
-                        <p>Add people to be your heir and/or witness. You'll need to share a link with them.</p>
+                        <h5 class="card-title" style="color:#cc2952;">New Will</h5>
                         <br>
                         <form class="mbr-form" data-form-title="new-will" method="post" id="new-will">
 
@@ -26,6 +26,39 @@ MY WILLS
                                 <button type="submit" class="btn btn-secondary btn-form display-4">Send</button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" id="lastWillAdded">
+            <div class="mbr-white col-md-12 content-container wills-form">
+                <div class="card will-card">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color:#cc2952;">Last Will Added</h5>
+                        <br>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="will-role"><i class="fa fa-user"></i></label>
+                            </div>
+                            <select class="custom-select" onchange="selectChanged()" style="height: 49px;" id="inputGroupSelect01">
+                                <option value="1">Witness</option>
+                                <option value="2" selected>Heir</option>
+                                <option value="3">both</option>
+                            </select>
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01">%</label>
+                            </div>
+                            <input type="text" class="form-control" id="originalPercent" style=" padding: 0px;line-height: 23px;font-size: 14px;" value="0" aria-label="Amount (to the nearest dollar)">
+                            <div class="input-group-append">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">.00</span>
+                                </div>
+                                <button onclick="addRow()" class="btn btn-outline-secondary" style="margin: 0px; padding: 0px 10px; font-size: 23px; color: #cc2952;" type="button">+</button>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
             </div>
@@ -45,6 +78,47 @@ MY WILLS
 
 <script src="/js/will.js"></script>
 <script src="/js/transactions-alerts.js"></script>
+
+<script id="last-will-added-template" type="x-tmpl-mustache">
+ <div class="mbr-white col-md-12 content-container wills-form">
+    <div class="card will-card">
+        <div class="card-body">
+            <h5 class="card-title" style="color:#cc2952;">Last Will Added</h5>
+            <br>
+             <div class="row">
+                <div class="col-md-12">
+                    <h6 class="text-muted">Heirs:</h6>
+                </div>
+             </div>
+            {{#heirs}}
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="card-text">
+                        <i class="fa fa-user"></i>Heir with {{percentage}} % <a href="{{link}}">heir</a> share button
+                    </p>
+                </div>
+            </div>
+            {{/heirs}}
+             <br>
+             <div class="row">
+                <div class="col-md-12">
+                    <h6 class="text-muted">witness:</h6>
+                </div>
+             </div>
+            {{#witness}}
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="card-text">
+                        <i class="fa fa-user"></i>witness <a href="{{link}}">heir</a> share button
+                    </p>
+                </div>
+            </div>
+            {{/witness}}
+        </div>
+    </div>
+ </div>
+</script>
+
 
 <script id="will-template" type="x-tmpl-mustache">
    {{#wills}}
