@@ -183,16 +183,16 @@ MyWills.prototype._saveWill = function (event) {
                 console.log('receipt');
                 console.log(receipt);
 
-                contract.methods.getMyContracts.call(function(err, addressesStr){
+                contract.methods.getMyContracts().call(function(err, addressesStr){
                     if (addressesStr.slice(-1) === ";") addressesStr = addressesStr.substring(0, addressesStr.length -1);
                     var adrList = addressesStr.split(";");
                    var address=adrList[adrList.length-1];
                     lastwill.heirs.forEach(function(item){
-                        item.url=this._createLink("2",account,address)
+                        item.url=this._createLink("2",item.account,address)
                     }.bind(this));
 
                     lastwill.witness.forEach(function(item){
-                        item.url=this._createLink("1",account,address)
+                        item.url=this._createLink("1",item.account,address)
                     }.bind(this));
 
                     this.lastwill=lastwill;
@@ -274,9 +274,9 @@ MyWills.prototype._listWills = function () {
 
 MyWills.prototype._createLink = function(type,account,will){
     if(type=="1"){
-        return '/wills-witness?pk='+account.privatekey+'&will='+will;
+        return window.location.protocol + '//' + window.location.host+'/witness?pk='+account.privateKey+'&will='+will;
     }else{
-       return '/wills-heir?pk='+account.privatekey+'&will='+will;
+        return window.location.protocol + '//' + window.location.host+'/heir?pk='+account.privateKey+'&will='+will;
     }
 }
 
