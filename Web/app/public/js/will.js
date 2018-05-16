@@ -125,16 +125,22 @@ MyWills.prototype._saveWill = function (event) {
     if(checkIfAllIn()) {
         event.preventDefault();
         var localWeb3 = new Web3(web3.currentProvider)
-      var heir=[];
+        var heir=[];
         var heir_percentage=[];
-      var witness=[];
+        var witness=[];
         $('div.field').each(function (){
-             var account=localWeb3.eth.accounts.create([localWeb3.utils.randomHex(32)]);
-          if($(this).find('select.custom-select').val() == '2' ){
-              heirs.push()
-          }else{
-
-          }
+            var account=localWeb3.eth.accounts.create([localWeb3.utils.randomHex(32)]);
+            var type=$(this).find('select.custom-select').val();
+            if(type == '1' ){
+                witness.push(account.address);
+            }else if(type == '2'){
+                heir.push(account.address);
+                heir_percentage.push($(this).find('input').val());
+            }else if(type == '3'){
+                heir.push(account.address);
+                heir_percentage.push($(this).find('input').val());
+                witness.push(account.address);
+            }
         });
 
         this.postWill(witness, heir, heir_percentage).then(function (txHash) {
