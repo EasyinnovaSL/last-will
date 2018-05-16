@@ -6,13 +6,9 @@ MY WILLS
 <section class="cid-qPEh09X89D  mbr-fullscreen mbr-parallax-background" id="header15-s">
 
     <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(7, 59, 76);"></div>
-    <div class="mbr-more hidden-sm-down" aria-hidden="true">
-        <a href="#next">
-            <i class="mbri-plus mbr-iconfont"></i>
-        </a>
-    </div>
 
     <div class="container align-left">
+
         <div class="row">
             <div class="mbr-white col-md-12 content-container wills-form">
                 <div class="card will-card">
@@ -52,6 +48,17 @@ MY WILLS
                     </div>
                 </div>
             </div>
+
+            <div id="last-will-links" class="mbr-white col-md-12 content-container wills-form" style="display: none;">
+                <div class="card will-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Last Will Links</h5>
+                        <br>
+                        <div class="links-container"></div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="row">
@@ -61,32 +68,6 @@ MY WILLS
         <div class="row">
             <div class="mbr-white col-md-12 content-container wills-container"></div>
         </div>
-
-        <div class="btn-group">
-            <button type="submit" class="btn btn-secondary btn-form display-4"
-                    data-toggle="dropdown">
-                SHARE <span class="caret"></span>
-            </button>
-
-            <ul class="dropdown-menu" role="menu">
-                <!--<li><a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fparse.com">Facebook</a></li>-->
-                <li><a href="https://www.facebook.com/messages/t/">
-                    <img src="https://i0.wp.com/idescargar.com/wp-content/uploads/2017/01/descargar-facebook-apk-gratis.png?fit=300%2C300&ssl=1" width="20" height="20">Facebook
-                </a></li>
-                <li><a href="whatsapp://send?text=URL" data-action="share/whatsapp/share">
-                    <img src="https://cdn3.iconfinder.com/data/icons/cute-flat-social-media-icons-3/512/whatsapp.png" width="20" height="20">Whatssap
-                </a></li>
-                <li><a href="mailto:?subject=PrivateKey&amp;body=Check out this site http://www.website.com.">
-                    <img src="http://png-2.findicons.com/files/icons/573/must_have/48/mail.png" >Email
-                </a></li>
-                <li class="divider"></li>
-            </ul>
-        </div>
-
-        <script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5afaa241c3d29a001129f23d&product=custom-share-buttons' async='async'></script>
-
-        <!-- Go to www.addthis.com/dashboard to customize your tools -->
-        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5afa9684e504d95b"></script>
 
     </div>
 
@@ -238,8 +219,60 @@ MY WILLS
     $(document).ready(function () {
         // Load wills plugin
         var will = new MyWills({contract: contracts.base, hierarchy: contracts.hierarchy});
-        // Test
-        // Transactions.addTransaction("0x4ff0941f6fabaf6a1b0ef84e81959bae9967e9f12607a2cedf14f3af2991b6d7", "Contract creation");
+
+        // Simulate save links
+        var testLinks = [];
+        testLinks.push({
+            url: "http://www.centreeasy.com?pk=0xbdf40c2c4048184a26e7916ee50454afe4b7903ee8a6712db17002f4c5a067b5&address=0xbdf40c2c4048184a26e7916ee50454afe4b7903ee8a6712db17002f4c5a067b5",
+            text: "I share you the following link: http://www.centreeasy.com",
+            subject: "Share Link",
+            type: "Witness",
+            percentage: "60",
+        }, {
+            url: "http://www.google.es",
+            text: "Google this: http://www.google.es",
+            subject: "Google Link",
+            type: "Witness",
+            percentage: "40"
+        }, {
+            url: "http://www.google.es",
+            text: "Google this: http://www.google.es",
+            subject: "Google Link",
+            type: "Heir"
+        });
+        localStorage.setItem("links", JSON.stringify(testLinks));
+
+        // Load Previous Links
+        var jsonLinks = localStorage.getItem("links");
+        console.log(jsonLinks);
+        if (jsonLinks) {
+            renderLinks(JSON.parse(jsonLinks));
+        }
+
     });
+
+    function renderLinks(links) {
+        $('.links-container').html("");
+        var isEmpty = true;
+        for (var link of links) {
+            var template = $('#link-template').html();
+            Mustache.parse(template);   // optional, speeds up future uses
+            var linkRendered = Mustache.render(template, {
+                link: link.url,
+                text: link.text,
+                subject: link.subject,
+                type: link.type,
+                percentage: link.percentage,
+            });
+            $('.links-container').append(linkRendered);
+            isEmpty = false;
+        }
+
+        localStorage.setItem("links", JSON.stringify(links));
+        if (!isEmpty) {
+            $('[data-toggle="tooltip"]').tooltip();
+            $("#last-will-links").show();
+        }
+    }
 
 </script>

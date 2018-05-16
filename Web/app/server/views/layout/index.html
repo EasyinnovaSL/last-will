@@ -24,6 +24,37 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
+	<style>
+		.dropdown-menu.show{
+			display: block;
+		}
+		.my-loader {
+			border: 16px solid #f3f3f3; /* Light grey */
+			border-top: 16px solid #3498db; /* Blue */
+			border-radius: 50%;
+			width: 120px;
+			height: 120px;
+			animation: spin 2s linear infinite;
+			margin-left: auto;
+			margin-right: auto;
+			position: relative;
+		}
+
+		@keyframes spin {
+			0% { transform: rotate(0deg); }
+			100% { transform: rotate(360deg); }
+		}
+		.btn-share{
+			margin: 0;
+			padding: 0;
+			margin-left: 5px;
+			margin-right: 5px;
+		}
+		.btn-share i {
+			font-size: 45px;
+		}
+	</style>
 </head>
 
 <body>
@@ -233,29 +264,18 @@
         var contracts = JSON.parse('<%- JSON.stringify(contracts); %>');
     </script>
 <% } %>
-<style>
-	.dropdown-menu.show{
-		display: block;
-	}
-	.my-loader {
-		border: 16px solid #f3f3f3; /* Light grey */
-		border-top: 16px solid #3498db; /* Blue */
-		border-radius: 50%;
-		width: 120px;
-		height: 120px;
-		animation: spin 2s linear infinite;
-		margin-left: auto;
-		margin-right: auto;
-		position: relative;
-	}
-
-	@keyframes spin {
-		0% { transform: rotate(0deg); }
-		100% { transform: rotate(360deg); }
-	}
-</style>
 
 <!--Main JS-->
+<script>
+	function copyToClipBoard(me) {
+        var copyText = $(me).data('text');
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val(copyText).select();
+        document.execCommand("copy");
+        $temp.remove();
+	}
+</script>
 <script src="/js/heritage.js"></script>
 <script src="/js/back-to-life.js"></script>
 <script src="/assets/mustache/js/mustache.min.js"></script>
@@ -271,6 +291,45 @@
             <div class="progress-bar" style="width: 0%;" role="progressbar" data-min="0" data-max="{{ max }}" data-current="0"></div>
         </div>
     </div>
+</script>
+
+<script id="link-template" type="x-tmpl-mustache">
+	<div class="input-group mb-3">
+		{{#percentage}}
+		<div class="input-group-prepend" style="width: 100px;">
+			<label class="input-group-text" for="will-role" style="width: 100%;">
+				<i class="fa fa-user" style="margin-right: 5px;"></i> {{type}}
+			</label>
+		</div>
+		<div class="input-group-prepend" style="width: 80px;">
+			<label class="input-group-text" for="will-role" style="width: 100%;">
+				<i class="fas fa-percentage" style="margin-right: 5px;"></i> {{percentage}}
+			</label>
+		</div>
+		{{/percentage}}
+		{{^percentage}}
+		<div class="input-group-prepend" style="width: 180px;">
+			<label class="input-group-text" for="will-role" style="width: 100%;">
+				<i class="fa fa-user" style="margin-right: 5px;"></i> {{type}}
+			</label>
+		</div>
+		{{/percentage}}
+		<div class="input-group-prepend">
+			<label class="input-group-text"><i class="fa fa-link"></i></label>
+		</div>
+		<input type="text" class="form-control" style="padding: 8px;line-height: 23px;font-size: 14px; border: 1px solid #ced4da;" value="{{link}}" disabled>
+		<div class="input-group-append" style="border: 1px solid #ced4da; background-color: white;">
+			<a class="btn btn-sm btn-share" href="whatsapp://send?text={{text}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp">
+				<i class="fab fa-whatsapp-square" style="color: green"></i>
+			</a>
+			<a class="btn btn-sm btn-share" href="mailto:?subject={{subject}}&body={{text}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Share via Email">
+				<i class="fas fa-envelope-square" style="color: grey"></i>
+			</a>
+			<a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{link}}" data-toggle="tooltip" data-placement="top" title="Copy to clipboard!">
+				<i class="fas fa-clipboard" style="color: deepskyblue; font-size: 40px;"></i>
+			</a>
+		</div>
+	</div>
 </script>
 
 <%- script %>
