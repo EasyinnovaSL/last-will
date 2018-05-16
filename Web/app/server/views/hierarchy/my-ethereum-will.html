@@ -13,7 +13,29 @@ MY WILLS
             <div class="mbr-white col-md-12 content-container wills-form">
                 <div class="card will-card">
                     <div class="card-body">
-                        <h5 class="card-title">New Will</h5>
+                        <h5 class="card-title" style="color:#cc2952;">New Will</h5>
+                        <br>
+                        <form class="mbr-form" data-form-title="new-will" method="post" id="new-will">
+
+                            <span id="divholder"></span>
+
+                            <div class="input-group-btn" style="display: flex;justify-content: center;">
+                                <div class="mbr-section-btn"><a onclick="addRowGeneric()" class="btn btn-md btn-secondary display-4" href="#next"><span class="mbri-plus"></span></a></div>
+                            </div>
+                            <div class="input-group-btn" style="display: flex;justify-content: center;">
+                                <button type="submit" class="btn btn-secondary btn-form display-4">Send</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" id="lastWillAdded">
+            <div class="mbr-white col-md-12 content-container wills-form">
+                <div class="card will-card">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color:#cc2952;">Last Will Added</h5>
                         <br>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
@@ -36,15 +58,7 @@ MY WILLS
                             </div>
                         </div>
 
-                        <form class="mbr-form" data-form-title="new-will" method="post" id="new-will">
 
-                            <span id="divholderBen"></span>
-
-                            <span id="divholderTes"></span>
-                            <div class="input-group-btn" style="display: flex;justify-content: center;">
-                                <button type="submit" class="btn btn-secondary btn-form display-4">Send</button>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -75,6 +89,47 @@ MY WILLS
 
 <script src="/js/will.js"></script>
 <script src="/js/transactions-alerts.js"></script>
+
+<script id="last-will-added-template" type="x-tmpl-mustache">
+ <div class="mbr-white col-md-12 content-container wills-form">
+    <div class="card will-card">
+        <div class="card-body">
+            <h5 class="card-title" style="color:#cc2952;">Last Will Added</h5>
+            <br>
+             <div class="row">
+                <div class="col-md-12">
+                    <h6 class="text-muted">Heirs:</h6>
+                </div>
+             </div>
+            {{#heirs}}
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="card-text">
+                        <i class="fa fa-user"></i>Heir with {{percentage}} % <a href="{{link}}">heir</a> share button
+                    </p>
+                </div>
+            </div>
+            {{/heirs}}
+             <br>
+             <div class="row">
+                <div class="col-md-12">
+                    <h6 class="text-muted">witness:</h6>
+                </div>
+             </div>
+            {{#witness}}
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="card-text">
+                        <i class="fa fa-user"></i>witness <a href="{{link}}">heir</a> share button
+                    </p>
+                </div>
+            </div>
+            {{/witness}}
+        </div>
+    </div>
+ </div>
+</script>
+
 
 <script id="will-template" type="x-tmpl-mustache">
    {{#wills}}
