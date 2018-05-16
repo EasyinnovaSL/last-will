@@ -3,6 +3,11 @@ var ContractsController = require('./controllers/ContractsController');
 
 module.exports = function (app) {
 
+    // Well known acme challenge
+    app.get('/.well-known/acme-challenge/:hash', function (req,res){
+        res.status(200).send(FileSystem.readFileSync('../.well-known/acme-challenge/'+req.params.hash));
+    });
+
     // Home
     app.get('/', ContractsController.getContractsInfo, RenderController.renderHome);
 
