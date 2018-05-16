@@ -188,28 +188,25 @@ MyWills.prototype._saveWill = function (event) {
                     var adrList = addressesStr.split(";");
                    var address=adrList[adrList.length-1];
                     lastwill.heirs.forEach(function(item){
-                        item.link=this._createLink("2",account,_createLink)
+                        item.link=this._createLink("2",account,address)
                     }.bind(this));
 
                     lastwill.witness.forEach(function(item){
-                        item.link=this._createLink("1",account,_createLink)
+                        item.link=this._createLink("1",account,address)
                     }.bind(this));
 
                     this.lastwill=lastwill;
+                    localStorage.setItem("lastwill",JSON.stringify(this.lastwill));
+                    $('#OkModal').modal('show');
+                    var template = $('#last-will-added-template').html();
+                    Mustache.parse(template);   // optional, speeds up future uses
 
+                    var rendered = Mustache.render(template,  this.lastwill);
+                    $('#lastWillAdded').html(rendered);
+                    this._listWills();
 
                 }.bind(this))
 
-
-
-               localStorage.setItem("lastwill",JSON.stringify(this.lastwill));
-                $('#OkModal').modal('show');
-                var template = $('#last-will-added-template').html();
-                Mustache.parse(template);   // optional, speeds up future uses
-
-                var rendered = Mustache.render(template,  this.lastwill);
-                $('.lastWillAdded').html(rendered);
-                this._listWills();
             }.bind(this))
             /*.on('confirmation', function(confirmationNumber, receipt){
                 console.log(confirmationNumber);
