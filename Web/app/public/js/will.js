@@ -45,21 +45,31 @@ function MyWills(options) {
 MyWills.prototype.options = {}
 
 MyWills.prototype._sendWill = function (event) {
-
-    var contract=$(event.target).attr('data-address');
-    var value=web3.toWei(parseFloat($('input[name=value-'+contract+']').val()), "ether");
-    web3.eth.sendTransaction({to:contract,value:value},function () {
-        $('#OkModal').modal('show');
-        this._listWills();
-    }.bind(this));
+    var contract = $(event.target).attr('data-address');
+    var inputValue = parseFloat($('input[name=value-'+contract+']').val());
+    if (!isNaN(inputValue)) {
+        var value = web3.toWei(inputValue, "ether");
+        web3.eth.sendTransaction({to:contract,value:value},function () {
+            $('#OkModal').modal('show');
+            this._listWills();
+        }.bind(this));
+    }
 };
 MyWills.prototype._withdrawWill = function (event) {
-    var contract=$(event.target).attr('data-address');
-    var value=web3.toWei(parseFloat($('input[name=value-'+contract+']').val()), "ether");
-    web3.eth.sendTransaction({from:contract,to:web3.eth.defaultAccount,value:value},function () {
-        $('#OkModal').modal('show');
-        this._listWills();
-    }.bind(this));
+    var contractAddress = $(event.target).attr('data-address');
+    var inputValue = parseFloat($('input[name=value-'+contractAddress+']').val());
+    if (!isNaN(inputValue)) {
+        var contract = web3.eth.contract(contracts.hierarchy.abi).at(contractAddress);
+        var value = web3.toWei(inputValue, "ether");
+        contract.transferBalanceWithAmount.sendTransaction(web3.eth.defaultAccount, value, function (err) {
+            if (err) {
+                $('#ErrorModal').modal('show');
+                return;
+            }
+            $('#OkModal').modal('show');
+            this._listWills();
+        }.bind(this));
+    }
 };
 
 
@@ -157,6 +167,7 @@ MyWills.prototype._saveWill = function (event) {
 };
 
 MyWills.prototype._listWills = function () {
+    $('.wills-container').html($("#generic-loader").clone());
     this.getWills().then(function(wills){
         if (wills !== null && wills && wills.length !== 0) {
             var template = $('#will-template').html();

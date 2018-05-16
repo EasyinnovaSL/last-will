@@ -81,6 +81,10 @@ contract HierarchyContract {
         return (listHeirs, listHeirsPercentages);
     }
 
+    function getWitnesses() returns (string) {
+        return listWitnesses;
+    }
+
     function getBalance() constant returns (uint) {
         return  address(this).balance;
     }
@@ -158,7 +162,7 @@ contract HierarchyContract {
     function transferBalanceWithAmount (address address_to_transfer,  uint256 _amount) onlyOwner{
 
         if (this.balance >= _amount && _amount > 0){
-            address_to_transfer.transfer(this.balance);
+            address_to_transfer.transfer(_amount);
         }
     }
 

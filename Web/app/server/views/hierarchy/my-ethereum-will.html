@@ -55,7 +55,7 @@ MY WILLS
         </div>
 
         <div class="row">
-            <div id="transactions-container" class="mbr-white col-md-12 content-container"></div>
+            <div id="transactions-container" class="mbr-white col-md-12"></div>
         </div>
 
         <div class="row">
@@ -73,47 +73,70 @@ MY WILLS
    {{#wills}}
   <div class="card will-card" id="{{address}}">
         <div class="card-header">
-            <span class="float-right">{{balance}} Eth</span>
+            <span class="float-right" style="font-size: 20px;">{{balance}} Eth</span>
             <h5 class="card-title">Heritage ({{address}})</h5>
         </div>
         <div class="card-body">
 
             <div class="row">
-                <div class="col-md-12">
-                    <h6 class="text-muted">Heirs:</h6>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h6 class="text-muted">Heirs:</h6>
+                        </div>
+                    </div>
+                    {{#heirs}}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="card-text">
+                                    <i class="fa fa-dollar-sign"></i> <span style="margin-right: 10px;">{{percentage}}%</span>
+                                    <i class="fa fa-user"></i> <span style="margin-right: 10px;">{{address}}</span>
+                                </p>
+                            </div>
+                        </div>
+                    {{/heirs}}
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h6 class="text-muted">Witnesses:</h6>
+                        </div>
+                    </div>
+                    {{#witnesses}}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="card-text">
+                                    <i class="fa fa-user"></i> {{address}}
+                                </p>
+                            </div>
+                        </div>
+                    {{/witnesses}}
                 </div>
             </div>
-
-            {{#heirs}}
-                <div class="row">
-                    <div class="col-md-12">
-                        <p class="card-text">
-                            <i class="fa fa-user"></i> {{address}}
-                        </p>
-                    </div>
-                </div>
-            {{/heirs}}
         </div>
-
 
         <div class="card-footer">
             {{#owner}}
                 <!-- Owner actions -->
-               <div class="input-group col-md-6 col-md-offset-3">
-  <div class="input-group-prepend">
-    <button class="btn btn-outline-secondary send" data-address="{{address}}" type="button" style="margin:0px">Send</button>
-  </div>
-  <input type="text" class="form-control" name="value-{{address}}" placeholder="0.00" aria-label="" aria-describedby="basic-addon1">
-   <div class="input-group-append">
-    <button class="btn btn-outline-secondary withdraw" data-address="{{address}}" type="button"  style="margin:0px">Withdraw</button>
-  </div>
-</div>
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="input-group col-md-6">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-sm btn-outline-secondary send" data-address="{{address}}" type="button" style="margin:0px">Deposit</button>
+                        </div>
+                        <input type="text" class="form-control" name="value-{{address}}" placeholder="0.00" aria-label="" aria-describedby="basic-addon1">
+                        <div class="input-group-append">
+                            <button class="btn btn-sm btn-outline-secondary withdraw" data-address="{{address}}" type="button"  style="margin:0px">Withdraw</button>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
             {{/owner}}
             {{^owner}}
                 <!-- Hier actions -->
-                <button class="btn btn-sm btn-primary declare-dead" data-address="{{address}}">
-                    Declare as dead
-                </button>
+                <!--<button class="btn btn-sm btn-primary declare-dead" data-address="{{address}}">-->
+                    <!--Declare as dead-->
+                <!--</button>-->
             {{/owner}}
         </div>
     </div>
