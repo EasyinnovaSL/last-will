@@ -64,7 +64,6 @@ BACK TO LIFE
                 return;
             }
 
-            console.log(iVoted);
             if (iVoted) {
                 $("#dead-div").show();
             } else {
@@ -78,9 +77,20 @@ BACK TO LIFE
                             return;
                         }
                         $('#OkModal').modal('show');
-                        $("#alive-div").hide();
-                        $("#dead-div").show();
+                        $('#OkModal p').html("Confirming transaction...");
+                        $('#OkModal .btn-success').hide();
+                        $('#OkModal .close').hide();
                         // Transactions.addTransaction(tx, "Owner Died");
+
+                    })
+                    .on('confirmation', function(confirmationNumber){
+                        if (confirmationNumber === 2) {
+                            $("#alive-div").hide();
+                            $("#dead-div").show();
+                            $('#OkModal p').html("Transaction send successfully!");
+                            $('#OkModal .btn-success').show();
+                            $('#OkModal .close').show();
+                        }
                     });
                 })
             }

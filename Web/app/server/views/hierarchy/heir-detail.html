@@ -107,7 +107,7 @@ BACK TO LIFE
     $(document).ready(function () {
 
        // localWeb3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-        var localWeb3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/8tpuK9msQwcod7QVd94H"));
+        localWeb3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/8tpuK9msQwcod7QVd94H"));
 
         var privateKey = "<%- pk %>";
         var willAddress = "<%- will %>";
@@ -176,8 +176,17 @@ BACK TO LIFE
                                         $('#ErrorModal').modal('show');
                                         return;
                                     }
-
                                     $('#OkModal').modal('show');
+                                    $('#OkModal p').html("Confirming transaction...");
+                                    $('#OkModal .btn-success').hide();
+                                    $('#OkModal .close').hide();
+                                })
+                                .on('confirmation', function(confirmationNumber){
+                                    if (confirmationNumber === 2) {
+                                        $('#OkModal p').html("Transaction send successfully!");
+                                        $('#OkModal .btn-success').show();
+                                        $('#OkModal .close').show();
+                                    }
                                 });
 
                             }
