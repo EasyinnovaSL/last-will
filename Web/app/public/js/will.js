@@ -151,9 +151,9 @@ MyWills.prototype._listWills = function () {
 
 MyWills.prototype._createLink = function(type,account,will){
     if(type=="1"){
-        return window.location.protocol + '//' + window.location.host+'/witness?pk='+account.privateKey+'&will='+will;
+        return window.location.protocol + '//' + window.location.host+'/witness?pk='+account.privateKey+'%26will='+will;
     }else{
-        return window.location.protocol + '//' + window.location.host+'/heir?pk='+account.privateKey+'&will='+will;
+        return window.location.protocol + '//' + window.location.host+'/heir?pk='+account.privateKey+'%26will='+will;
     }
 }
 
