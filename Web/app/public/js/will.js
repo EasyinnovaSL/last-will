@@ -3,7 +3,7 @@ function MyWills(options) {
     this.back_to_life = new BackToLife(options);
     this.heritageAbi = options.hierarchy.abi;
     this.lastwill= JSON.parse(localStorage.getItem("lastwill")) || {witness:[],heirs:[],address:''};
-    this.confirmationsNeeded = 12;
+    this.confirmationsNeeded = 2;
 
     $('#new-will').submit($.proxy(this._saveWill, this));
     $('.wills-container').on('click','button.send',$.proxy(this._sendWill,this));
