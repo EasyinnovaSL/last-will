@@ -3,7 +3,7 @@ function MyWills(options) {
     this.back_to_life = new BackToLife(options);
     this.heritageAbi = options.hierarchy.abi;
     this.lastwill= JSON.parse(localStorage.getItem("lastwill")) || {witness:[],heirs:[],address:''};
-    this.confirmationsNeeded = 2;
+    this.confirmationsNeeded = 12;
 
     $('#new-will').submit($.proxy(this._saveWill, this));
     $('.wills-container').on('click','button.send',$.proxy(this._sendWill,this));
@@ -106,11 +106,15 @@ MyWills.prototype._saveWill = function (event) {
                         var address=adrList[adrList.length-1];
                         console.log("Address: " + address);
                         lastwill.heirs.forEach(function(item){
-                            item.url=this._createLink("2",item.account,address)
+                            var url = this._createLink("2",item.account,address);
+                            item.url = url;
+                            item.escapedUrl = url.replace("&", "%26");
                         }.bind(this));
 
                         lastwill.witness.forEach(function(item){
-                            item.url=this._createLink("1",item.account,address)
+                            var url = this._createLink("1",item.account,address);
+                            item.url = url;
+                            item.escapedUrl = url.replace("&", "%26");
                         }.bind(this));
 
                         this.lastwill=lastwill;
@@ -151,9 +155,9 @@ MyWills.prototype._listWills = function () {
 
 MyWills.prototype._createLink = function(type,account,will){
     if(type=="1"){
-        return window.location.protocol + '//' + window.location.host+'/witness?pk='+account.privateKey+'%26will='+will;
+        return window.location.protocol + '//' + window.location.host+'/witness?pk='+account.privateKey+'&will='+will;
     }else{
-        return window.location.protocol + '//' + window.location.host+'/heir?pk='+account.privateKey+'%26will='+will;
+        return window.location.protocol + '//' + window.location.host+'/heir?pk='+account.privateKey+'&will='+will;
     }
 }
 

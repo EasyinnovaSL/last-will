@@ -94,7 +94,7 @@ MY WILLS
                         <a class="btn btn-sm btn-share" href="whatsapp://send?text=I share you the following link: {{url}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp">
                             <i class="fab fa-whatsapp-square" style="color: green"></i>
                         </a>
-                        <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=I share you the following link: {{url}}" data-toggle="tooltip" data-placement="top" title="Share via Email">
+                        <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=I share you the following link: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email">
                             <i class="fas fa-envelope-square" style="color: grey"></i>
                         </a>
                         <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copy to clipboard!">
@@ -119,7 +119,7 @@ MY WILLS
                         <a class="btn btn-sm btn-share" href="whatsapp://send?text=I share you the following link: {{url}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp">
                             <i class="fab fa-whatsapp-square" style="color: green"></i>
                         </a>
-                        <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=I share you the following link: {{url}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Share via Email">
+                        <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=I share you the following link: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email">
                             <i class="fas fa-envelope-square" style="color: grey"></i>
                         </a>
                         <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copy to clipboard!">
