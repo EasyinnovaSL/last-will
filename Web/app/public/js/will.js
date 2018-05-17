@@ -101,7 +101,7 @@ MyWills.prototype._saveWill = function (event) {
                     contract.methods.getMyContracts().call({from: web3.eth.defaultAccount},function(err, addressesStr){
                         // Generate Links
                         console.log("Addresses: " + addressesStr);
-                        if (addressesStr.slice(-1) === ";") addressesStr = addressesStr.substring(0, addressesStr.length -2);
+                        if (addressesStr.slice(-1) === ";") addressesStr = addressesStr.substring(0, addressesStr.length -1);
                         var adrList = addressesStr.split(";");
                         var address=adrList[adrList.length-1];
                         console.log("Address: " + address);
