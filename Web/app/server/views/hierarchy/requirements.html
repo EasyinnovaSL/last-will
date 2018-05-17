@@ -145,6 +145,7 @@ BACK TO LIFE
             $("#details").show();
         };
 
+
         // Check if Web3 has been injected by the browser:
         if (typeof web3 !== 'undefined') {
             // You have a web3 browser!
@@ -152,8 +153,9 @@ BACK TO LIFE
 
             // Check which network is metamask attached
             web3.version.getNetwork((err, netId) => {
+                // Force Rinkeby or Private Net
                 var rinkebyErr = (netId !== "4");
-                var addressErr = (web3.eth.accounts.length === 0);
+                var addressErr = (web3.eth.defaultAccount === null || web3.eth.defaultAccount === undefined);
                 setRinkebyError(rinkebyErr);
                 setAddressError(addressErr);
 
@@ -164,7 +166,6 @@ BACK TO LIFE
                 } else {
                     allOk();
                 }
-
             });
 
         } else {
