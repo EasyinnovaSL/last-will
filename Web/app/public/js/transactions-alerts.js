@@ -26,11 +26,11 @@ function TransactoinAlerts(options) {
     },this);
 
     // Load TXs from local storage
-    var jsonTxs = localStorage.getItem("transactions");
-    if (jsonTxs) {
-        this.transactions = JSON.parse(jsonTxs);
-    }
-    this.loadTransactions();
+    // var jsonTxs = localStorage.getItem("transactions");
+    // if (jsonTxs) {
+    //     this.transactions = JSON.parse(jsonTxs);
+    // }
+    // this.loadTransactions();
 }
 
 TransactoinAlerts.prototype.options = {};

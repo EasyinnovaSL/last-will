@@ -1,0 +1,5 @@
+Start Sync rinkeby:
+    geth --rinkeby --rpc --rpcapi db,eth,net,web3,personal --unlock 0x6530C8d44153406750c1fDA90162E492F80C1Df0 --password 12345678
+
+After the blockchain is sync, run migrate (inside folder Smart Contract):
+    truffle migrate --reset --network rinkeby

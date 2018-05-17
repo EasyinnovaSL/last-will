@@ -24,7 +24,7 @@ BACK TO LIFE
                 </div>
                 <div class="mbr-white col-lg-12">
                     <p id="text-alive" class="mbr-timeline-text mbr-fonts-style display-7" style="display: none">
-                        The Owner is already alive,we hope he has a long life <i class="mbri-smile-face"></i>
+                        The Owner is still alive, we hope he has a long life <i class="mbri-smile-face"></i>
                     </p>
                 </div>
 
@@ -126,8 +126,7 @@ BACK TO LIFE
             contract.methods.hasDied().call(function(err, hasDied){
                 if (err) return reject(err);
 
-                //if(hasDied){
-                    if(true){
+                if(hasDied){
                     $("#text-died").fadeIn("slow");
                     $("#heir-address").fadeIn("slow");
 
@@ -171,7 +170,7 @@ BACK TO LIFE
                                 $('#ErrorModal').modal('show');
                             }else{
 
-                                localWeb3.eth.sendTransaction({from: heirAddress, to: accountToTransfer, value: localWeb3.utils.toWei("10", 'ether'), gas: estimatedGas},function (err) {
+                                localWeb3.eth.sendTransaction({from: heirAddress, to: accountToTransfer, value: (balance-minimumBalance), gas: estimatedGas},function (err) {
                                     if (err) {
                                         $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong.');
                                         $('#ErrorModal').modal('show');

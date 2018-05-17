@@ -74,11 +74,33 @@ MyWills.prototype._withdrawWill = function (event) {
     }
 };
 
-numberOfFields=0;
+numberOfFields = 0;
+percentagesModified = false;
 addRowGeneric();
 function addRowGeneric(){
-    $("#divholder").append("<div id='row"+numberOfFields+"' class='input-group mb-3'><div class='input-group-prepend'><label class='input-group-text' for='inputGroupSelect01'><i class='fa fa-user'></i></label></div><select class='custom-select'  onchange='selectChanged(\""+numberOfFields+"\")' style='height: 49px;' id='inputGroupSelect"+numberOfFields+"'><option value='1'>Witness</option><option value='2' selected>Heir</option><option value='3'>Both</option></select><div class='input-group-prepend'><label class='input-group-text' for='inputGroupSelect01'>%</label></div><input type='text' id='percent"+numberOfFields+"' class='form-control percentatgeRepartir' style=' padding: 0px;line-height: 23px;font-size: 14px;' aria-label='Amount (to the nearest dollar)' value='0'><div class='input-group-append'><div class='input-group-append'><span class='input-group-text'>.00</span></div><button onclick='deleteRow(\"row"+numberOfFields+"\")' class='btn btn-outline-secondary' style='margin: 0px; padding: 0px 10px; font-size: 23px; color: #cc2952;' type='button' ><span class='mbri-trash'></span></button></div></div>");
+    $("#divholder").append("<div id='row"+numberOfFields+"' class='field input-group mb-3'><div class='input-group-prepend'><label class='input-group-text' for='inputGroupSelect01'><i class='fa fa-user'></i></label></div><select class='custom-select'  onchange='selectChanged(\""+numberOfFields+"\")' style='height: 49px;' id='inputGroupSelect"+numberOfFields+"'><option value='1'>Witness</option><option value='2'>Heir</option><option value='3' selected>Heir & Witness</option></select><div class='input-group-prepend'><label class='input-group-text' for='inputGroupSelect01'>%</label></div><input type='text' id='percent"+numberOfFields+"' class='form-control percentatgeRepartir' style=' padding: 0px;line-height: 23px;font-size: 14px;' aria-label='Amount (to the nearest dollar)' value='0'><div class='input-group-append'><div class='input-group-append'><span class='input-group-text' style='border-bottom-right-radius: 0; border-top-right-radius: 0;'>.00</span></div><button onclick='deleteRow(\"row"+numberOfFields+"\")' class='btn btn-outline-secondary' style='border: 1px solid #ced4da; margin: 0px; padding: 0px 10px; font-size: 23px; color: #cc2952;' type='button' ><span class='mbri-trash'></span></button></div></div>");
     numberOfFields++;
+    if (numberOfFields === 1) {
+        percentagesModified = false;
+    }
+    // recalculatePercentages();
+}
+function recalculatePercentages() {
+    if (!percentagesModified && numberOfFields > 0) {
+        var value = parseInt(100 / numberOfFields);
+        $("#divholder").find('.percentatgeRepartir').each(function (index){
+            // If Last, add modulus
+            if (index === numberOfFields-1){
+                value = value + (100 % numberOfFields);
+            }
+            $(this).val(value);
+        })
+    }
+    $(".percentatgeRepartir").on('keyup', function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        percentagesModified = true;
+    });
 }
 function checkIfAllIn(){
     $i=0;
@@ -88,27 +110,44 @@ function checkIfAllIn(){
         }
     });
     if($i!=100){
-        alert('Percentage must sum 100');
+        $('#ErrorModal').find('.modal-body').find('p').html('Percentage must sum 100.');
+        $('#ErrorModal').modal('show');
+        return false;
+    }
+    var amount = parseInt($("#ethToContract").val());
+    if (amount < 0.1) {
+        $('#ErrorModal').find('.modal-body').find('p').html('The minimum amount to send is 0.1 Eth.');
+        $('#ErrorModal').modal('show');
         return false;
     }
     return true;
 }
 function deleteRow(rowD){
     $('#'+rowD).remove();
+    numberOfFields--;
+    // recalculatePercentages();
 }
 function selectChanged(rowNumber){
+    var percentField = $("#percent"+rowNumber);
     switch($('#inputGroupSelect'+rowNumber+' option:selected').val()) {
         case '1':
-            $("#percent"+rowNumber).attr("disabled", "disabled");
-            $("#percent"+rowNumber).val('-');
+            percentField.attr("disabled", "disabled");
+            percentField.data('val', percentField.val());
+            percentField.val('-');
             break;
         case '2':
-            $("#percent"+rowNumber).removeAttr("disabled");
-            $("#percent"+rowNumber).val('0');
+            percentField.removeAttr("disabled");
+            var actual = percentField.val();
+            if (actual === "-") {
+                percentField.val(percentField.data('val') || '0');
+            }
             break;
         case '3':
-            $("#percent"+rowNumber).removeAttr("disabled");
-            $("#percent"+rowNumber).val('0');
+            percentField.removeAttr("disabled");
+            var actual = percentField.val();
+            if (actual === "-") {
+                percentField.val(percentField.data('val') || '0');
+            }
             break;
     }
 }
@@ -126,9 +165,9 @@ MyWills.prototype._saveWill = function (event) {
 
         $('div.field').each(function (){
             var account=localWeb3.eth.accounts.create([localWeb3.utils.randomHex(32)]);
-            var type=$(this).find('select.custom-select').val();
+            var type=$(this).find('select').val();
             if(type == '1' ){
-                lastwill.witness.push({link:self._createLink(type,account)});
+                lastwill.witness.push({account:account});
                 witness.push(account.address);
             }else if(type == '2'){
                 lastwill.heirs.push({account:account,percentage:parseInt($(this).find('input').val())});
@@ -159,40 +198,43 @@ MyWills.prototype._saveWill = function (event) {
         var localWeb3 = new Web3(web3.currentProvider);
         var contract = new localWeb3.eth.Contract(contracts.base.abi, contracts.base.address);
 
-        contract.methods.createHierarchyContractPayable(addressesheirsStr, percentagesheirsStr,addresseswitnesStr).send({from: web3.eth.defaultAccount,gas: 4500000,value: web3.toWei(1,"ether")})
+        var inputValue = $("#ethToContract").val();
+        if (!inputValue) inputValue = 0;
+        contract.methods.createHierarchyContractPayable(addressesheirsStr, percentagesheirsStr,addresseswitnesStr).send({from: web3.eth.defaultAccount,gas: 4500000,value: web3.toWei(inputValue,"ether")})
             .on('transactionHash', function(hash){
-                console.log('transactionHash');
-                console.log(hash);
+                $('#OkModal').modal('show');
+                $('#OkModal p').html("Confirming transaction...");
+                $('#OkModal .btn-success').hide();
+                $('#OkModal .close').hide();
             })
-            .on('receipt', function(receipt){
-                console.log('receipt');
-                console.log(receipt);
+            .on('confirmation', function(confirmationNumber, receipt){
+                if (confirmationNumber === 6) {
+                    contract.methods.getMyContracts().call(function(err, addressesStr){
+                        // Generate Links
+                        if (addressesStr.slice(-1) === ";") addressesStr = addressesStr.substring(0, addressesStr.length -1);
+                        var adrList = addressesStr.split(";");
+                        var address=adrList[adrList.length-1];
+                        lastwill.heirs.forEach(function(item){
+                            item.url=this._createLink("2",item.account,address)
+                        }.bind(this));
 
-                contract.methods.getMyContracts().call(function(err, addressesStr){
-                    if (addressesStr.slice(-1) === ";") addressesStr = addressesStr.substring(0, addressesStr.length -1);
-                    var adrList = addressesStr.split(";");
-                   var address=adrList[adrList.length-1];
-                    lastwill.heirs.forEach(function(item){
-                        item.url=this._createLink("2",item.account,address)
-                    }.bind(this));
+                        lastwill.witness.forEach(function(item){
+                            item.url=this._createLink("1",item.account,address)
+                        }.bind(this));
 
-                    lastwill.witness.forEach(function(item){
-                        item.url=this._createLink("1",item.account,address)
-                    }.bind(this));
+                        this.lastwill=lastwill;
+                        localStorage.setItem("lastwill",JSON.stringify(this.lastwill));
 
-                    this.lastwill=lastwill;
-                    localStorage.setItem("lastwill",JSON.stringify(this.lastwill));
-                    $('#OkModal').modal('show');
-                    this.renderLastWill(this.lastwill)
-                    this._listWills();
+                        // Final render
+                        $('#OkModal p').html("Transaction send successfully!");
+                        $('#OkModal .btn-success').show();
+                        $('#OkModal .close').show();
+                        this.renderLastWill(this.lastwill);
+                        this._listWills();
 
-                }.bind(this))
-
+                    }.bind(this))
+                }
             }.bind(this))
-            /*.on('confirmation', function(confirmationNumber, receipt){
-                console.log(confirmationNumber);
-                console.log(receipt);
-            })*/
             .on('error', console.error); // If a out of gas error, the second parameter is the receipt.
             /*
             .then(function (receip) {
@@ -248,6 +290,8 @@ MyWills.prototype._listWills = function () {
             Mustache.parse(template);   // optional, speeds up future uses
             var rendered = Mustache.render(template, {'wills': wills});
             $('.wills-container').html(rendered);
+        } else {
+            $('.wills-container').html("");
         }
     }).catch(function(err){
         console.error(err);

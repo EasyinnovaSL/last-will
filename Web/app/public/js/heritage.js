@@ -5,7 +5,7 @@ function Heritage(options){
 }
 
 Heritage.prototype.options={
-web:web3
+// web:web3
 };
 
 Heritage.prototype.isOwner = function(){

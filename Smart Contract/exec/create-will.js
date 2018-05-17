@@ -9,7 +9,7 @@ module.exports = function(callback) {
     return BackToLife.deployed().then(function (instance) {
         BackToLifeContractInstance = instance;
     }).then(function () {
-        return BackToLifeContractInstance.createHierarchyContractPayable("0xc0Eb469a948C5b7A163Df6e9bCa0a7115a74B7a9;0xE9948052F6135eA10E12b64deBD2f0060143148A".toLowerCase(), "60;40", "0xc0Eb469a948C5b7A163Df6e9bCa0a7115a74B7a9;0xE9948052F6135eA10E12b64deBD2f0060143148A".toLowerCase(), {value: web3.toWei(10, "ether")});
+        return BackToLifeContractInstance.createHierarchyContractPayable("0xc0Eb469a948C5b7A163Df6e9bCa0a7115a74B7a9;0xE9948052F6135eA10E12b64deBD2f0060143148A".toLowerCase(), "60;40", "0x8585f3E392F85D1E5b3B105193f458D4BF00b41d;0x1DE3CE1B51CafAF17f0FFdfcc93970d43D2B59b3".toLowerCase(), {value: web3.toWei(10, "ether")});
     }).then(function (tx) {
         return BackToLifeContractInstance.getMyContracts.call();
     }).then(function (result) {

@@ -14,37 +14,6 @@ contract BackToLife {
     /* FallBack Payable function */
     function () payable {}
 
-    function createHierarchyContract (string _listHeirs, string _listHeirsPercentages, string _listWitnesses) {
-
-        address newHierarchyContract = new HierarchyContract(msg.sender);
-
-        HierarchyContract _HierarchyContract = HierarchyContract(newHierarchyContract);
-
-        var stringContractAddress = addressToString(newHierarchyContract);
-
-        mapOwnerStringContract[msg.sender] =  mapOwnerStringContract[msg.sender].toSlice().concat(stringContractAddress.toSlice()).toSlice().concat(";".toSlice());
-
-        /* Add contract to the list of each heirs */
-        var s = _listHeirs.toSlice().copy();
-        var delim = ";".toSlice();
-        uint256 listHeirsLength = s.count(delim) + 1;
-        bool itsHeir = false;
-
-        string memory senderStringAddress = addressToString(msg.sender);
-
-        for(uint i = 0; i < listHeirsLength; i++) {
-
-            address heirAddress = parseAddr(s.split(delim).toString());
-            mapOwnerStringContract[heirAddress] =  mapOwnerStringContract[heirAddress].toSlice().concat(stringContractAddress.toSlice()).toSlice().concat(";".toSlice());
-        }
-
-
-        /* Add heirs to the contract */
-        _HierarchyContract.addHeirs(_listHeirs, _listHeirsPercentages, _listWitnesses);
-
-    }
-
-
     function createHierarchyContractPayable (string _listHeirs, string _listHeirsPercentages, string _listWitnesses) payable {
 
         address newHierarchyContract = new HierarchyContract(msg.sender);
@@ -73,27 +42,38 @@ contract BackToLife {
 
 
         /* Add contract to the list of each heirs */
-        s = _listHeirs.toSlice().copy();
+//        s = _listHeirs.toSlice().copy();
+//        var delim = ";".toSlice();
+//        uint256 listHeirsLength = s.count(delim) + 1;
+//        string memory senderStringAddress = addressToString(msg.sender);
+//        for(uint i = 0; i < listHeirsLength; i++) {
+//            address heirAddress = parseAddr(s.split(delim).toString());
+//            mapOwnerStringContract[heirAddress] =  mapOwnerStringContract[heirAddress].toSlice().concat(stringContractAddress.toSlice()).toSlice().concat(";".toSlice());
+//        }
+
+        /* Calculate number of witness */
+        s = _listWitnesses.toSlice().copy();
         var delim = ";".toSlice();
-        uint256 listHeirsLength = s.count(delim) + 1;
-        bool itsHeir = false;
+        uint256 listWitnessLength = s.count(delim) + 1;
 
-        string memory senderStringAddress = addressToString(msg.sender);
-
-        for(uint i = 0; i < listHeirsLength; i++) {
-
-            address heirAddress = parseAddr(s.split(delim).toString());
-            mapOwnerStringContract[heirAddress] =  mapOwnerStringContract[heirAddress].toSlice().concat(stringContractAddress.toSlice()).toSlice().concat(";".toSlice());
-        }
-
-
-        /* Add heirs to the contract */
+        /* Add heirs and witness to the contract */
         _HierarchyContract.addHeirs(_listHeirs, _listHeirsPercentages, _listWitnesses);
 
+        /* Send received funds */
         if(msg.value > 0){
-            //ms.value is the number of wei sent with the message
-            if(!newHierarchyContract.send(msg.value)){
+
+            // Send to contract
+            if(!newHierarchyContract.send(msg.value - (listWitnessLength * 1000000000000000))){
                 throw;
+            }
+
+            // Send to witness
+            if (listWitnessLength == 1) {
+                parseAddr(_listWitnesses).send(1000000000000000);
+            } else {
+                for(uint i = 0; i < listWitnessLength; i++) {
+                    parseAddr(s.split(delim).toString()).send(1000000000000000);
+                }
             }
         }
     }
