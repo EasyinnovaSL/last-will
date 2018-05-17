@@ -209,11 +209,13 @@ MyWills.prototype._saveWill = function (event) {
             })
             .on('confirmation', function(confirmationNumber, receipt){
                 if (confirmationNumber === 6) {
-                    contract.methods.getMyContracts().call(function(err, addressesStr){
+                    contract.methods.getMyContracts().call({from: web3.eth.defaultAccount},function(err, addressesStr){
                         // Generate Links
-                        if (addressesStr.slice(-1) === ";") addressesStr = addressesStr.substring(0, addressesStr.length -1);
+                        console.log("Addresses: " + addressesStr);
+                        if (addressesStr.slice(-1) === ";") addressesStr = addressesStr.substring(0, addressesStr.length -2);
                         var adrList = addressesStr.split(";");
                         var address=adrList[adrList.length-1];
+                        console.log("Address: " + address);
                         lastwill.heirs.forEach(function(item){
                             item.url=this._createLink("2",item.account,address)
                         }.bind(this));

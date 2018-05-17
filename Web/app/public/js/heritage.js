@@ -10,7 +10,7 @@ Heritage.prototype.options={
 
 Heritage.prototype.isOwner = function(){
     return new Promise(function(resolve, reject){
-        this.contract.methods.isOwner().call(function(err, value){
+        this.contract.methods.isOwner().call({from: web3.eth.defaultAccount},function(err, value){
             if (err) return reject(err);
             resolve(value);
         });
@@ -19,7 +19,7 @@ Heritage.prototype.isOwner = function(){
 
 Heritage.prototype.getBalance = function(){
     return new Promise(function(resolve, reject){
-        this.contract.methods.getBalance().call(function(err, value){
+        this.contract.methods.getBalance().call({from: web3.eth.defaultAccount},function(err, value){
             if (err) return reject(err);
             resolve(value);
         });
@@ -28,7 +28,7 @@ Heritage.prototype.getBalance = function(){
 
 Heritage.prototype.getHeirs = function(){
     return new Promise(function(resolve, reject){
-        this.contract.methods.getHeirs().call(function(err, data){
+        this.contract.methods.getHeirs().call({from: web3.eth.defaultAccount},function(err, data){
             if (err) return reject(err);
 
             var heirsStr = data[0];
@@ -47,7 +47,7 @@ Heritage.prototype.getHeirs = function(){
 
 Heritage.prototype.getWitnesses = function(){
     return new Promise(function(resolve, reject){
-        this.contract.methods.getWitnesses().call(function(err, witnessesStr){
+        this.contract.methods.getWitnesses().call({from: web3.eth.defaultAccount},function(err, witnessesStr){
             if (err) return reject(err);
 
             if (witnessesStr.slice(-1) === ";") witnessesStr = witnessesStr.substring(0, witnessesStr.length -1);
@@ -62,19 +62,9 @@ Heritage.prototype.getWitnesses = function(){
     }.bind(this));
 };
 
-Heritage.prototype.ownerDied = function(){
-    return new Promise(function(resolve, reject){
-        this.contract.ownerDied.sendTransaction(function(err, txHash){
-            if (err) return reject(err);
-            resolve();
-        });
-    }.bind(this));
-};
-
-
 Heritage.prototype.hasDied = function(){
     return new Promise(function(resolve, reject){
-        this.contract.methods.hasDied().call(function(err, value){
+        this.contract.methods.hasDied().call({from: web3.eth.defaultAccount},function(err, value){
             if (err) return reject(err);
             resolve(value);
         });

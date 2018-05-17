@@ -10,7 +10,7 @@ BackToLife.prototype.options={
 
 BackToLife.prototype.getWills = function(){
     return new Promise(function(resolve, reject){
-        this.contract.getMyContracts.call(async function(err, addressesStr){
+        this.contract.getMyContracts.call({from: web3.eth.defaultAccount}, async function(err, addressesStr){
             if (err) return reject(err);
             let wills = [];
             console.log("My Contracts: " + addressesStr);
@@ -95,19 +95,4 @@ BackToLife.prototype.createNotaryWill= function(will){
 
 BackToLife.prototype.createKeepAliveWill= function(){
     // TODO new contract type keep alive
-};
-
-/**
- * Get last created will
- */
-BackToLife.prototype.getLastWillHash = function(){
-    let contract = this.contract;
-    return new Promise(function(resolve, reject){
-        contract.getMyContracts.call(function(err, addressesStr){
-            if (err) reject(err);
-            if (addressesStr.slice(-1) === ";") addressesStr = addressesStr.substring(0, addressesStr.length -1);
-            var adrList = addressesStr.split(";");
-            resolve(adrList[adrList.length-1]);
-        });
-    });
 };
