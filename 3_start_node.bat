@@ -1,4 +1,3 @@
 cd Web
-set PORT=80
-set PORTSSL=4003
+set PORT=3001
 node app.js
