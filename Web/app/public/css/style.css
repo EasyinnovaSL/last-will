@@ -1,6 +1,6 @@
 .modal-error {
     color: #434e65;
-    width: 525px;
+    width: auto;
 }
 
 .modal-error .modal-content {
@@ -91,7 +91,7 @@
 
 .modal-confirm {
     color: #434e65;
-    width: 525px;
+    width: auto;
 }
 
 .modal-confirm .modal-content {
