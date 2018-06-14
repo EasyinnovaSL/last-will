@@ -169,8 +169,9 @@ BACK TO LIFE
                                 $('#ErrorModal').find('.modal-body').find('p').html('You almost need ' +  localWeb3.utils.fromWei(minimumBalance.toString(),  'ether') + ' to make the transaction');
                                 $('#ErrorModal').modal('show');
                             }else{
-
-                                localWeb3.eth.sendTransaction({from: heirAddress, to: accountToTransfer, value: (balance-minimumBalance), gas: estimatedGas},function (err) {
+                                var a = new localWeb3.utils.BN(balance);
+                                var b = new localWeb3.utils.BN(minimumBalance);
+                                localWeb3.eth.sendTransaction({from: heirAddress, to: accountToTransfer, value: a.sub(b), gas: estimatedGas},function (err) {
                                     if (err) {
                                         $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong.');
                                         $('#ErrorModal').modal('show');
