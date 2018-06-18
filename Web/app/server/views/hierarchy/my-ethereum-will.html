@@ -17,6 +17,14 @@ MY WILLS
                         <br>
                         <form class="mbr-form" data-form-title="new-will" method="post" id="new-will">
 
+                            <label class="card-title">Your Ethereum Address:</label>
+
+                            <input type="text" id="ownerInput" class="form-control" style="padding: 0px 0px 0px 10px; line-height: 23px;font-size: 14px;background: white;" placeholder="0x0">
+
+                            <br>
+
+                            <label class="card-title">Heirs & Witnesses:</label>
+
                             <span id="divholder"></span>
 
                             <div class="input-group-btn" style="display: flex;justify-content: center;">
@@ -25,15 +33,11 @@ MY WILLS
 
                             <div class="row">
                                 <div class="col-md-4">
-                                    <div class="input-group-btn" style="display: flex;justify-content: center;">
-                                        <label style="margin-top: auto; margin-bottom: auto; margin-right: 5px;">Amount to protect:</label>
-                                        <input type='text' id='ethToContract' class='form-control' style='height: 3em; margin-top: auto; margin-bottom: auto;padding: 0px;line-height: 23px;font-size: 14px; width: 5em' value='0'>
-                                        <div style='width: 4em; height: 3em; margin-top: auto; margin-bottom: auto;' class="input-group-append"><span class="input-group-text">Eth</span></div>
-                                    </div>
+
                                 </div>
                                 <div class="col-md-4">
                                     <div class="input-group-btn" style="display: flex;justify-content: center;">
-                                        <button type="submit" class="btn btn-secondary btn-form display-4">Send</button>
+                                        <button type="submit" class="btn btn-secondary btn-form display-4">Create Last Will</button>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -51,13 +55,31 @@ MY WILLS
 
         </div>
 
+        <div class="row wills-row">
+            <div class="col-md-12">
 
-        <div class="row">
-            <div id="transactions-container" class="mbr-white col-md-12"></div>
-        </div>
+                <div class="row" id="list-wills">
+                    <div class="mbr-white col-md-12 content-container wills-form">
+                        <div class="card will-card">
+                            <div class="card-body">
 
-        <div class="row">
-            <div class="mbr-white col-md-12 content-container wills-container"></div>
+                                <h5 class="card-title" style="color:#cc2952;">List Wills</h5>
+
+                                <br>
+
+                                <label class="card-title">To see the created Last Will Smart Contracts, enter the owner address:</label>
+
+                                <input type="text" id="listOwner" class="form-control" style=" padding: 0px 0px 0px 10px;line-height: 23px;font-size: 14px;background: white;" placeholder="0x0">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wills-container">
+
+                </div>
+            </div>
         </div>
 
     </div>
@@ -65,7 +87,6 @@ MY WILLS
 </section>
 
 <script src="/js/will.js"></script>
-<script src="/js/transactions-alerts.js"></script>
 
 <script id="last-will-added-template" type="x-tmpl-mustache">
  <div class="mbr-white col-md-12 content-container wills-form">
@@ -137,73 +158,77 @@ MY WILLS
 
 <script id="will-template" type="x-tmpl-mustache">
    {{#wills}}
-  <div class="card will-card" id="{{address}}">
-        <div class="card-header">
-            <span class="float-right" style="font-size: 20px;">{{balance}} Eth</span>
-            <h5 class="card-title">Heritage ({{address}})</h5>
-        </div>
-        <div class="card-body">
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h6 class="text-muted">Heirs:</h6>
-                        </div>
-                    </div>
-                    {{#heirs}}
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p class="card-text">
-                                    <i class="fa fa-dollar-sign"></i> <span style="margin-right: 10px;">{{percentage}}%</span>
-                                    <i class="fa fa-user"></i> <span style="margin-right: 10px;">{{address}}</span>
-                                </p>
-                            </div>
-                        </div>
-                    {{/heirs}}
+   <div class="row">
+        <div class="mbr-white col-md-12 content-container wills-form">
+            <div class="card will-card" id="{{address}}">
+                <div class="card-header">
+                    <span class="float-right" style="font-size: 20px;">{{balance}} Eth</span>
+                    <h5 class="card-title">Will ({{address}})</h5>
                 </div>
-                <div class="col-md-6">
+                <div class="card-body">
+
                     <div class="row">
-                        <div class="col-md-12">
-                            <h6 class="text-muted">Witnesses:</h6>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h6 class="text-muted">Heirs:</h6>
+                                </div>
+                            </div>
+                            {{#heirs}}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p class="card-text">
+                                            <i class="fa fa-dollar-sign"></i> <span style="margin-right: 10px;">{{percentage}}%</span>
+                                            <i class="fa fa-user"></i> <span style="margin-right: 10px;">{{address}}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            {{/heirs}}
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h6 class="text-muted">Witnesses:</h6>
+                                </div>
+                            </div>
+                            {{#witnesses}}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p class="card-text">
+                                            <i class="fa fa-user"></i> {{address}}
+                                        </p>
+                                    </div>
+                                </div>
+                            {{/witnesses}}
                         </div>
                     </div>
-                    {{#witnesses}}
+                </div>
+
+                <div class="card-footer">
+                    {{#owner}}
+                        <!-- Owner actions -->
                         <div class="row">
-                            <div class="col-md-12">
-                                <p class="card-text">
-                                    <i class="fa fa-user"></i> {{address}}
-                                </p>
+                            <div class="input-group col-md-6">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-sm btn-outline-secondary send" data-address="{{address}}" type="button" style="margin:0px">Deposit Ether</button>
+                                </div>
+                                <!--<input type="text" class="form-control" name="value-{{address}}" placeholder="0.00" aria-label="" aria-describedby="basic-addon1">-->
+                                <!--<div class="input-group-append">-->
+                                    <!--<button class="btn btn-sm btn-outline-secondary withdraw" data-address="{{address}}" type="button"  style="margin:0px">Withdraw</button>-->
+                                <!--</div>-->
                             </div>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3"></div>
                         </div>
-                    {{/witnesses}}
+                    {{/owner}}
+                    {{^owner}}
+                        <!-- Hier actions -->
+                        <!--<button class="btn btn-sm btn-primary declare-dead" data-address="{{address}}">-->
+                            <!--Declare as dead-->
+                        <!--</button>-->
+                    {{/owner}}
                 </div>
             </div>
-        </div>
-
-        <div class="card-footer">
-            {{#owner}}
-                <!-- Owner actions -->
-                <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="input-group col-md-6">
-                        <div class="input-group-prepend">
-                            <button class="btn btn-sm btn-outline-secondary send" data-address="{{address}}" type="button" style="margin:0px">Deposit</button>
-                        </div>
-                        <input type="text" class="form-control" name="value-{{address}}" placeholder="0.00" aria-label="" aria-describedby="basic-addon1">
-                        <div class="input-group-append">
-                            <button class="btn btn-sm btn-outline-secondary withdraw" data-address="{{address}}" type="button"  style="margin:0px">Withdraw</button>
-                        </div>
-                    </div>
-                    <div class="col-md-3"></div>
-                </div>
-            {{/owner}}
-            {{^owner}}
-                <!-- Hier actions -->
-                <!--<button class="btn btn-sm btn-primary declare-dead" data-address="{{address}}">-->
-                    <!--Declare as dead-->
-                <!--</button>-->
-            {{/owner}}
         </div>
     </div>
     {{/wills}}
@@ -250,14 +275,13 @@ MY WILLS
     }
 
     @media (min-width: 768px) {
-        .content-container.wills-container, .content-container.wills-form {
+        .content-container.wills-row, .content-container.wills-form {
             padding-right: 10px;
         }
 
     }
 
-    .wills-container {
-        padding: 10px;
+    .wills-row {
         border: 1px solid rgba(0, 0, 0, .125);
         background-color: #78929bc4;
         border-radius: .25rem;
@@ -271,9 +295,6 @@ MY WILLS
 </style>
 
 <script>
-
-    // Load transaction plugin globally
-    var Transactions = new TransactoinAlerts({container: "#transactions-container"});
 
     $(document).ready(function () {
         // Load wills plugin

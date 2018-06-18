@@ -10,19 +10,17 @@ contract BackToLife {
 
     mapping (address => string) mapOwnerStringContract;
 
+    /* Create Last Will Contract */
+    function createLastWill (address _owner, string _listHeirs, string _listHeirsPercentages, string _listWitnesses) payable {
 
-    /* FallBack Payable function */
-    function () payable {}
-
-    function createHierarchyContractPayable (string _listHeirs, string _listHeirsPercentages, string _listWitnesses) payable {
-
-        address newHierarchyContract = new HierarchyContract(msg.sender);
+        address owner = _owner;
+        address newHierarchyContract = new HierarchyContract(owner);
 
         HierarchyContract _HierarchyContract = HierarchyContract(newHierarchyContract);
 
         var stringContractAddress = addressToString(newHierarchyContract);
 
-        mapOwnerStringContract[msg.sender] =  mapOwnerStringContract[msg.sender].toSlice().concat(stringContractAddress.toSlice()).toSlice().concat(";".toSlice());
+        mapOwnerStringContract[owner] =  mapOwnerStringContract[owner].toSlice().concat(stringContractAddress.toSlice()).toSlice().concat(";".toSlice());
 
         var s = _listHeirs.toSlice().copy();
 
@@ -45,7 +43,7 @@ contract BackToLife {
 //        s = _listHeirs.toSlice().copy();
 //        var delim = ";".toSlice();
 //        uint256 listHeirsLength = s.count(delim) + 1;
-//        string memory senderStringAddress = addressToString(msg.sender);
+//        string memory senderStringAddress = addressToString(owner);
 //        for(uint i = 0; i < listHeirsLength; i++) {
 //            address heirAddress = parseAddr(s.split(delim).toString());
 //            mapOwnerStringContract[heirAddress] =  mapOwnerStringContract[heirAddress].toSlice().concat(stringContractAddress.toSlice()).toSlice().concat(";".toSlice());
@@ -59,13 +57,13 @@ contract BackToLife {
         /* Add heirs and witness to the contract */
         _HierarchyContract.addHeirs(_listHeirs, _listHeirsPercentages, _listWitnesses);
 
-        /* Send received funds */
+        /* Send funds to witnesses */
         if(msg.value > 0){
 
             // Send to contract
-            if(!newHierarchyContract.send(msg.value - (listWitnessLength * 1000000000000000))){
-                throw;
-            }
+//            if(!newHierarchyContract.send(msg.value - ((s.count(delim) + 1) * 1000000000000000))){
+//                throw;
+//            }
 
             // Send to witness
             if (listWitnessLength == 1) {
@@ -78,12 +76,9 @@ contract BackToLife {
         }
     }
 
-
-
-
-
-    function getMyContracts() returns (string) {
-        return mapOwnerStringContract[msg.sender];
+    /* Get Address Contracts */
+    function getContracts(address owner) returns (string) {
+        return mapOwnerStringContract[owner];
     }
 
     function addressToString(address x) returns (string) {

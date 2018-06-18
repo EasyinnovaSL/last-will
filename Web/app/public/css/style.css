@@ -185,6 +185,10 @@
     float: right;
 }
 
+.modal-info .modal-header {
+    background-color: #3acaea;
+}
+
 .trigger-btn {
     display: inline-block;
     margin: 100px auto;

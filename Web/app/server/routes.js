@@ -12,16 +12,22 @@ module.exports = function (app) {
     app.get('/', RenderController.renderHome);
 
     // Error meta mask
-    app.get('/requirements', RenderController.renderRequirements);
+    // app.get('/requirements', RenderController.renderRequirements);
 
     // Render hierarchy contracts list
-    app.get('/my-wills', ContractsController.getContractsInfo, ContractsController.checkMetaMask, RenderController.renderMyWills);
+    app.get('/my-wills', ContractsController.getContractsInfo, RenderController.renderMyWills);
 
     // Render witness link
     app.get('/witness', ContractsController.getContractsInfo, RenderController.renderWitness);
 
     // Render heir link
     app.get('/heir', ContractsController.getContractsInfo, RenderController.renderHeir);
+
+    // Create new Will Contract
+    app.post('/will', ContractsController.createWillContract);
+
+    // List my contracts
+    app.post('/contracts', ContractsController.getWillContracts);
 
     // Error fallback //
     // app.get('*', RenderController.renderError);
