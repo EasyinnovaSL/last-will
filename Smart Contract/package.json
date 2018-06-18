@@ -1,0 +1,13 @@
+{
+  "name": "back-to-life-smart-contracts",
+  "version": "1.0.0",
+  "description": "Back to life Smart Contracts.",
+  "author": "Centre Easy",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EasyinnovaSL/last-will"
+  },
+  "dependencies": {
+    "truffle-hdwallet-provider": "latest"
+  }
+}

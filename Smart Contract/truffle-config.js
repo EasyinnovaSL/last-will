@@ -1,3 +1,7 @@
+
+var HDWalletProvider = require("truffle-hdwallet-provider");
+var seed = "utility unit joke key fit hip carpet phrase license bread undo eager";
+
 module.exports = {
     solc: {
         optimizer: {
@@ -15,11 +19,12 @@ module.exports = {
             //gasPrice: 9000000000 // 9 GWei
         },
         rinkeby: {
-            host: "localhost", // Connect to geth on the specified
-            port: 8545,
+            provider: function() {
+                return new HDWalletProvider(seed, "https://rinkeby.infura.io/VzAp7t8qZU2Sn4vuyupa")
+                // Main account: 0x3bdec9a3d0378738a36bc484d234bdd035072a7a
+            },
             network_id: 4,
-            from: "0x6530C8d44153406750c1fDA90162E492F80C1Df0",
-            gas: 4612388 // Gas limit used for deploys
+            gasPrice: 1000000000 // 1 GWei
         }
     }
 };
