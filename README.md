@@ -8,14 +8,14 @@
 
 `npm install --global ganache-cli`
 
-* Install
-
-`https://metamask.io/` `https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn`
-
 2. Run inside the folder Web:
 
   `npm install`
-  
+
+3. Run inside the folder Smart Contract:
+
+  `npm install`
+
   
 ### Run Application
 
