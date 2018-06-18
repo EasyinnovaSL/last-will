@@ -1,3 +1,6 @@
 # build folder
 build
 blockchain
+
+# Dependency directories
+node_modules
