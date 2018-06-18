@@ -25,8 +25,8 @@ exports.renderHeir = function(req,res){
  * Load Configuration
  */
 exports.renderConfiguration = function (req, res, next) {
-    // Remove main private key from config
-    Config.mainPrivateKey = null;
-    res.locals.Config = Config;
+    res.locals.Config = {
+        provider: Config.provider
+    };
     next();
 };

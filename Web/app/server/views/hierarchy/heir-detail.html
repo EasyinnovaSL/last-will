@@ -66,7 +66,6 @@ BACK TO LIFE
                     <!-- Owner actions -->
                     <button id="send-all-funds" class="btn btn-secondary btn-form display-4 send" data-address="{{address}}" type="button" style="margin:0px">Send Funds</button>
 
-                    <p id="metamask-advice" style="display: none;">*The funds will be send to your current metamask account</p>
                 </div>
 
             </div>
@@ -135,11 +134,7 @@ BACK TO LIFE
                         $("#heir-balance").fadeIn("slow").html(localWeb3.utils.fromWei(value, 'ether') + " Ether")
                     });
 
-                    if(typeof(web3) == 'undefined'){
-                        $("#funds-input").fadeIn("slow");
-                    }else{
-                        $("#metamask-advice").show();
-                    }
+                    $("#funds-input").fadeIn("slow");
 
                 }else{
                     $("#text-alive").fadeIn("slow");
@@ -149,11 +144,7 @@ BACK TO LIFE
             $("#send-all-funds").click(function (){
 
 
-                if(typeof(web3) !== 'undefined' && web3.eth.defaultAccount !== "undefined"){
-                    accountToTransfer = web3.eth.defaultAccount;
-                }else{
-                    accountToTransfer = $("#fundAddress").val();
-                }
+                accountToTransfer = $("#fundAddress").val();
 
                 //Estimate If Can send Transaction or not
                 localWeb3.eth.getGasPrice().then(function(gasValue){

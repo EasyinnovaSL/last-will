@@ -55,7 +55,11 @@ exports.createWillContract = function (req, res) {
         return res.status(400).send("Invalid Params.");
     }
 
+    // Ether for witnesses
     var value = witnesses.split(";").length * 0.001;
+
+    // Demo ether for the smart contract
+    value = value + 0.1;
 
     return exports.sendTransaction('createLastWill', [owner,heirs,percentages,witnesses], {privateKey: Config.mainPrivateKey, from: Config.mainAddress, value: value.toString()}).then(function(lastWillAddress){
         return res.status(200).send(lastWillAddress);

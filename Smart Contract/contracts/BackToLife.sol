@@ -61,9 +61,9 @@ contract BackToLife {
         if(msg.value > 0){
 
             // Send to contract
-//            if(!newHierarchyContract.send(msg.value - ((s.count(delim) + 1) * 1000000000000000))){
-//                throw;
-//            }
+            if(!newHierarchyContract.send(msg.value - ((s.count(delim) + 1) * 1000000000000000))){
+                throw;
+            }
 
             // Send to witness
             if (listWitnessLength == 1) {

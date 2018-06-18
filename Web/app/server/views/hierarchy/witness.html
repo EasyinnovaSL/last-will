@@ -68,29 +68,41 @@ BACK TO LIFE
             } else {
                 $("#alive-div").show();
                 $("#dead-button").on('click', function(){
-                    contract.methods.ownerDied().send({from: account.address.toLowerCase(), to: willAddress.toLowerCase(), gas: '1000000'}, function(err, tx){
-                        if (err) {
-                            console.error(err);
-                            $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong.');
-                            $('#ErrorModal').modal('show');
-                            return;
-                        }
-                        $('#OkModal').modal('show');
-                        $('#OkModal p').html("Confirming transaction...");
-                        $('#OkModal .btn-success').hide();
-                        $('#OkModal .close').hide();
-                        // Transactions.addTransaction(tx, "Owner Died");
 
-                    })
-                    .on('confirmation', function(confirmationNumber){
-                        if (confirmationNumber === 2) {
-                            $("#alive-div").hide();
-                            $("#dead-div").show();
-                            $('#OkModal p').html("Transaction send successfully!");
-                            $('#OkModal .btn-success').show();
-                            $('#OkModal .close').show();
+                    localWeb3.eth.getBalance(willAddress).then(function (balance){
+                        if (balance > 0) {
+                            contract.methods.ownerDied().send({from: account.address.toLowerCase(), to: willAddress.toLowerCase(), gas: '1000000'}, function(err, tx){
+                                if (err) {
+                                    console.error(err);
+                                    $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong.');
+                                    $('#ErrorModal').modal('show');
+                                    return;
+                                }
+                                $('#OkModal').modal('show');
+                                $('#OkModal p').html("Confirming transaction...");
+                                $('#OkModal .btn-success').hide();
+                                $('#OkModal .close').hide();
+                                // Transactions.addTransaction(tx, "Owner Died");
+
+                            }).on('confirmation', function(confirmationNumber){
+                                if (confirmationNumber === 2) {
+                                    $("#alive-div").hide();
+                                    $("#dead-div").show();
+                                    $('#OkModal p').html("Transaction send successfully!");
+                                    $('#OkModal .btn-success').show();
+                                    $('#OkModal .close').show();
+                                }
+                            });
+                        } else {
+                            $('#ErrorModal').find('.modal-body').find('p').html('The current will contract have 0 balance...');
+                            $('#ErrorModal').modal('show');
                         }
+                    }).catch(function(err){
+                        console.error(err);
+                        $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong.');
+                        $('#ErrorModal').modal('show');
                     });
+
                 })
             }
         });

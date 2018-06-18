@@ -120,6 +120,8 @@ contract HierarchyContract {
 
     function ownerDied() onlyWitness {
 
+        require (this.balance > 0);
+
         //Set owner as died
         mapHeirsVoteOwnerHasDied[addressToString(msg.sender)] = true;
 
@@ -135,8 +137,6 @@ contract HierarchyContract {
         }
 
         if(count == listLength){
-
-           require (this.balance > 0);
 
             isDied = true;
 
