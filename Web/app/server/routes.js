@@ -11,8 +11,8 @@ module.exports = function (app) {
     // Home
     app.get('/', RenderController.renderHome);
 
-    // Error meta mask
-    // app.get('/requirements', RenderController.renderRequirements);
+    // Load config file
+    app.all('*', RenderController.renderConfiguration);
 
     // Render hierarchy contracts list
     app.get('/my-wills', ContractsController.getContractsInfo, RenderController.renderMyWills);

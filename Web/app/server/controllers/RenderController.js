@@ -1,6 +1,8 @@
 
+var Config = require('../config/config');
+
 /**
- * Render home
+ * Render pages
  */
 
 exports.renderHome = function (req, res) {
@@ -17,4 +19,14 @@ exports.renderWitness = function(req,res){
 };
 exports.renderHeir = function(req,res){
     return res.render('hierarchy/heir-detail',{pk: req.query.pk, will: req.query.will});
+};
+
+/**
+ * Load Configuration
+ */
+exports.renderConfiguration = function (req, res, next) {
+    // Remove main private key from config
+    Config.mainPrivateKey = null;
+    res.locals.Config = Config;
+    next();
 };
