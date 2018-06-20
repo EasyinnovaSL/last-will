@@ -29,6 +29,9 @@ module.exports = function (app) {
     // List my contracts
     app.post('/contracts', ContractsController.getWillContracts);
 
+    // Render About Us
+    app.get('/about-us', RenderController.renderAboutUs);
+
     // Error fallback //
     // app.get('*', RenderController.renderError);
 

@@ -1,10 +1,7 @@
 
-/**
- * Render home
- */
-
+// Render Home
 exports.renderHome = function (req, res) {
-    return res.render('index', {header: false});
+    return res.render('index');
 };
 exports.renderMyWills = function (req, res) {
     return res.render('hierarchy/my-ethereum-will.html');
@@ -17,4 +14,7 @@ exports.renderWitness = function(req,res){
 };
 exports.renderHeir = function(req,res){
     return res.render('hierarchy/heir-detail',{pk: req.query.pk, will: req.query.will});
+};
+exports.renderAboutUs = function (req, res) {
+    return res.render('hierarchy/about-us');
 };
