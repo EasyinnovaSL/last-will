@@ -6,9 +6,9 @@ My Wills
 
 <%- contentFor('content') %>
 
-<section class="cid-qPEh09X89D mbr-parallax-background" id="header15-s" style="padding-top: 100px; padding-bottom: 100px;">
+<section class="cid-qPEh09X89D mbr-parallax-background" id="header15-s" style="padding-top: 100px;">
 
-    <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(7, 59, 76);"></div>
+    <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(118, 118, 118);"></div>
 
     <div class="container align-left">
 
@@ -16,17 +16,17 @@ My Wills
             <div class="mbr-white col-md-12 content-container wills-form">
                 <div class="card will-card">
                     <div class="card-body">
-                        <h5 class="card-title" style="color:#cc2952;">New Will</h5>
+                        <h5 class="card-title display-1" style="color:#e80000;">New Will</h5>
                         <br>
                         <form class="mbr-form" data-form-title="new-will" method="post" id="new-will">
 
-                            <label class="card-title">Your Ethereum Address:</label>
+                            <label class="card-title display-5">Your Ethereum Address:</label>
 
-                            <input type="text" id="ownerInput" class="form-control" style="padding: 0px 0px 0px 10px; line-height: 23px;font-size: 14px;background: white;" placeholder="0x0">
+                            <input type="text" id="ownerInput" class="form-control" style="padding: 0px 0px 0px 10px; line-height: 23px;font-size: 14px;background: white;" placeholder="0x (hexadecimal)">
 
                             <br>
 
-                            <label class="card-title">Heirs & Witnesses:</label>
+                            <label class="card-title display-5">Heirs & Witnesses:</label>
 
                             <span id="divholder"></span>
 
@@ -56,7 +56,7 @@ My Wills
             </div>
         </div>
 
-        <div class="row" id="last-will-links">
+        <div class="row align-center" id="last-will-links">
 
         </div>
 
@@ -68,13 +68,13 @@ My Wills
                         <div class="card will-card">
                             <div class="card-body">
 
-                                <h5 class="card-title" style="color:#cc2952;">List Wills</h5>
+                                <h5 class="card-title display-1" style="color:#e80000;">List Wills</h5>
 
                                 <br>
 
                                 <label class="card-title">To see the created Last Will Smart Contracts, enter the owner address:</label>
 
-                                <input type="text" id="listOwner" class="form-control" style=" padding: 0px 0px 0px 10px;line-height: 23px;font-size: 14px;background: white;" placeholder="0x0">
+                                <input type="text" id="listOwner" class="form-control" style=" padding: 0px 0px 0px 10px;line-height: 23px;font-size: 14px;background: white;" placeholder="0x (hexadecimal)">
 
                             </div>
                         </div>
@@ -97,7 +97,7 @@ My Wills
  <div class="mbr-white col-md-12 content-container wills-form">
     <div class="card will-card">
         <div class="card-body">
-            <h5 class="card-title" style="color:#cc2952;">Last Will</h5>
+            <h5 class="card-title display-1" style="color:#e80000;">Last Will</h5>
             <br>
             <p>Here are the generated links. Send them to the people you want:</p>
             {{#heirs}}
@@ -112,10 +112,10 @@ My Wills
                             <i class="fas fa-percentage" style="margin-right: 5px;"></i> {{percentage}}
                         </label>
                     </div>
-                    <div class="input-group-prepend">
+                    <div class="input-group-prepend d-none d-sm-block">
                         <label class="input-group-text"><i class="fa fa-link"></i></label>
                     </div>
-                    <input type="text" class="form-control" style="padding: 8px;line-height: 23px;font-size: 14px; border: 1px solid #ced4da;" value="{{url}}" disabled>
+                    <input type="text" class="form-control d-none d-sm-block" style="padding: 8px;line-height: 23px;font-size: 14px; border: 1px solid #ced4da;" value="{{url}}" disabled>
                     <div class="input-group-append" style="border: 1px solid #ced4da; background-color: white;">
                         <a class="btn btn-sm btn-share" href="whatsapp://send?text=I share you the following link: {{url}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp">
                             <i class="fab fa-whatsapp-square" style="color: green"></i>
@@ -137,10 +137,10 @@ My Wills
                             <i class="fa fa-user" style="margin-right: 5px;"></i> Witness
                         </label>
                     </div>
-                    <div class="input-group-prepend">
+                    <div class="input-group-prepend d-none d-sm-block">
                         <label class="input-group-text"><i class="fa fa-link"></i></label>
                     </div>
-                    <input type="text" class="form-control" style="padding: 8px;line-height: 23px;font-size: 14px; border: 1px solid #ced4da;" value="{{url}}" disabled>
+                    <input type="text" class="form-control d-none d-sm-block" style="padding: 8px;line-height: 23px;font-size: 14px; border: 1px solid #ced4da;" value="{{url}}" disabled>
                     <div class="input-group-append" style="border: 1px solid #ced4da; background-color: white;">
                         <a class="btn btn-sm btn-share" href="whatsapp://send?text=I share you the following link: {{url}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp">
                             <i class="fab fa-whatsapp-square" style="color: green"></i>
@@ -168,7 +168,7 @@ My Wills
             <div class="card will-card" id="{{address}}">
                 <div class="card-header">
                     <span class="float-right" style="font-size: 20px;">{{balance}} Eth</span>
-                    <h5 class="card-title">Will ({{address}})</h5>
+                    <span class="float-left" style="font-size: 20px;">Will</span>
                 </div>
                 <div class="card-body">
 
@@ -215,7 +215,7 @@ My Wills
                         <div class="row">
                             <div class="input-group col-md-6">
                                 <div class="input-group-prepend">
-                                    <button class="btn btn-sm btn-outline-secondary send" data-address="{{address}}" type="button" style="margin:0px">Deposit Ether</button>
+                                    <button class="btn btn-secondary btn-form display-4 btn-sm send" data-address="{{address}}" type="button" style="margin:0px">Deposit Ether</button>
                                 </div>
                                 <!--<input type="text" class="form-control" name="value-{{address}}" placeholder="0.00" aria-label="" aria-describedby="basic-addon1">-->
                                 <!--<div class="input-group-append">-->
@@ -287,9 +287,7 @@ My Wills
     }
 
     .wills-row {
-        border: 1px solid rgba(0, 0, 0, .125);
-        background-color: #78929bc4;
-        border-radius: .25rem;
+
     }
 
     .wills-form {
