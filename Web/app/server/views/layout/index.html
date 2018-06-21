@@ -20,7 +20,44 @@
   <link rel="stylesheet" href="assets/animatecss/animate.min.css">
   <link rel="stylesheet" href="assets/theme/css/style.css">
   <link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css" type="text/css">
-  
+
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
+    <style>
+		.dropdown-menu.show{
+			display: block;
+		}
+		.my-loader {
+			border: 16px solid #f3f3f3; /* Light grey */
+			border-top: 16px solid #3498db; /* Blue */
+			border-radius: 50%;
+			width: 120px;
+			height: 120px;
+			animation: spin 2s linear infinite;
+			margin-left: auto;
+			margin-right: auto;
+			position: relative;
+		}
+
+		@keyframes spin {
+			0% { transform: rotate(0deg); }
+			100% { transform: rotate(360deg); }
+		}
+		.btn-share{
+			margin: 0;
+			padding: 0;
+			margin-left: 5px;
+			margin-right: 5px;
+		}
+		.btn-share i {
+			font-size: 45px;
+		}
+	</style>
+
 </head>
 <body>
   <section class="menu cid-qV2aqtN3ao" once="menu" id="menu1-1">
@@ -73,7 +110,7 @@
 
 
 
-                        <li class="foot-menu-item mbr-fonts-style display-7"><a href="about-us"><strong>About Us</strong></a></li><li class="foot-menu-item mbr-fonts-style display-7"><a href="https://mobirise.com"><strong>Contact</strong></a></li></ul>
+                        <li class="foot-menu-item mbr-fonts-style display-7"><a href="about-us"><strong>About Us</strong></a></li><li class="foot-menu-item mbr-fonts-style display-7"><a href="/"><strong>Contact</strong></a></li></ul>
                 </div>
                 <div class="row social-row">
                     <div class="social-list align-right pb-2">
@@ -92,7 +129,7 @@
                             <span class="mbr-iconfont mbr-iconfont-social socicon-medium socicon"></span>
                         </a>
                     </div><div class="soc-item">
-                        <a href="https://mobirise.com" target="_blank">
+                        <a href="/" target="_blank">
                             <span class="mbr-iconfont mbr-iconfont-social socicon-telegram socicon"></span>
                         </a>
                     </div><div class="soc-item">
@@ -119,6 +156,7 @@
     <script src="assets/smoothscroll/smooth-scroll.js"></script>
     <script src="assets/touchswipe/jquery.touch-swipe.min.js"></script>
     <script src="assets/theme/js/script.js"></script>
+    <script src="/vendor/jquery.cookie.js"></script>
     <%- script %>
 
     <input name="animation" type="hidden">

@@ -169,8 +169,8 @@ body {
 }
 .btn-secondary,
 .btn-secondary:active {
-  background-color: #000000 !important;
-  border-color: #000000 !important;
+  background-color: #e80000 !important;
+  border-color: #e80000 !important;
   color: #ffffff !important;
 }
 .btn-secondary:hover,
@@ -2344,4 +2344,21 @@ body {
 }
 .cid-qVpabncqLN .media-container-row .mbr-text {
   text-align: center;
+}
+
+.cid-qPEh09X89D {
+  background-image: url("../../../assets/images/backtolife-background-1920x1080.png");
+}
+.cid-qPEh09X89D .form-container {
+  transition: all .2s;
+  border: 1px solid #ffffff;
+  padding: 1rem;
+}
+.cid-qPEh09X89D .input-group-btn {
+  justify-content: center;
+}
+@media (min-width: 768px) {
+  .cid-qPEh09X89D .content-container {
+    padding-right: 5rem;
+  }
 }
