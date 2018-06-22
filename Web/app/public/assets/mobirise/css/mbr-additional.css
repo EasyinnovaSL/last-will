@@ -2362,3 +2362,20 @@ body {
     padding-right: 5rem;
   }
 }
+
+.cid-qPEl4VRv2L {
+  background-image: url("../../../assets/images/backtolife-background-1920x1080.png");
+}
+.cid-qPEl4VRv2L .form-container {
+  transition: all .2s;
+  border: 1px solid #ffffff;
+  padding: 1rem;
+}
+.cid-qPEl4VRv2L .input-group-btn {
+  justify-content: center;
+}
+@media (min-width: 768px) {
+  .cid-qPEl4VRv2L .content-container {
+    padding-right: 5rem;
+  }
+}
