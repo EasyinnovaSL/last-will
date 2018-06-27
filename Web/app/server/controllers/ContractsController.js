@@ -46,6 +46,16 @@ FileSystem.readFile(urlContractHierarchyReal, 'utf8', function (err,data) {
     willAbiReal = config.abi;
 });
 
+exports.getWillAbi = function(req) {
+    if (req.session.real) return willAbiReal;
+    return willAbi;
+}
+
+exports.getContract = function(req) {
+    if (req.session.real) return contractReal;
+    return contract;
+}
+
 /**
  * Get Smart Contracts Info
  */
@@ -79,6 +89,7 @@ exports.createWillContract = function (req, res) {
     var percentages = req.body.percentages;
     var witnesses = req.body.witnesses;
     var recaptcha = req.body.recaptcha;
+    req.session.real = req.body.real == "true";
 
     if(recaptcha === undefined || recaptcha === '' || recaptcha === null) {
         return res.status(400).send("Please select captcha.");
@@ -106,7 +117,7 @@ exports.createWillContract = function (req, res) {
             return res.status(400).send("Failed captcha verification");
         }
 
-        return exports.sendTransaction('createLastWill', [owner,heirs,percentages,witnesses], {privateKey: Config.mainPrivateKey, from: Config.mainAddress, value: value.toString()}).then(function(lastWillAddress){
+        return exports.sendTransaction('createLastWill', [owner,heirs,percentages,witnesses], {privateKey: Config.mainPrivateKey, from: Config.mainAddress, value: value.toString(), req: req}).then(function(lastWillAddress){
             return res.status(200).send(lastWillAddress);
         }).catch(function(err){
             return res.status(400).send(err.message);
@@ -118,14 +129,6 @@ exports.createWillContract = function (req, res) {
 
 };
 
-exports.getWillAbi = function() {
-    return willAbi;
-}
-
-exports.getContract = function() {
-    return contract;
-}
-
 /**
  * Get Will Contracts
  */
@@ -136,7 +139,7 @@ exports.getWillContracts = async function (req, res) {
         return res.status(400).send("Invalid Params.");
     }
 
-    exports.getContract().methods.getContracts(owner).call({from: Config.mainAddress}, async function(err, addressesStr){
+    exports.getContract(req).methods.getContracts(owner).call({from: Config.mainAddress}, async function(err, addressesStr){
         if (err) {
             return res.status(400).send(err.message);
         } else {
@@ -148,7 +151,7 @@ exports.getWillContracts = async function (req, res) {
             for (let willAddress of adrList) {
                 if (willAddress === "") continue;
 
-                var lwContract = new web3.eth.Contract(exports.getWillAbi(),willAddress);
+                var lwContract = new web3.eth.Contract(exports.getWillAbi(req),willAddress);
 
                 // var isOwner = await lwContract.methods.isOwner(owner).call({from: Config.mainAddress});
                 var isOwner = true;
@@ -183,9 +186,9 @@ exports.getWillContracts = async function (req, res) {
 /**
  * Get Last Will Contract Address
  */
-exports.getLastWillContract = function (owner) {
+exports.getLastWillContract = function (owner,contract) {
     return new Promise(async function (resolve, reject) {
-        exports.getContract().methods.getContracts(owner).call({from: Config.mainAddress}, function (err, addressesStr) {
+        contract.methods.getContracts(owner).call({from: Config.mainAddress}, function (err, addressesStr) {
             if (err) return reject(err);
 
             // Empty
@@ -222,7 +225,8 @@ exports.sendTransaction = function (functionName, parameters, options) {
             if (parameters === null) {
                 parameters = [];
             }
-            var data = exports.getContract().methods[functionName].apply(null, parameters).encodeABI();
+            var contract = exports.getContract(options.req);
+            var data = contract.methods[functionName].apply(null, parameters).encodeABI();
 
             // Sign transaction
             var privateKey = new Buffer(options.privateKey, 'hex');
@@ -234,7 +238,7 @@ exports.sendTransaction = function (functionName, parameters, options) {
                 nonce: web3.utils.toHex(nonce),
                 gasPrice: web3.utils.toHex(1000000000), // 1GWei
                 gasLimit: web3.utils.toHex(2000000),
-                to: exports.getContract()._address,
+                to: contract._address,
                 value: value,
                 data: data
             };
@@ -242,12 +246,12 @@ exports.sendTransaction = function (functionName, parameters, options) {
             tx.sign(privateKey);
 
             // Get Last contract address
-            var lastWillAddress = await exports.getLastWillContract(parameters[0]);
+            var lastWillAddress = await exports.getLastWillContract(parameters[0],contract);
 
             // Send transaction
             var serializedTx = tx.serialize();
             web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).on('confirmation', async function (number, receipt){
-                var currentLastWillAddress = await exports.getLastWillContract(parameters[0]);
+                var currentLastWillAddress = await exports.getLastWillContract(parameters[0],contract);
                 if (lastWillAddress !== currentLastWillAddress) {
                     return resolve(currentLastWillAddress);
                 }

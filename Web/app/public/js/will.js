@@ -126,6 +126,7 @@ MyWills.prototype._saveWill = function (event) {
                 heirs: addressesheirsStr,
                 percentages: percentagesheirsStr,
                 witnesses: addresseswitnesStr,
+                real: localStorage.getItem("contractType")=="real",
                 recaptcha:$('#g-recaptcha-response').val()
             },
             beforeSend: function() {
