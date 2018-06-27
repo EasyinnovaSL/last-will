@@ -83,18 +83,18 @@ MyWills.prototype._saveWill = function (event) {
                 lastwill.witness.push({account:account});
                 witness.push(account.address);
             }else if(type == '2'){
-                lastwill.heirs.push({account:account,percentage:parseInt($(this).find('input').val())});
                 heir.push(account.address);
                 var val = $(this).find('input').val();
-                val = parseFloat(val.replace(",","."))*1000;
-                heir_percentage.push(Math.floor(val));
+                var fval = parseFloat(val.replace(",","."));
+                lastwill.heirs.push({account:account,percentage:fval});
+                heir_percentage.push(Math.floor(fval*1000));
             }else if(type == '3'){
-                lastwill.heirs.push({account:account,percentage:parseInt($(this).find('input').val())});
                 lastwill.witness.push({account:account});
                 heir.push(account.address);
                 var val = $(this).find('input').val();
-                val = parseFloat(val.replace(",","."))*1000;
-                heir_percentage.push(Math.floor(val));
+                var fval = parseFloat(val.replace(",","."));
+                lastwill.heirs.push({account:account,percentage:fval});
+                heir_percentage.push(Math.floor(fval*1000));
                 witness.push(account.address);
             }
         });
@@ -240,7 +240,7 @@ MyWills.prototype.checkIfAllIn = function () {
         }
     });
     if(i!=100000){
-        $('#ErrorModal').find('.modal-body').find('p').html('Percentage must sum 100 (now '+i+')');
+        $('#ErrorModal').find('.modal-body').find('p').html('Percentage must sum 100');
         $('#ErrorModal').modal('show');
         return false;
     }
@@ -263,12 +263,17 @@ percentagesModified = false;
 addRowGeneric();
 
 $('.percentatgeRepartir').blur(function(){
+    if ($(this).val().length == 0) return;
     var num = parseFloat($(this).val());
-    var cleanNum = num.toFixed(3);
-    $(this).val(cleanNum);
-    if(num/cleanNum != 1){
-        $('#ErrorModal').find('.modal-body').find('p').html('Please enter a maximum of 3 decimal places.');
-        $('#ErrorModal').modal('show');
+    if (!isNaN(num)) {
+        var cleanNum = num.toFixed(3);
+        if (cleanNum != num) {
+            $(this).val(cleanNum);
+            if (num / cleanNum != 1) {
+                $('#ErrorModal').find('.modal-body').find('p').html('Please enter a maximum of 3 decimal places.');
+                $('#ErrorModal').modal('show');
+            }
+        }
     }
 });
 
