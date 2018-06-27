@@ -32,6 +32,9 @@ module.exports = function (app) {
     // Render About Us
     app.get('/about-us', RenderController.renderAboutUs);
 
+    // Render Contact Us
+    app.get('/contact-us', RenderController.renderContactUs);
+
     // Error fallback //
     // app.get('*', RenderController.renderError);
 

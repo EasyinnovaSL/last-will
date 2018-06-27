@@ -2,6 +2,7 @@
 var Web3 = require('web3');
 var Web3EthPersonal = require('web3-eth-personal');
 var FileSystem = require('fs');
+var request = require('request');
 var Config = require('../config/config');
 var EthereumTx = require('ethereumjs-tx');
 
@@ -50,10 +51,16 @@ exports.createWillContract = function (req, res) {
     var heirs = req.body.heirs;
     var percentages = req.body.percentages;
     var witnesses = req.body.witnesses;
+    var recaptcha = req.body.recaptcha;
+
+    if(recaptcha === undefined || recaptcha === '' || recaptcha === null) {
+        return res.status(400).send("Please select captcha.");
+    }
 
     if (!owner || !heirs || !percentages || !witnesses) {
         return res.status(400).send("Invalid Params.");
     }
+
 
     // Ether for witnesses
     var value = witnesses.split(";").length * 0.001;
@@ -61,11 +68,27 @@ exports.createWillContract = function (req, res) {
     // Demo ether for the smart contract
     value = value + 0.1;
 
-    return exports.sendTransaction('createLastWill', [owner,heirs,percentages,witnesses], {privateKey: Config.mainPrivateKey, from: Config.mainAddress, value: value.toString()}).then(function(lastWillAddress){
-        return res.status(200).send(lastWillAddress);
-    }).catch(function(err){
-        return res.status(400).send(err.message);
-    })
+    // recaptcha
+    var secretKey = "6LffzGAUAAAAAGxQl-J2mnFZqVkpQb6-AglNclxv";
+    var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + recaptcha + "&remoteip=" + req.connection.remoteAddress;
+
+    request(verificationUrl,function(error,response,body) {
+        body = JSON.parse(body);
+        // Success will be true or false depending upon captcha validation.
+        if(body.success !== undefined && !body.success) {
+            return res.status(400).send("Failed captcha verification");
+        }
+
+        return exports.sendTransaction('createLastWill', [owner,heirs,percentages,witnesses], {privateKey: Config.mainPrivateKey, from: Config.mainAddress, value: value.toString()}).then(function(lastWillAddress){
+            return res.status(200).send(lastWillAddress);
+        }).catch(function(err){
+            return res.status(400).send(err.message);
+        });
+
+    });
+
+
+
 };
 
 /**
@@ -111,7 +134,7 @@ exports.getWillContracts = async function (req, res) {
                 for (var i in heirsList) {
                     heirs.push({
                         address: heirsList[i],
-                        percentage: parseInt(percentList[i]),
+                        percentage: parseInt(percentList[i])/1000.0,
                     });
                 }
 
