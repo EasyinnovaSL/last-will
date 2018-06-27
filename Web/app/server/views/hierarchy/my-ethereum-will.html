@@ -97,6 +97,32 @@ My Wills
 
 </section>
 
+
+<!-- The Modal -->
+<div class="modal fade" id="myAddressModal" style="padding: 10px;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header" style="background: #3acaea; color: white;">
+                <h4 class="modal-title">Address</h4>
+                <button type="button" class="close" data-dismiss="modal" style="font-size: 32px;">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body text-center" style="word-wrap: break-word;"></div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
 <script src="/js/will.js"></script>
 <script src='https://www.google.com/recaptcha/api.js'></script>
 
@@ -189,12 +215,31 @@ My Wills
                             </div>
                             {{#heirs}}
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <p class="card-text">
-                                            <i class="fa fa-dollar-sign"></i> <span style="margin-right: 10px;">{{percentage}}%</span>
-                                            <i class="fa fa-user"></i> <span style="margin-right: 10px;">{{address}}</span>
-                                        </p>
+                                    <div class="col-md-12 d-none d-sm-block">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <i class="fa fa-dollar-sign"></i> <span style="margin-right: 10px;">{{percentage}}%</span>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <i class="fa fa-user"></i> <span style="margin-right: 10px;">{{address}}</span>
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    <div class="col-xs-12 d-sm-none" style="margin:  0 auto;">
+                                                <span class="btn btn-sm btn-light" href="javascript:void(0)" style="margin: 0; font-size: 16px !important;">
+                                                     <i class="fa fa-dollar-sign"></i> &nbsp; {{percentage}}%
+                                                </span>
+
+                                                <a class="btn btn-sm btn-light show-witness-address" href="javascript:void(0)" style="margin: 0; font-size: 16px !important;" data-toggle="modal" data-target="#myAddressModal" onclick="updateAddressModal('{{address}}');">
+                                                    <i class="fa fa-user"></i> &nbsp; Address
+                                                </a>
+                                    </div>
+
+
+
+
+
                                 </div>
                             {{/heirs}}
                         </div>
@@ -215,6 +260,16 @@ My Wills
                             {{/witnesses}}
                         </div>
                     </div>
+
+                    <!-- EtherScan -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                             <a href="https://etherscan.io/address/{{address}}" target="_blank">Check your contract in EtherScan</a>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="card-footer">
@@ -248,6 +303,15 @@ My Wills
 
 </script>
 <style>
+
+
+    #myAddressModal .modal-dialog {
+        -webkit-transform: translate(0,-50%);
+        -o-transform: translate(0,-50%);
+        transform: translate(0,-50%);
+        top: 50%;
+        margin: 0 auto;
+    }
 
     @media (max-width: 767px) {
         .g-recaptcha {
@@ -314,6 +378,14 @@ My Wills
 
 <script>
 
+
+    function updateAddressModal(userAddress){
+        $('#myAddressModal div.modal-body').html(String(userAddress));
+    }
+
+
+
+
     $(document).ready(function () {
         // Load wills plugin
       var will = new MyWills({contract: contracts.base, hierarchy: contracts.hierarchy});
@@ -323,6 +395,8 @@ My Wills
         if (jsonWill) {
             will.renderLastWill(JSON.parse(jsonWill));
         }
+
+
     });
 
 </script>
