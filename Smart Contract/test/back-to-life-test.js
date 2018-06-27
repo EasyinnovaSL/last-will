@@ -1,68 +1,112 @@
 var BackToLife = artifacts.require("./BackToLife.sol");
-var HierarchyContract = artifacts.require("./HierarchyContract.sol");
+var MyWill = artifacts.require("./MyWill.sol");
 
 contract('BackToLife', function(accounts) {
-    console.log(accounts);
-    var sender = accounts[0];
-    console.log("Sender Account: " + sender);
 
-    it("BackToLife Create Accounts", function() {
-        var BackToLifeContractInstance;
-        var  instanceHierarchyContract;
+    var service = accounts[0];
+    var owner = accounts[1];
+    var witness = accounts[2];
 
-        return BackToLife.deployed().then(function (instance) {
-            BackToLifeContractInstance = instance;
-        }).then(function (result) {
+    var heirs = [accounts[3], accounts[4]];
+    var heirsPercentages = ["30000", "70000"];
 
-            //assert.equal(result.valueOf(), 150, "Balance Is Incorrect");
+    var BackToLifeContractInstance;
+    var MyWillInstance;
 
-            //return BackToLifeContractInstance.createHierarchyContract("0xf1f42f995046e67b79dd5ebafd224ce964740da3;0x2052d46d53107b0384503be3a11935f0b5cd5342", "11;89", "0xf1f42f995046e67b79dd5ebafd224ce964740da3;0x2052d46d53107b0384503be3a11935f0b5cd5342");
-            return BackToLifeContractInstance.createHierarchyContractPayable("0xca3174f4c90013d29e8a24bd7cc4efb2d0ee5958;0x62644862009ce35e5260ed9b28db0b7b03561784", "11;89", "0xca3174f4c90013d29e8a24bd7cc4efb2d0ee5958;0x62644862009ce35e5260ed9b28db0b7b03561784", {value: web3.toWei(10, "ether")});
+    it("Create My Will", async function() {
 
-        }).then(function () {
+        BackToLifeContractInstance = await BackToLife.deployed();
 
-            return BackToLifeContractInstance.getMyContracts.call();
+        // Create My Will contract
+        await BackToLifeContractInstance.createLastWill(owner, heirs.join(";"), heirsPercentages.join(";"), witness, {from: service});
+        var result = await BackToLifeContractInstance.getContracts.call(owner, {from: service});
+        var myWilLAddress = result.valueOf().split(';')[0];
 
-        }).then(function (result) {
+        // Check contract creation
+        if (myWilLAddress === "") {
+            assert.equal(true, false, "Contract has not been created");
+        }
 
-            var contractAddress = result.valueOf().replace(';','');
-
-            instanceHierarchyContract = HierarchyContract.at(contractAddress);
-
-            //instanceHierarchyContract.send({from: "0xff1fbfe19950b12ace5101de1459d765e062cb59", value: 1});
-
-
-            return instanceHierarchyContract.getBalance.call();
-
-        }).then(function (result) {
-
-            assert.equal(result.valueOf(), 10000000000000000000, "The Smart Contract Balance is incorrect");
-
-            //return instanceHierarchyContract.getPercentage.call();
-
-        }).then(function () {
-
-            //assert.equal(result.valueOf(), 10000000000000000000, "The byte representation is incorrect");
-
-            instanceHierarchyContract.ownerDied({from: "0xca3174f4c90013d29e8a24bd7cc4efb2d0ee5958"});
-
-            return instanceHierarchyContract.getBalance.call({from: "0xca3174f4c90013d29e8a24bd7cc4efb2d0ee5958"});
-
-        }).then(function (result) {
-
-            //assert.equal(result.valueOf(), 10000000000000000000, "The Account Balance is incorrect");
-            assert.equal(result.valueOf(), 10000000000000000000, "The Account Balance of 0xca3174f4c90013d29e8a24bd7cc4efb2d0ee5958 is incorrect");
-
-            instanceHierarchyContract.ownerDied({from: "0x62644862009ce35e5260ed9b28db0b7b03561784"});
-
-            return instanceHierarchyContract.getBalance.call({from: "0xff1fbfe19950b12ace5101de1459d765e062cb59"});
-
-        }).then(function (result) {
-            assert.equal(result.valueOf(), 0, "The smart contract balance is incorrect");
-            //assert.equal(true, true, "true");
-
-        });
+        MyWillInstance = await MyWill.at(myWilLAddress);
+        var balance = await MyWillInstance.getBalance.call();
+        assert.equal(balance.valueOf(), 0, "The Smart Contract Balance is incorrect");
     });
 
+    it("Send Ether", async function() {
+
+        // Send some ether (it will fail)
+        try {
+            await MyWillInstance.send(web3.toWei(0.0001,"ether"), {from: owner});
+            assert.equal(true, false, "The Smart Contract can receive too small amount of ether");
+        } catch (ex) {
+
+        }
+
+        // Send some ether
+        await MyWillInstance.send(web3.toWei(100,"ether"), {from: owner});
+        var balance = await MyWillInstance.getBalance.call();
+        var expected = 100 - 0.001 - 0.005; // 0.001 for 1 witness + 0.005 for the club (creation of smart contract)
+        assert.equal(balance.valueOf(), web3.toWei(expected,"ether"), "The Smart Contract cannot receive ether");
+    });
+
+    it("Owner Died from heir", async function() {
+
+        // Owner Died
+        try{
+            await MyWillInstance.ownerDied({from: heirs[0]});
+            assert.equal(true, false, "The heir can execute owner died");
+        } catch(ex){ }
+
+        // Owner Died
+        try{
+            await MyWillInstance.ownerDied({from: heirs[1]});
+            assert.equal(true, false, "The heir can execute owner died");
+        } catch(ex){ }
+
+    });
+
+    it("Owner Died", async function() {
+
+        var heir1Balance = await web3.eth.getBalance(heirs[0]);
+        var heir2Balance = await web3.eth.getBalance(heirs[1]);
+
+        // Owner Died
+        await MyWillInstance.ownerDied({from: witness});
+
+        // Check balance 0
+        var balance = await MyWillInstance.getBalance.call();
+
+        var bb = await web3.eth.getBalance(heirs[0]);
+        var difference = bb.valueOf() - heir1Balance;
+        console.log("H1: " + difference);
+
+        bb = await web3.eth.getBalance(heirs[1]);
+        difference = bb.valueOf() - heir2Balance;
+        console.log("H2: " + difference);
+
+        assert.equal(balance.valueOf(), 0, "The dead execution failed");
+
+        // Check heir 30% balance
+        balance = await web3.eth.getBalance(heirs[0]);
+        var difference = balance.valueOf() - heir1Balance;
+        assert.equal(true, difference > web3.toWei(29,"ether") && difference < web3.toWei(31,"ether"), "Heir 30% don't receive funds");
+
+        // Check heir 70% balance
+        balance = await web3.eth.getBalance(heirs[1]);
+        difference = balance.valueOf() - heir2Balance;
+        assert.equal(true, difference > web3.toWei(69,"ether") && difference < web3.toWei(71,"ether"), "Heir 70% don't receive funds");
+
+    });
+
+    it("Deny Transfer when dead", async function() {
+
+        // Check smart contract deny ether transfers
+        try {
+            await MyWillInstance.send(web3.toWei(10,"ether"));
+            assert.equal(true, false, "The smart contract accepts funds after death");
+        } catch (ex) {
+            assert.equal(true, true, "");
+        }
+    });
 
 });

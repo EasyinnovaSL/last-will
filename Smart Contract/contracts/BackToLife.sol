@@ -2,25 +2,25 @@ pragma solidity ^0.4.15;
 
 /* https://github.com/Arachnid/solidity-stringutils */
 import "./strings.sol";
-import "./HierarchyContract.sol";
+import "./MyWill.sol";
 
 contract BackToLife {
 
     using strings for *;
 
+    address club;
+
     mapping (address => string) mapOwnerStringContract;
 
+    /* Create base contract */
+    function BackToLife () {
+        club = msg.sender;
+    }
+
     /* Create Last Will Contract */
-    function createLastWill (address _owner, string _listHeirs, string _listHeirsPercentages, string _listWitnesses) payable {
+    function createLastWill (address _owner, string _listHeirs, string _listHeirsPercentages, string _listWitnesses) {
 
         address owner = _owner;
-        address newHierarchyContract = new HierarchyContract(owner);
-
-        HierarchyContract _HierarchyContract = HierarchyContract(newHierarchyContract);
-
-        var stringContractAddress = addressToString(newHierarchyContract);
-
-        mapOwnerStringContract[owner] =  mapOwnerStringContract[owner].toSlice().concat(stringContractAddress.toSlice()).toSlice().concat(";".toSlice());
 
         var s = _listHeirs.toSlice().copy();
 
@@ -54,26 +54,10 @@ contract BackToLife {
         var delim = ";".toSlice();
         uint256 listWitnessLength = s.count(delim) + 1;
 
-        /* Add heirs and witness to the contract */
-        _HierarchyContract.addHeirs(_listHeirs, _listHeirsPercentages, _listWitnesses);
-
-        /* Send funds to witnesses */
-        if(msg.value > 0){
-
-            // Send to contract
-            if(!newHierarchyContract.send(msg.value - ((s.count(delim) + 1) * 1000000000000000))){
-                throw;
-            }
-
-            // Send to witness
-            if (listWitnessLength == 1) {
-                parseAddr(_listWitnesses).send(1000000000000000);
-            } else {
-                for(uint i = 0; i < listWitnessLength; i++) {
-                    parseAddr(s.split(delim).toString()).send(1000000000000000);
-                }
-            }
-        }
+        /* Create the My Will contract */
+        address myWillAddress = new MyWill(owner, _listHeirs, _listHeirsPercentages, _listWitnesses, club);
+        var myWillAddressString = addressToString(myWillAddress);
+        mapOwnerStringContract[owner] =  mapOwnerStringContract[owner].toSlice().concat(myWillAddressString.toSlice()).toSlice().concat(";".toSlice());
     }
 
     /* Get Address Contracts */
@@ -100,23 +84,23 @@ contract BackToLife {
         else return byte(uint8(b) + 0x57);
     }
 
-    function parseAddr(string _a) internal returns (address){
-        bytes memory tmp = bytes(_a);
-        uint160 iaddr = 0;
-        uint160 b1;
-        uint160 b2;
-        for (uint i=2; i<2+2*20; i+=2){
-            iaddr *= 256;
-            b1 = uint160(tmp[i]);
-            b2 = uint160(tmp[i+1]);
-            if ((b1 >= 97)&&(b1 <= 102)) b1 -= 87;
-            else if ((b1 >= 48)&&(b1 <= 57)) b1 -= 48;
-            if ((b2 >= 97)&&(b2 <= 102)) b2 -= 87;
-            else if ((b2 >= 48)&&(b2 <= 57)) b2 -= 48;
-            iaddr += (b1*16+b2);
-        }
-        return address(iaddr);
-    }
+//    function parseAddr(string _a) internal returns (address){
+//        bytes memory tmp = bytes(_a);
+//        uint160 iaddr = 0;
+//        uint160 b1;
+//        uint160 b2;
+//        for (uint i=2; i<2+2*20; i+=2){
+//            iaddr *= 256;
+//            b1 = uint160(tmp[i]);
+//            b2 = uint160(tmp[i+1]);
+//            if ((b1 >= 97)&&(b1 <= 102)) b1 -= 87;
+//            else if ((b1 >= 48)&&(b1 <= 57)) b1 -= 48;
+//            if ((b2 >= 97)&&(b2 <= 102)) b2 -= 87;
+//            else if ((b2 >= 48)&&(b2 <= 57)) b2 -= 48;
+//            iaddr += (b1*16+b2);
+//        }
+//        return address(iaddr);
+//    }
 
     function getBalance() constant returns (uint) {
         return  address(this).balance;
