@@ -134,7 +134,7 @@ exports.getWillContracts = async function (req, res) {
                 for (var i in heirsList) {
                     heirs.push({
                         address: heirsList[i],
-                        percentage: parseInt(percentList[i]),
+                        percentage: parseInt(percentList[i])/1000.0,
                     });
                 }
 

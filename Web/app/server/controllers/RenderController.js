@@ -23,6 +23,9 @@ exports.renderHeir = function(req,res){
 exports.renderAboutUs = function (req, res) {
     return res.render('hierarchy/about-us');
 };
+exports.renderContactUs = function (req, res) {
+    return res.render('hierarchy/contact-us');
+};
 
 /**
  * Load Configuration
