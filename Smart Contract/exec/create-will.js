@@ -9,11 +9,12 @@ module.exports = async function(callback) {
         var witness = accounts[2];
 
         var heirs = [accounts[3], accounts[4]];
-        var heirsPercentages = ["30", "70"];
+        var heirsPercentages = ["30000", "70000"];
 
         var BackToLifeContractInstance = await BackToLife.deployed();
-        await BackToLifeContractInstance.createLastWill(owner, heirs.join(";"), heirsPercentages.join(";"), witness, {from: service});
-        var result = await BackToLifeContractInstance.getContracts.call(owner, {from: service});
+        var result = await BackToLifeContractInstance.createLastWill(owner, heirs.join(";"), heirsPercentages.join(";"), witness, {from: service});
+        console.log("Gas cost: " + result.receipt.gasUsed);
+        result = await BackToLifeContractInstance.getContracts.call(owner, {from: service});
         var strAddresses = result.valueOf();
         if (strAddresses.valueOf().endsWith(";")) {
             strAddresses = strAddresses.slice(0, -1);

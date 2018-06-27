@@ -75,15 +75,6 @@ contract('BackToLife', function(accounts) {
 
         // Check balance 0
         var balance = await MyWillInstance.getBalance.call();
-
-        var bb = await web3.eth.getBalance(heirs[0]);
-        var difference = bb.valueOf() - heir1Balance;
-        console.log("H1: " + difference);
-
-        bb = await web3.eth.getBalance(heirs[1]);
-        difference = bb.valueOf() - heir2Balance;
-        console.log("H2: " + difference);
-
         assert.equal(balance.valueOf(), 0, "The dead execution failed");
 
         // Check heir 30% balance
