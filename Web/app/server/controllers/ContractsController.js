@@ -15,8 +15,8 @@ web3.eth.personal = new Web3EthPersonal(Config.provider);
 
 var urlContractBacktolifeTest = "../contractBackToLife.json";
 var urlContractHierarchyTest = "../contractHierarchy.json";
-var urlContractBacktolifeReal = "../Production/contractBackToLife.json";
-var urlContractHierarchyReal = "../Production/contractHierarchy.json";
+var urlContractBacktolifeReal = "../Production/Ropsten/contractBackToLife.json";
+var urlContractHierarchyReal = "../Production/Ropsten/contractMyWill.json";
 
 // Read contract info
 FileSystem.readFile(urlContractBacktolifeTest, 'utf8', function (err,data) {
