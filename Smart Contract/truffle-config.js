@@ -25,6 +25,14 @@ module.exports = {
             },
             network_id: 4,
             gasPrice: 1000000000 // 1 GWei
+        },
+        ropsten: {
+            provider: function() {
+                return new HDWalletProvider(seed, "https://ropsten.infura.io/VzAp7t8qZU2Sn4vuyupa")
+                // Main account: 0x3bdec9a3d0378738a36bc484d234bdd035072a7a
+            },
+            network_id: 3,
+            gasPrice: 4000000000 // 4 GWei
         }
     }
 };

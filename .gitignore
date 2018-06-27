@@ -6,7 +6,9 @@
 contractLostPassword.json
 contractBackToLife.json
 contractHierarchy.json
-!/Production/*
+contractMyWill.json
+!/Production/Ropsten/*
+!/Production/Main/*
 
 # Blockchain folder
 blockchain/

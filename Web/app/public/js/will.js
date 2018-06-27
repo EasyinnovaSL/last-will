@@ -40,17 +40,17 @@ MyWills.prototype.options = {}
 
 MyWills.prototype._sendWill = function (event) {
     var contract = $(event.target).attr('data-address');
-    $("#InfoModal").find("h5").html(contract);
+
+    var html = "<p>Send <strong>ROPSTEN</strong> Ethers to the next address, using either an exchanger or an Ethereum Wallet:</p>"
+               + "<h5>"+contract+"</h5>";
+    if (!realContractSelected()) {
+        html += "<p>Also, in this TestNet version, you can use the <a target=\"_blank\" href=\"http://faucet.ropsten.be:3001\">Ropsten official faucet</a></p>";
+    }
+
+    $("#InfoModal").find(".content").html(html);
     $("#InfoModal").modal('show');
-    // var inputValue = parseFloat($('input[name=value-'+contract+']').val());
-    // if (!isNaN(inputValue)) {
-    //     var value = web3.toWei(inputValue, "ether");
-    //     web3.eth.sendTransaction({to:contract,value:value},function () {
-    //         $('#OkModal').modal('show');
-    //         this._listWills();
-    //     }.bind(this));
-    // }
 };
+
 MyWills.prototype._withdrawWill = function (event) {
     var contractAddress = $(event.target).attr('data-address');
     var inputValue = parseFloat($('input[name=value-'+contractAddress+']').val());
@@ -84,26 +84,30 @@ MyWills.prototype._saveWill = function (event) {
                 lastwill.witness.push({account:account});
                 witness.push(account.address);
             }else if(type == '2'){
-                lastwill.heirs.push({account:account,percentage:parseInt($(this).find('input').val())});
                 heir.push(account.address);
-                heir_percentage.push($(this).find('input').val());
+                var val = $(this).find('input').val();
+                var fval = parseFloat(val.replace(",","."));
+                lastwill.heirs.push({account:account,percentage:fval});
+                heir_percentage.push(Math.floor(fval*1000));
             }else if(type == '3'){
-                lastwill.heirs.push({account:account,percentage:parseInt($(this).find('input').val())});
                 lastwill.witness.push({account:account});
                 heir.push(account.address);
-                heir_percentage.push($(this).find('input').val());
+                var val = $(this).find('input').val();
+                var fval = parseFloat(val.replace(",","."));
+                lastwill.heirs.push({account:account,percentage:fval});
+                heir_percentage.push(Math.floor(fval*1000));
                 witness.push(account.address);
             }
         });
 
         if (witness.length < 1) throw new Error("Invalid number of addresses");
         if (heir.length < 1) throw new Error("Invalid number of addresses");
-        if (heir_percentage && heir_percentage.length !== heir.length) throw new Error("Invalid number of percentages (must be the same as addresses");
+        if (heir_percentage && heir_percentage.length !== heir.length) throw new Error("Invalid number of percentages (must be the same as addresses)");
         var totalpercentage = 0;
         heir_percentage.forEach(function (i){
             totalpercentage+=parseInt(i);
         });
-        if (totalpercentage !== 100) throw new Error("Invalid percentage (percentage must sum 100");
+        if (totalpercentage !== 100000) throw new Error("Invalid percentage (percentage must sum 100)");
 
         // Input params
         var ownerAddress = $("#ownerInput").val();
@@ -123,6 +127,7 @@ MyWills.prototype._saveWill = function (event) {
                 heirs: addressesheirsStr,
                 percentages: percentagesheirsStr,
                 witnesses: addresseswitnesStr,
+                real: localStorage.getItem("contractType")=="real",
                 recaptcha:$('#g-recaptcha-response').val()
             },
             beforeSend: function() {
@@ -243,7 +248,8 @@ MyWills.prototype.getWills = function (address) {
                type: "POST",
                url: "/contracts",
                data: {
-                   owner: address
+                   owner: address,
+                   real: realContractSelected()
                },
                success: function(wills){
                    console.log(wills);
@@ -267,15 +273,15 @@ MyWills.prototype.renderLastWill = function () {
 };
 
 MyWills.prototype.checkIfAllIn = function () {
-    var $i=0;
+    var i=0;
     $( ".percentatgeRepartir" ).each(function( index ) {
         if($( this ).val()!='-'){
             console.log("Percentage: " + $( this ).val());
-            $i=$i+parseInt($( this ).val());
+            i+=Math.floor(parseFloat($( this ).val().replace(",","."))*1000);
         }
     });
-    if($i!=100){
-        $('#ErrorModal').find('.modal-body').find('p').html('Percentage must sum 100 (now '+$i+')');
+    if(i!=100000){
+        $('#ErrorModal').find('.modal-body').find('p').html('Percentage must sum 100');
         $('#ErrorModal').modal('show');
         return false;
     }
@@ -296,6 +302,21 @@ MyWills.prototype.checkIfAllIn = function () {
 numberOfFields = 0;
 percentagesModified = false;
 addRowGeneric();
+
+$('.percentatgeRepartir').blur(function(){
+    if ($(this).val().length == 0) return;
+    var num = parseFloat($(this).val());
+    if (!isNaN(num)) {
+        var cleanNum = num.toFixed(3);
+        if (cleanNum != num) {
+            $(this).val(cleanNum);
+            if (num / cleanNum != 1) {
+                $('#ErrorModal').find('.modal-body').find('p').html('Please enter a maximum of 3 decimal places.');
+                $('#ErrorModal').modal('show');
+            }
+        }
+    }
+});
 
 function addRowGeneric(){
     $("#divholder").append("<div id='row"+numberOfFields+"' class='field input-group mb-3'><div class='input-group-prepend'><label class='input-group-text' for='inputGroupSelect01'><i class='fa fa-user'></i></label></div><select class='custom-select'  onchange='selectChanged(\""+numberOfFields+"\")' style='height: 49px;' id='inputGroupSelect"+numberOfFields+"'><option value='1'>Witness</option><option value='2'>Heir</option><option value='3' selected>Heir & Witness</option></select><div class='input-group-prepend'><label class='input-group-text' for='inputGroupSelect01'>%</label></div><input type='text' id='percent"+numberOfFields+"' class='form-control percentatgeRepartir' style=' padding: 0px;line-height: 23px;font-size: 14px; text-align:center ' aria-label='Amount (to the nearest dollar)' value=''><div class='input-group-append'><button onclick='deleteRow(\"row"+numberOfFields+"\")' class='btn btn-outline-secondary' style='border: 1px solid #ced4da; margin: 0px; padding: 0px 10px; font-size: 23px; color: #e80000;' type='button' ><span class='mbri-trash'></span></button></div></div>");

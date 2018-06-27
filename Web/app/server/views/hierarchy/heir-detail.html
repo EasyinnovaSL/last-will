@@ -97,6 +97,8 @@ Heir
 
 <script src="/js/transactions-alerts.js"></script>
 
+<script src="/js/contracts.js"></script>
+
 <script type="application/javascript">
 
     var localWeb3 = null;
@@ -121,8 +123,7 @@ Heir
             account = localWeb3.eth.accounts.privateKeyToAccount(privateKey);
             heirAddress = account.address;
 
-            var contract = new localWeb3.eth.Contract( contracts.hierarchy.abi, willAddress);
-            //var contract = new localWeb3.eth.Contract( contracts.hierarchy.abi, "0x278741d6fe3ab34f2c71dc1f6fbd80db3a88d16c");
+            var contract = new localWeb3.eth.Contract( getHierarchyContract(contracts).abi, willAddress);
 
             contract.methods.hasDied().call(function(err, hasDied){
                 if (err) return reject(err);
