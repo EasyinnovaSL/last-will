@@ -85,24 +85,28 @@ MyWills.prototype._saveWill = function (event) {
             }else if(type == '2'){
                 lastwill.heirs.push({account:account,percentage:parseInt($(this).find('input').val())});
                 heir.push(account.address);
-                heir_percentage.push($(this).find('input').val());
+                var val = $(this).find('input').val();
+                val = parseFloat(val.replace(",","."))*1000;
+                heir_percentage.push(Math.floor(val));
             }else if(type == '3'){
                 lastwill.heirs.push({account:account,percentage:parseInt($(this).find('input').val())});
                 lastwill.witness.push({account:account});
                 heir.push(account.address);
-                heir_percentage.push($(this).find('input').val());
+                var val = $(this).find('input').val();
+                val = parseFloat(val.replace(",","."))*1000;
+                heir_percentage.push(Math.floor(val));
                 witness.push(account.address);
             }
         });
 
         if (witness.length < 1) throw new Error("Invalid number of addresses");
         if (heir.length < 1) throw new Error("Invalid number of addresses");
-        if (heir_percentage && heir_percentage.length !== heir.length) throw new Error("Invalid number of percentages (must be the same as addresses");
+        if (heir_percentage && heir_percentage.length !== heir.length) throw new Error("Invalid number of percentages (must be the same as addresses)");
         var totalpercentage = 0;
         heir_percentage.forEach(function (i){
             totalpercentage+=parseInt(i);
         });
-        if (totalpercentage !== 100) throw new Error("Invalid percentage (percentage must sum 100");
+        if (totalpercentage !== 100000) throw new Error("Invalid percentage (percentage must sum 100)");
 
         // Input params
         var ownerAddress = $("#ownerInput").val();
@@ -227,15 +231,15 @@ MyWills.prototype.renderLastWill = function () {
 };
 
 MyWills.prototype.checkIfAllIn = function () {
-    var $i=0;
+    var i=0;
     $( ".percentatgeRepartir" ).each(function( index ) {
         if($( this ).val()!='-'){
             console.log("Percentage: " + $( this ).val());
-            $i=$i+parseInt($( this ).val());
+            i+=Math.floor(parseFloat($( this ).val().replace(",","."))*1000);
         }
     });
-    if($i!=100){
-        $('#ErrorModal').find('.modal-body').find('p').html('Percentage must sum 100 (now '+$i+')');
+    if(i!=100000){
+        $('#ErrorModal').find('.modal-body').find('p').html('Percentage must sum 100 (now '+i+')');
         $('#ErrorModal').modal('show');
         return false;
     }
@@ -256,6 +260,16 @@ MyWills.prototype.checkIfAllIn = function () {
 numberOfFields = 0;
 percentagesModified = false;
 addRowGeneric();
+
+$('.percentatgeRepartir').blur(function(){
+    var num = parseFloat($(this).val());
+    var cleanNum = num.toFixed(3);
+    $(this).val(cleanNum);
+    if(num/cleanNum != 1){
+        $('#ErrorModal').find('.modal-body').find('p').html('Please enter a maximum of 3 decimal places.');
+        $('#ErrorModal').modal('show');
+    }
+});
 
 function addRowGeneric(){
     $("#divholder").append("<div id='row"+numberOfFields+"' class='field input-group mb-3'><div class='input-group-prepend'><label class='input-group-text' for='inputGroupSelect01'><i class='fa fa-user'></i></label></div><select class='custom-select'  onchange='selectChanged(\""+numberOfFields+"\")' style='height: 49px;' id='inputGroupSelect"+numberOfFields+"'><option value='1'>Witness</option><option value='2'>Heir</option><option value='3' selected>Heir & Witness</option></select><div class='input-group-prepend'><label class='input-group-text' for='inputGroupSelect01'>%</label></div><input type='text' id='percent"+numberOfFields+"' class='form-control percentatgeRepartir' style=' padding: 0px;line-height: 23px;font-size: 14px; text-align:center ' aria-label='Amount (to the nearest dollar)' value=''><div class='input-group-append'><button onclick='deleteRow(\"row"+numberOfFields+"\")' class='btn btn-outline-secondary' style='border: 1px solid #ced4da; margin: 0px; padding: 0px 10px; font-size: 23px; color: #e80000;' type='button' ><span class='mbri-trash'></span></button></div></div>");
