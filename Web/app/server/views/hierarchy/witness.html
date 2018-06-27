@@ -44,6 +44,8 @@ Witness
 
 <script src="/js/transactions-alerts.js"></script>
 
+<script src="/js/contracts.js"></script>
+
 <script>
 
     var Transactions = new TransactoinAlerts({container: "#transactions-container"});
@@ -56,7 +58,7 @@ Witness
 
         var willAddress = "<%- will %>";
 
-        var contract = new localWeb3.eth.Contract(contracts.hierarchy.abi, willAddress);
+        var contract = new localWeb3.eth.Contract(getHierarchyContract(contracts).abi, willAddress);
 
         contract.methods.hasVoted().call({from: account.address.toLowerCase(), to: willAddress.toLowerCase()}, function(err, iVoted){
             if (err) {

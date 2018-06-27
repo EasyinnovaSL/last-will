@@ -6,11 +6,27 @@ My Wills
 
 <%- contentFor('content') %>
 
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
 <section class="cid-qPEh09X89D mbr-parallax-background" id="header15-s" style="padding-top: 100px; margin-bottom: 144px;">
 
     <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(118, 118, 118);"></div>
 
     <div class="container align-left">
+
+        <div class="row">
+            <div class="col-md-12 test-real-selector">
+                <div class="pull-right">
+                    <style>
+                        .toggle, .toggle-on, .toggle-off { border-radius: 20px; background: white; height:30px !important; width:100px !important; }
+                        .toggle-handle { border-radius: 20px; }
+                    </style>
+                    <label style="color:white">Real network</label>
+                    <input type="checkbox" data-toggle="toggle" id="chkTestReal">
+                </div>
+            </div>
+        </div>
 
         <div class="row">
             <div class="mbr-white col-md-12 content-container wills-form">
@@ -38,9 +54,6 @@ My Wills
                                 <div class="g-recaptcha col-md-4 offset-md-4" data-sitekey="6LffzGAUAAAAAAD0UhJuWZvnbMtlTZxM2WXBkQUP"></div>
 
                             </div>
-
-                            <p class="description">We are using the TestNet RINKEBY. For testing and demo purposes, we will send 0.1 Ether to each Last Will Smart Contract created.</p>
-
 
                             <div class="row">
                                 <div class="col-md-4">
@@ -235,11 +248,6 @@ My Wills
                                                     <i class="fa fa-user"></i> &nbsp; Address
                                                 </a>
                                     </div>
-
-
-
-
-
                                 </div>
                             {{/heirs}}
                         </div>
@@ -251,10 +259,15 @@ My Wills
                             </div>
                             {{#witnesses}}
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-12 d-none d-sm-block">
                                         <p class="card-text">
                                             <i class="fa fa-user"></i> {{address}}
                                         </p>
+                                    </div>
+                                    <div class="col-xs-12 d-sm-none" style="margin:  0 auto;">
+                                        <a class="btn btn-sm btn-light show-witness-address" href="javascript:void(0)" style="margin: 0; font-size: 16px !important;" data-toggle="modal" data-target="#myAddressModal" onclick="updateAddressModal('{{address}}');">
+                                            <i class="fa fa-user"></i> &nbsp; Address
+                                        </a>
                                     </div>
                                 </div>
                             {{/witnesses}}
@@ -376,6 +389,8 @@ My Wills
     }
 </style>
 
+<script src="/js/contracts.js"></script>
+
 <script>
 
 
@@ -388,7 +403,7 @@ My Wills
 
     $(document).ready(function () {
         // Load wills plugin
-      var will = new MyWills({contract: contracts.base, hierarchy: contracts.hierarchy});
+        var will = new MyWills({contract: getBaseContract(contracts), hierarchy: getHierarchyContract(contracts)});
 
         // Load Previous Last Will
         var jsonWill = localStorage.getItem("lastwill");
@@ -396,7 +411,13 @@ My Wills
             will.renderLastWill(JSON.parse(jsonWill));
         }
 
-
+        $("#chkTestReal").change(function() {
+            if($(this).is(":checked")) {
+                var returnVal = confirm("Are you sure?");
+                $(this).attr("checked", returnVal);
+            }
+            $('#textbox1').val($(this).is(':checked'));
+        });
     });
 
 </script>
