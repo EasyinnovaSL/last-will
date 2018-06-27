@@ -1,6 +1,6 @@
 
 var Config = require('../config/config');
-
+var nodemailer = require('nodemailer');
 /**
  * Render pages
  */
@@ -22,6 +22,35 @@ exports.renderHeir = function(req,res){
 };
 exports.renderAboutUs = function (req, res) {
     return res.render('hierarchy/about-us');
+};
+
+exports.sendMail = function (req, res) {
+    var email= req.body.email;
+    var will= req.body.email;
+
+
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: Config.email.user,
+            pass: Config.email.password
+        }
+    });
+
+    var mailOptions = {
+        from:  Config.email.address,
+        to: email,
+        subject: 'Last will',
+        text: 'That was easy!'
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
 };
 
 /**

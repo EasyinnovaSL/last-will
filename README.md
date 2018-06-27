@@ -16,7 +16,12 @@
 
   `npm install`
 
-  
+### Configure Application
+
+1. Rename .\Web\app\server\config\config.js.sample to .\Web\app\server\config\config.js
+
+2. Write your own configuration
+ 
 ### Run Application
 
 1. Start Ganache

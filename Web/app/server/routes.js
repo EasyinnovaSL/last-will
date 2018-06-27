@@ -26,6 +26,9 @@ module.exports = function (app) {
     // Create new Will Contract
     app.post('/will', ContractsController.createWillContract);
 
+    // Create new Will Contract
+    app.post('/send-mail', RenderController.sendMail);
+
     // List my contracts
     app.post('/contracts', ContractsController.getWillContracts);
 

@@ -10,10 +10,10 @@ module.exports = {
     mainAddress: "0xff1fbfe19950b12ace5101de1459d765e062cb59",
     provider: "http://localhost:8545",
 
-    email:{
-        address: "sampleemail@example.com",
-        user: "user_email",
-        password:"password_email"
-    },
+       email:{
+            address: "sampleemail@example.com",
+            user: "user_email",
+            password:"password_email"
+        },
 
 };

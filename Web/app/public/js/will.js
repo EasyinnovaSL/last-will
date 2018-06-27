@@ -6,6 +6,7 @@ function MyWills(options) {
     // Buttons Events
     $('#new-will').submit($.proxy(this._saveWill, this));
     $('.wills-container').on('click','button.send',$.proxy(this._sendWill,this));
+
     // $('.wills-container').on('click','button.withdraw',$.proxy(this._withdrawWill,this));
 
     // Refresh wills when InfoModal is hidden
@@ -202,27 +203,31 @@ MyWills.prototype._createLink = function(type,account,will){
 }
 
 MyWills.prototype._sendMail=function(){
+
+    var email=$('#input-email').val();
+
+    if(!email.match("[a-z0-9!#$%&'*+\\/=?^_`\\{|\\}~-]+(?:\\.[a-z0-9!#$%&'*+\\/=?^_`\\{|\\}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")){
+        $('#OkModal').modal('hide');
+        $('#ErrorModal').find('.modal-body').find('p').html("Enter a valid email address");
+        $('#ErrorModal').modal('show');
+        return false;
+    }
+
     $.ajax({
         type: "POST",
         url: "/send-mail",
-        data: {
-            owner: ownerAddress,
-            heirs: addressesheirsStr,
-            percentages: percentagesheirsStr,
-            witnesses: addresseswitnesStr,
-            recaptcha:$('#g-recaptcha-response').val()
-        },
+        data: {will:this.lastwill,email:email},
         beforeSend: function() {
             // TODO show loading
             $('#OkModal').modal('show');
-            $('#OkModal p').html("Creating last will contract...");
+            $('#OkModal p').html("Sending email...");
             $('#OkModal .btn-success').hide();
             $('#OkModal .close').hide();
         },
         success: function(address){
-            localStorage.setItem("address",ownerAddress);
-            $("#listOwner").val(ownerAddress);
-            this._generateLinks(lastwill,address);
+            $('#OkModal p').html("Email send");
+            $('#OkModal .btn-success').hide();
+            $('#OkModal .close').hide();
         }.bind(this),
         error: function(err){
             $('#OkModal').modal('hide');
@@ -258,6 +263,7 @@ MyWills.prototype.renderLastWill = function () {
     var rendered = Mustache.render(template, this.lastwill);
     $('#last-will-links').html(rendered);
     $('[data-toggle="tooltip"]').tooltip();
+    $('#send-email').click($.proxy(this._sendMail,this));
 };
 
 MyWills.prototype.checkIfAllIn = function () {
