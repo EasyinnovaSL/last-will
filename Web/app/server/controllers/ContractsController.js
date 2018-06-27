@@ -8,21 +8,42 @@ var EthereumTx = require('ethereumjs-tx');
 
 var contract;
 var willAbi;
+var contractReal;
+var willAbiReal;
 var web3 = new Web3(new Web3.providers.HttpProvider(Config.provider));
 web3.eth.personal = new Web3EthPersonal(Config.provider);
 
+var urlContractBacktolifeTest = "../contractBackToLife.json";
+var urlContractHierarchyTest = "../contractHierarchy.json";
+var urlContractBacktolifeReal = "../Production/contractBackToLife.json";
+var urlContractHierarchyReal = "../Production/contractHierarchy.json";
+
 // Read contract info
-FileSystem.readFile("../contractBackToLife.json", 'utf8', function (err,data) {
+FileSystem.readFile(urlContractBacktolifeTest, 'utf8', function (err,data) {
     if (err) console.log(err);
     var config = JSON.parse(data);
     var abi = config.abi;
     var contractAddress = config.address;
     contract = new web3.eth.Contract(abi,contractAddress);
 });
-FileSystem.readFile("../contractHierarchy.json", 'utf8', function (err,data) {
+FileSystem.readFile(urlContractHierarchyTest, 'utf8', function (err,data) {
     if (err) console.log(err);
     var config = JSON.parse(data);
     willAbi = config.abi;
+});
+
+// Read contract info Real
+FileSystem.readFile(urlContractBacktolifeReal, 'utf8', function (err,data) {
+    if (err) console.log(err);
+    var config = JSON.parse(data);
+    var abi = config.abi;
+    var contractAddress = config.address;
+    contractReal = new web3.eth.Contract(abi,contractAddress);
+});
+FileSystem.readFile(urlContractHierarchyReal, 'utf8', function (err,data) {
+    if (err) console.log(err);
+    var config = JSON.parse(data);
+    willAbiReal = config.abi;
 });
 
 /**
@@ -30,13 +51,19 @@ FileSystem.readFile("../contractHierarchy.json", 'utf8', function (err,data) {
  */
 exports.getContractsInfo = function (req, res, next) {
     // Read contracts
-    var baseContract = FileSystem.readFileSync("../contractBackToLife.json");
+    var baseContract = FileSystem.readFileSync(urlContractBacktolifeTest);
     if (!baseContract) return res.redirect("/error");
-    var hierarchyContract = FileSystem.readFileSync("../contractHierarchy.json");
+    var hierarchyContract = FileSystem.readFileSync(urlContractHierarchyTest);
     if (!hierarchyContract) return res.redirect("/error");
+    var baseContractReal = FileSystem.readFileSync(urlContractBacktolifeReal);
+    if (!baseContractReal) return res.redirect("/error");
+    var hierarchyContractReal = FileSystem.readFileSync(urlContractHierarchyReal);
+    if (!hierarchyContractReal) return res.redirect("/error");
     res.locals.contracts = {
         base: JSON.parse(baseContract),
         hierarchy: JSON.parse(hierarchyContract),
+        baseReal: JSON.parse(baseContractReal),
+        hierarchyReal: JSON.parse(hierarchyContractReal),
     };
 
     // Continue
@@ -91,6 +118,14 @@ exports.createWillContract = function (req, res) {
 
 };
 
+exports.getWillAbi = function() {
+    return willAbi;
+}
+
+exports.getContract = function() {
+    return contract;
+}
+
 /**
  * Get Will Contracts
  */
@@ -101,7 +136,7 @@ exports.getWillContracts = async function (req, res) {
         return res.status(400).send("Invalid Params.");
     }
 
-    contract.methods.getContracts(owner).call({from: Config.mainAddress}, async function(err, addressesStr){
+    exports.getContract().methods.getContracts(owner).call({from: Config.mainAddress}, async function(err, addressesStr){
         if (err) {
             return res.status(400).send(err.message);
         } else {
@@ -113,7 +148,7 @@ exports.getWillContracts = async function (req, res) {
             for (let willAddress of adrList) {
                 if (willAddress === "") continue;
 
-                var lwContract = new web3.eth.Contract(willAbi,willAddress);
+                var lwContract = new web3.eth.Contract(exports.getWillAbi(),willAddress);
 
                 // var isOwner = await lwContract.methods.isOwner(owner).call({from: Config.mainAddress});
                 var isOwner = true;
@@ -150,7 +185,7 @@ exports.getWillContracts = async function (req, res) {
  */
 exports.getLastWillContract = function (owner) {
     return new Promise(async function (resolve, reject) {
-        contract.methods.getContracts(owner).call({from: Config.mainAddress}, function (err, addressesStr) {
+        exports.getContract().methods.getContracts(owner).call({from: Config.mainAddress}, function (err, addressesStr) {
             if (err) return reject(err);
 
             // Empty
@@ -187,7 +222,7 @@ exports.sendTransaction = function (functionName, parameters, options) {
             if (parameters === null) {
                 parameters = [];
             }
-            var data = contract.methods[functionName].apply(null, parameters).encodeABI();
+            var data = exports.getContract().methods[functionName].apply(null, parameters).encodeABI();
 
             // Sign transaction
             var privateKey = new Buffer(options.privateKey, 'hex');
@@ -199,7 +234,7 @@ exports.sendTransaction = function (functionName, parameters, options) {
                 nonce: web3.utils.toHex(nonce),
                 gasPrice: web3.utils.toHex(1000000000), // 1GWei
                 gasLimit: web3.utils.toHex(2000000),
-                to: contract._address,
+                to: exports.getContract()._address,
                 value: value,
                 data: data
             };

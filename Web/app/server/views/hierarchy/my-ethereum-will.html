@@ -6,11 +6,27 @@ My Wills
 
 <%- contentFor('content') %>
 
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
 <section class="cid-qPEh09X89D mbr-parallax-background" id="header15-s" style="padding-top: 100px; margin-bottom: 144px;">
 
     <div class="mbr-overlay" style="opacity: 0.5; background-color: rgb(118, 118, 118);"></div>
 
     <div class="container align-left">
+
+        <div class="row">
+            <div class="col-md-12 test-real-selector">
+                <div class="pull-right">
+                    <style>
+                        .toggle, .toggle-on, .toggle-off { border-radius: 20px; background: white; height:30px !important; width:100px !important; }
+                        .toggle-handle { border-radius: 20px; }
+                    </style>
+                    <label style="color:white">Real network</label>
+                    <input type="checkbox" data-toggle="toggle" id="chkTestReal">
+                </div>
+            </div>
+        </div>
 
         <div class="row">
             <div class="mbr-white col-md-12 content-container wills-form">
@@ -312,17 +328,27 @@ My Wills
     }
 </style>
 
+<script src="/js/contracts.js"></script>
+
 <script>
 
     $(document).ready(function () {
         // Load wills plugin
-      var will = new MyWills({contract: contracts.base, hierarchy: contracts.hierarchy});
+        var will = new MyWills({contract: getBaseContract(contracts), hierarchy: getHierarchyContract(contracts)});
 
         // Load Previous Last Will
         var jsonWill = localStorage.getItem("lastwill");
         if (jsonWill) {
             will.renderLastWill(JSON.parse(jsonWill));
         }
+
+        $("#chkTestReal").change(function() {
+            if($(this).is(":checked")) {
+                var returnVal = confirm("Are you sure?");
+                $(this).attr("checked", returnVal);
+            }
+            $('#textbox1').val($(this).is(':checked'));
+        });
     });
 
 </script>
