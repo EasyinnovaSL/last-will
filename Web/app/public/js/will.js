@@ -39,17 +39,17 @@ MyWills.prototype.options = {}
 
 MyWills.prototype._sendWill = function (event) {
     var contract = $(event.target).attr('data-address');
-    $("#InfoModal").find("h5").html(contract);
+
+    var html = "<p>Send <strong>ROPSTEN</strong> Ethers to the next address, using either an exchanger or an Ethereum Wallet:</p>"
+               + "<h5>"+contract+"</h5>";
+    if (!realContractSelected()) {
+        html += "<p>Also, in this TestNet version, you can use the <a target=\"_blank\" href=\"http://faucet.ropsten.be:3001\">Ropsten official faucet</a></p>";
+    }
+
+    $("#InfoModal").find(".content").html(html);
     $("#InfoModal").modal('show');
-    // var inputValue = parseFloat($('input[name=value-'+contract+']').val());
-    // if (!isNaN(inputValue)) {
-    //     var value = web3.toWei(inputValue, "ether");
-    //     web3.eth.sendTransaction({to:contract,value:value},function () {
-    //         $('#OkModal').modal('show');
-    //         this._listWills();
-    //     }.bind(this));
-    // }
 };
+
 MyWills.prototype._withdrawWill = function (event) {
     var contractAddress = $(event.target).attr('data-address');
     var inputValue = parseFloat($('input[name=value-'+contractAddress+']').val());
