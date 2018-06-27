@@ -176,18 +176,16 @@ contract MyWill {
 
             /* Execute the last will */
 
-            var contractBalance = this.balance;
             users = listHeirs.toSlice().copy();
             var  percentages = listHeirsPercentages.toSlice().copy();
             listLength = users.count(";".toSlice()) + 1;
 
-            for(i = 0; i < listLength; i++) {
-                parseAddr(users.split(";".toSlice()).toString()).transfer(((contractBalance * stringToUint(percentages.split(";".toSlice()).toString())) / 100000));
-                //contractBalance -= ((contractBalance * stringToUint(percentages.split(";".toSlice()).toString())) / 100000);
+            for(i = 0; i < listLength - 1; i++) {
+                parseAddr(users.split(";".toSlice()).toString()).transfer(((this.balance * stringToUint(percentages.split(";".toSlice()).toString())) / 100000));
             }
 
             // Last one gets the remaining
-            //parseAddr(users.split(";".toSlice()).toString()).transfer(contractBalance);
+            parseAddr(users.split(";".toSlice()).toString()).transfer(this.balance);
 
             status = Status.DEAD;
         }
