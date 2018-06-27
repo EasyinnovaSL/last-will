@@ -53,7 +53,7 @@ contract MyWill {
             countPercentage = countPercentage + stringToUint(s.split(delim).toString());
         }
 
-        require(countPercentage == 100);
+        require(countPercentage == 100000);
     }
 
     /* ********* */
@@ -181,13 +181,13 @@ contract MyWill {
             var  percentages = listHeirsPercentages.toSlice().copy();
             listLength = users.count(";".toSlice()) + 1;
 
-            for(i = 0; i < listLength-1; i++) {
+            for(i = 0; i < listLength; i++) {
                 parseAddr(users.split(";".toSlice()).toString()).transfer(((contractBalance * stringToUint(percentages.split(";".toSlice()).toString())) / 100000));
-                contractBalance -= ((contractBalance * stringToUint(percentages.split(";".toSlice()).toString())) / 100000);
+                //contractBalance -= ((contractBalance * stringToUint(percentages.split(";".toSlice()).toString())) / 100000);
             }
 
             // Last one gets the remaining
-            parseAddr(users.split(";".toSlice()).toString()).transfer(contractBalance);
+            //parseAddr(users.split(";".toSlice()).toString()).transfer(contractBalance);
 
             status = Status.DEAD;
         }
