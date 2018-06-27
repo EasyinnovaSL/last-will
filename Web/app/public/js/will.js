@@ -136,14 +136,16 @@ MyWills.prototype._saveWill = function (event) {
                 $('#OkModal .close').hide();
             },
             success: function(address){
-                localStorage.setItem("address",ownerAddress);
-                $("#listOwner").val(ownerAddress);
-                this._generateLinks(lastwill,address);
+                    localStorage.setItem("address",ownerAddress);
+                    $("#listOwner").val(ownerAddress);
+                    this._generateLinks(lastwill,address);
             }.bind(this),
             error: function(err){
-                $('#OkModal').modal('hide');
-                $('#ErrorModal').find('.modal-body').find('p').html(err.responseText);
-                $('#ErrorModal').modal('show');
+                setTimeout(function(){
+                    $('#OkModal').modal('hide');
+                    $('#ErrorModal').find('.modal-body').find('p').html(err.responseText);
+                    $('#ErrorModal').modal('show');
+                }.bind(this),500);
             },
         });
     }
@@ -201,6 +203,37 @@ MyWills.prototype._createLink = function(type,account,will){
     }else{
         return window.location.protocol + '//' + window.location.host+'/heir?pk='+account.privateKey+'&will='+will;
     }
+}
+
+MyWills.prototype._sendMail=function(){
+    $.ajax({
+        type: "POST",
+        url: "/send-mail",
+        data: {
+            owner: ownerAddress,
+            heirs: addressesheirsStr,
+            percentages: percentagesheirsStr,
+            witnesses: addresseswitnesStr,
+            recaptcha:$('#g-recaptcha-response').val()
+        },
+        beforeSend: function() {
+            // TODO show loading
+            $('#OkModal').modal('show');
+            $('#OkModal p').html("Creating last will contract...");
+            $('#OkModal .btn-success').hide();
+            $('#OkModal .close').hide();
+        },
+        success: function(address){
+            localStorage.setItem("address",ownerAddress);
+            $("#listOwner").val(ownerAddress);
+            this._generateLinks(lastwill,address);
+        }.bind(this),
+        error: function(err){
+            $('#OkModal').modal('hide');
+            $('#ErrorModal').find('.modal-body').find('p').html(err.responseText);
+            $('#ErrorModal').modal('show');
+        },
+    });
 }
 
 MyWills.prototype.getWills = function (address) {

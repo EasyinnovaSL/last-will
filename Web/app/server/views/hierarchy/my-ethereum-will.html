@@ -34,7 +34,9 @@ My Wills
                                 <div class="mbr-section-btn"><a onclick="addRowGeneric()" class="btn btn-md btn-secondary display-4" style="    padding: 10px;"><span class="mbri-plus"></span></a></div>
                             </div>
                             <div class="row">
+
                                 <div class="g-recaptcha col-md-4 offset-md-4" data-sitekey="6LffzGAUAAAAAAD0UhJuWZvnbMtlTZxM2WXBkQUP"></div>
+
                             </div>
 
                             <p class="description">We are using the TestNet RINKEBY. For testing and demo purposes, we will send 0.1 Ether to each Last Will Smart Contract created.</p>
@@ -161,6 +163,7 @@ My Wills
             {{/witness}}
 
         </div>
+
     </div>
  </div>
 </script>
@@ -245,6 +248,13 @@ My Wills
 
 </script>
 <style>
+
+    @media (max-width: 767px) {
+        .g-recaptcha {
+            margin-left: -7px;
+            padding: 0px;
+        }
+    }
     .will-card {
         border: 1px solid rgba(0, 0, 0, .125);
         background-color: #fff;
@@ -306,7 +316,7 @@ My Wills
 
     $(document).ready(function () {
         // Load wills plugin
-        var will = new MyWills({contract: contracts.base, hierarchy: contracts.hierarchy});
+      var will = new MyWills({contract: contracts.base, hierarchy: contracts.hierarchy});
 
         // Load Previous Last Will
         var jsonWill = localStorage.getItem("lastwill");
