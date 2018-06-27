@@ -126,6 +126,7 @@ MyWills.prototype._saveWill = function (event) {
                 heirs: addressesheirsStr,
                 percentages: percentagesheirsStr,
                 witnesses: addresseswitnesStr,
+                real: localStorage.getItem("contractType")=="real",
                 recaptcha:$('#g-recaptcha-response').val()
             },
             beforeSend: function() {
@@ -242,7 +243,8 @@ MyWills.prototype.getWills = function (address) {
                type: "POST",
                url: "/contracts",
                data: {
-                   owner: address
+                   owner: address,
+                   real: realContractSelected()
                },
                success: function(wills){
                    console.log(wills);

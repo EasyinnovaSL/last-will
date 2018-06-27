@@ -110,6 +110,7 @@ My Wills
 
 </section>
 
+<script src="/js/contracts.js"></script>
 <script src="/js/will.js"></script>
 <script src='https://www.google.com/recaptcha/api.js'></script>
 
@@ -325,8 +326,6 @@ My Wills
     }
 </style>
 
-<script src="/js/contracts.js"></script>
-
 <script>
 
     $(document).ready(function () {
@@ -340,12 +339,16 @@ My Wills
         }
 
         $("#chkTestReal").change(function() {
-            if($(this).is(":checked")) {
-                var returnVal = confirm("Are you sure?");
-                $(this).attr("checked", returnVal);
-            }
-            $('#textbox1').val($(this).is(':checked'));
+            var nettype = "test";
+            if ($(this).is(":checked")) nettype = "real";
+            var oldval = localStorage.getItem("contractType");
+            localStorage.setItem("contractType",nettype);
+            if (oldval != nettype) location.reload();
         });
+
+        if (localStorage.getItem("contractType") == "real") {
+            $("#chkTestReal").bootstrapToggle('on');
+        }
     });
 
 </script>
