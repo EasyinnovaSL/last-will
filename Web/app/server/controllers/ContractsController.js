@@ -13,34 +13,53 @@ var willAbiReal;
 var web3 = new Web3(new Web3.providers.HttpProvider(Config.provider));
 web3.eth.personal = new Web3EthPersonal(Config.provider);
 
-var urlContractBacktolifeTest = "../contractBackToLife.json";
-var urlContractHierarchyTest = "../contractHierarchy.json";
-var urlContractBacktolifeReal = "../Production/contractBackToLife.json";
-var urlContractHierarchyReal = "../Production/contractHierarchy.json";
+var Production = false;
+var urlContractBacktolifeLocal = "../contractBackToLife.json";
+var urlContractHierarchyLocal = "../contractMyWill.json";
+var urlContractBacktolifeTest = "../Production/Ropsten/contractBackToLife.json";
+var urlContractHierarchyTest = "../Production/Ropsten/contractMyWill.json";
+var urlContractBacktolifeReal = "../Production/Main/contractBackToLife.json";
+var urlContractHierarchyReal = "../Production/Main/contractMyWill.json";
+
+exports.getContractBacktoLife = function(real) {
+    if (real) {
+        return Production ? urlContractBacktolifeReal : urlContractBacktolifeTest;
+    } else {
+        return Production ? urlContractBacktolifeTest : urlContractBacktolifeLocal;
+    }
+}
+
+exports.getContractMywill = function(real) {
+    if (real) {
+        return Production ? urlContractHierarchyReal : urlContractHierarchyTest;
+    } else {
+        return Production ? urlContractHierarchyTest : urlContractHierarchyLocal;
+    }
+}
 
 // Read contract info
-FileSystem.readFile(urlContractBacktolifeTest, 'utf8', function (err,data) {
+FileSystem.readFile(exports.getContractBacktoLife(false), 'utf8', function (err,data) {
     if (err) console.log(err);
     var config = JSON.parse(data);
     var abi = config.abi;
     var contractAddress = config.address;
     contract = new web3.eth.Contract(abi,contractAddress);
 });
-FileSystem.readFile(urlContractHierarchyTest, 'utf8', function (err,data) {
+FileSystem.readFile(exports.getContractMywill(false), 'utf8', function (err,data) {
     if (err) console.log(err);
     var config = JSON.parse(data);
     willAbi = config.abi;
 });
 
 // Read contract info Real
-FileSystem.readFile(urlContractBacktolifeReal, 'utf8', function (err,data) {
+FileSystem.readFile(exports.getContractBacktoLife(true), 'utf8', function (err,data) {
     if (err) console.log(err);
     var config = JSON.parse(data);
     var abi = config.abi;
     var contractAddress = config.address;
     contractReal = new web3.eth.Contract(abi,contractAddress);
 });
-FileSystem.readFile(urlContractHierarchyReal, 'utf8', function (err,data) {
+FileSystem.readFile(exports.getContractMywill(true), 'utf8', function (err,data) {
     if (err) console.log(err);
     var config = JSON.parse(data);
     willAbiReal = config.abi;
@@ -61,13 +80,13 @@ exports.getContract = function(req) {
  */
 exports.getContractsInfo = function (req, res, next) {
     // Read contracts
-    var baseContract = FileSystem.readFileSync(urlContractBacktolifeTest);
+    var baseContract = FileSystem.readFileSync(exports.getContractBacktoLife(false));
     if (!baseContract) return res.redirect("/error");
-    var hierarchyContract = FileSystem.readFileSync(urlContractHierarchyTest);
+    var hierarchyContract = FileSystem.readFileSync(exports.getContractMywill(false));
     if (!hierarchyContract) return res.redirect("/error");
-    var baseContractReal = FileSystem.readFileSync(urlContractBacktolifeReal);
+    var baseContractReal = FileSystem.readFileSync(exports.getContractBacktoLife(true));
     if (!baseContractReal) return res.redirect("/error");
-    var hierarchyContractReal = FileSystem.readFileSync(urlContractHierarchyReal);
+    var hierarchyContractReal = FileSystem.readFileSync(exports.getContractMywill(true));
     if (!hierarchyContractReal) return res.redirect("/error");
     res.locals.contracts = {
         base: JSON.parse(baseContract),
@@ -134,6 +153,7 @@ exports.createWillContract = function (req, res) {
  */
 exports.getWillContracts = async function (req, res) {
     var owner = req.body.owner;
+    req.session.real = req.body.real == "true";
 
     if (!owner) {
         return res.status(400).send("Invalid Params.");

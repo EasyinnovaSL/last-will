@@ -243,7 +243,8 @@ MyWills.prototype.getWills = function (address) {
                type: "POST",
                url: "/contracts",
                data: {
-                   owner: address
+                   owner: address,
+                   real: realContractSelected()
                },
                success: function(wills){
                    console.log(wills);
