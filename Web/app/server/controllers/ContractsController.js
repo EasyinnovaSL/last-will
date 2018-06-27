@@ -259,7 +259,7 @@ exports.sendTransaction = function (functionName, parameters, options) {
                 gasPrice: web3.utils.toHex(1000000000), // 1GWei
                 gasLimit: web3.utils.toHex(2000000),
                 to: contract._address,
-                value: value,
+                value: 0x00,
                 data: data
             };
             var tx = new EthereumTx(rawTx);
