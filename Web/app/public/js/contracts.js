@@ -1,5 +1,5 @@
 function realContractSelected() {
-    var contractType = localStorage.getItem("contractType")
+    var contractType = localStorage.getItem("contractType");
     return contractType == "real";
 }
 

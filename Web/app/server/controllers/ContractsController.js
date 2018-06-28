@@ -13,51 +13,80 @@ var willAbiReal;
 var web3 = new Web3(new Web3.providers.HttpProvider(Config.provider));
 web3.eth.personal = new Web3EthPersonal(Config.provider);
 
-var urlContractBacktolifeTest = "../contractBackToLife.json";
-var urlContractHierarchyTest = "../contractMyWill.json";
-var urlContractBacktolifeReal = "../Production/Ropsten/contractBackToLife.json";
-var urlContractHierarchyReal = "../Production/Ropsten/contractMyWill.json";
+var Production = false;
+var urlContractBacktolifeLocal = "../contractBackToLife.json";
+var urlContractHierarchyLocal = "../contractMyWill.json";
+var urlContractBacktolifeTest = "../Production/Ropsten/contractBackToLife.json";
+var urlContractHierarchyTest = "../Production/Ropsten/contractMyWill.json";
+var urlContractBacktolifeReal = "../Production/Main/contractBackToLife.json";
+var urlContractHierarchyReal = "../Production/Main/contractMyWill.json";
+
+exports.getContractBacktoLife = function(real) {
+    if (real) {
+        return Production ? urlContractBacktolifeReal : urlContractBacktolifeTest;
+    } else {
+        return Production ? urlContractBacktolifeTest : urlContractBacktolifeLocal;
+    }
+}
+
+exports.getContractMywill = function(real) {
+    if (real) {
+        return Production ? urlContractHierarchyReal : urlContractHierarchyTest;
+    } else {
+        return Production ? urlContractHierarchyTest : urlContractHierarchyLocal;
+    }
+}
 
 // Read contract info
-FileSystem.readFile(urlContractBacktolifeTest, 'utf8', function (err,data) {
+FileSystem.readFile(exports.getContractBacktoLife(false), 'utf8', function (err,data) {
     if (err) console.log(err);
     var config = JSON.parse(data);
     var abi = config.abi;
     var contractAddress = config.address;
     contract = new web3.eth.Contract(abi,contractAddress);
 });
-FileSystem.readFile(urlContractHierarchyTest, 'utf8', function (err,data) {
+FileSystem.readFile(exports.getContractMywill(false), 'utf8', function (err,data) {
     if (err) console.log(err);
     var config = JSON.parse(data);
     willAbi = config.abi;
 });
 
 // Read contract info Real
-FileSystem.readFile(urlContractBacktolifeReal, 'utf8', function (err,data) {
+FileSystem.readFile(exports.getContractBacktoLife(true), 'utf8', function (err,data) {
     if (err) console.log(err);
     var config = JSON.parse(data);
     var abi = config.abi;
     var contractAddress = config.address;
     contractReal = new web3.eth.Contract(abi,contractAddress);
 });
-FileSystem.readFile(urlContractHierarchyReal, 'utf8', function (err,data) {
+FileSystem.readFile(exports.getContractMywill(true), 'utf8', function (err,data) {
     if (err) console.log(err);
     var config = JSON.parse(data);
     willAbiReal = config.abi;
 });
+
+exports.getWillAbi = function(req) {
+    if (req.session.real) return willAbiReal;
+    return willAbi;
+}
+
+exports.getContract = function(req) {
+    if (req.session.real) return contractReal;
+    return contract;
+}
 
 /**
  * Get Smart Contracts Info
  */
 exports.getContractsInfo = function (req, res, next) {
     // Read contracts
-    var baseContract = FileSystem.readFileSync(urlContractBacktolifeTest);
+    var baseContract = FileSystem.readFileSync(exports.getContractBacktoLife(false));
     if (!baseContract) return res.redirect("/error");
-    var hierarchyContract = FileSystem.readFileSync(urlContractHierarchyTest);
+    var hierarchyContract = FileSystem.readFileSync(exports.getContractMywill(false));
     if (!hierarchyContract) return res.redirect("/error");
-    var baseContractReal = FileSystem.readFileSync(urlContractBacktolifeReal);
+    var baseContractReal = FileSystem.readFileSync(exports.getContractBacktoLife(true));
     if (!baseContractReal) return res.redirect("/error");
-    var hierarchyContractReal = FileSystem.readFileSync(urlContractHierarchyReal);
+    var hierarchyContractReal = FileSystem.readFileSync(exports.getContractMywill(true));
     if (!hierarchyContractReal) return res.redirect("/error");
     res.locals.contracts = {
         base: JSON.parse(baseContract),
@@ -79,10 +108,11 @@ exports.createWillContract = function (req, res) {
     var percentages = req.body.percentages;
     var witnesses = req.body.witnesses;
     var recaptcha = req.body.recaptcha;
+    req.session.real = req.body.real == "true";
 
-    // if(recaptcha === undefined || recaptcha === '' || recaptcha === null) {
-    //     return res.status(400).send("Please select captcha.");
-    // }
+    if(recaptcha === undefined || recaptcha === '' || recaptcha === null) {
+        return res.status(400).send("Please select captcha.");
+    }
 
     if (!owner || !heirs || !percentages || !witnesses) {
         return res.status(400).send("Invalid Params.");
@@ -92,12 +122,12 @@ exports.createWillContract = function (req, res) {
     var secretKey = "6LffzGAUAAAAAGxQl-J2mnFZqVkpQb6-AglNclxv";
     var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + recaptcha + "&remoteip=" + req.connection.remoteAddress;
 
-    // request(verificationUrl,function(error,response,body) {
-    //     body = JSON.parse(body);
-    //     // Success will be true or false depending upon captcha validation.
-    //     if(body.success !== undefined && !body.success) {
-    //         return res.status(400).send("Failed captcha verification");
-    //     }
+     request(verificationUrl,function(error,response,body) {
+         body = JSON.parse(body);
+         // Success will be true or false depending upon captcha validation.
+         if(body.success !== undefined && !body.success) {
+             return res.status(400).send("Failed captcha verification");
+         }
 
         return exports.sendTransaction('createLastWill', [owner,heirs,percentages,witnesses], {privateKey: Config.mainPrivateKey, from: Config.mainAddress}).then(function(lastWillAddress){
             return res.status(200).send(lastWillAddress);
@@ -105,31 +135,24 @@ exports.createWillContract = function (req, res) {
             return res.status(400).send(err.message);
         });
 
-    // });
+    });
 
 
 
 };
-
-exports.getWillAbi = function() {
-    return willAbi;
-}
-
-exports.getContract = function() {
-    return contract;
-}
 
 /**
  * Get Will Contracts
  */
 exports.getWillContracts = async function (req, res) {
     var owner = req.body.owner;
+    req.session.real = req.body.real == "true";
 
     if (!owner) {
         return res.status(400).send("Invalid Params.");
     }
 
-    exports.getContract().methods.getContracts(owner).call({from: Config.mainAddress}, async function(err, addressesStr){
+    exports.getContract(req).methods.getContracts(owner).call({from: Config.mainAddress}, async function(err, addressesStr){
         if (err) {
             return res.status(400).send(err.message);
         } else {
@@ -141,7 +164,7 @@ exports.getWillContracts = async function (req, res) {
             for (let willAddress of adrList) {
                 if (willAddress === "") continue;
 
-                var lwContract = new web3.eth.Contract(exports.getWillAbi(),willAddress);
+                var lwContract = new web3.eth.Contract(exports.getWillAbi(req),willAddress);
 
                 // var isOwner = await lwContract.methods.isOwner(owner).call({from: Config.mainAddress});
                 var isOwner = true;
@@ -176,9 +199,9 @@ exports.getWillContracts = async function (req, res) {
 /**
  * Get Last Will Contract Address
  */
-exports.getLastWillContract = function (owner) {
+exports.getLastWillContract = function (owner,contract) {
     return new Promise(async function (resolve, reject) {
-        exports.getContract().methods.getContracts(owner).call({from: Config.mainAddress}, function (err, addressesStr) {
+        contract.methods.getContracts(owner).call({from: Config.mainAddress}, function (err, addressesStr) {
             if (err) return reject(err);
 
             // Empty
@@ -211,7 +234,8 @@ exports.sendTransaction = function (functionName, parameters, options) {
             if (parameters === null) {
                 parameters = [];
             }
-            var data = exports.getContract().methods[functionName].apply(null, parameters).encodeABI();
+            var contract = exports.getContract(options.req);
+            var data = contract.methods[functionName].apply(null, parameters).encodeABI();
 
             // Sign transaction
             var privateKey = new Buffer(options.privateKey, 'hex');
@@ -223,20 +247,20 @@ exports.sendTransaction = function (functionName, parameters, options) {
                 nonce: web3.utils.toHex(nonce),
                 gasPrice: web3.utils.toHex(1000000000), // 1GWei
                 gasLimit: web3.utils.toHex(2000000),
-                to: exports.getContract()._address.toLowerCase(),
-                value: "0x00",
+                to: contract._address,
+                value: 0x00,
                 data: data
             };
             var tx = new EthereumTx(rawTx);
             tx.sign(privateKey);
 
             // Get Last contract address
-            var lastWillAddress = await exports.getLastWillContract(parameters[0]);
+            var lastWillAddress = await exports.getLastWillContract(parameters[0],contract);
 
             // Send transaction
             var serializedTx = tx.serialize();
             web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).on('confirmation', async function (number, receipt){
-                var currentLastWillAddress = await exports.getLastWillContract(parameters[0]);
+                var currentLastWillAddress = await exports.getLastWillContract(parameters[0],contract);
                 if (lastWillAddress !== currentLastWillAddress) {
                     return resolve(currentLastWillAddress);
                 }
