@@ -55,6 +55,11 @@ MyWills.prototype._depositWill = function (event) {
     modal.find(".first-time").hide();
     if (firstTime) {
         modal.find(".first-time").show();
+        modal.find("[name=limit]").html("210.000");
+        modal.find("[name=limitCopy]").data('text',"210000");
+    } else {
+        modal.find("[name=limit]").html("50.000");
+        modal.find("[name=limitCopy]").data('text',"50000");
     }
 
     if (realContractSelected()){
@@ -70,20 +75,53 @@ MyWills.prototype._depositWill = function (event) {
 
 
 MyWills.prototype._withdrawWill = function (event) {
-    var contractAddress = $(event.target).attr('data-address');
-    var ownerAddress = $(event.target).attr('data-owner');
+    var contractAddress = $(event.target).data('address');
+    var ownerAddress = $(event.target).data('owner');
+    var contractBalance = $(event.target).data('balance');
     var modal = $("#SendModal");
     modal.find('input[name=to]').val("");
     modal.find('input[name=value]').val("");
+    modal.find('input[name=max]').val(contractBalance);
     modal.find(".input-group").show();
     modal.find(".generate-group").hide();
+    hideInputError(modal.find('input[name=to]'));
+    hideInputError(modal.find('input[name=value]'));
     modal.find("button.generate").off('click').on('click', function(){
+        var localWeb3 = new Web3(new Web3.providers.HttpProvider(Config.provider));
+
         // Get input
         var to = modal.find('input[name=to]').val();
         var value = modal.find('input[name=value]').val();
+        var max = modal.find('input[name=max]').val();
+
+        // Check input
+        var error = false;
+        if (!localWeb3.utils.isAddress(to)) {
+            showInputError(modal.find('input[name=to]'), "Wrong address");
+            error = true;
+        } else {
+            hideInputError(modal.find('input[name=to]'));
+        }
+        if (!value) {
+            showInputError(modal.find('input[name=value]'), "Wrong value");
+            error = true;
+        } else {
+            var valueWei = new localWeb3.utils.BN(localWeb3.utils.toWei(value, 'ether'));
+            var maxWei = new localWeb3.utils.BN(localWeb3.utils.toWei(max, 'ether'));
+            if (valueWei.isZero()) {
+                showInputError(modal.find('input[name=value]'), "The value can't be 0");
+                error = true;
+            } else if (valueWei.gt(maxWei)) {
+                console.log("BT");
+                showInputError(modal.find('input[name=value]'), "The maximum value is: " + max + "");
+                error = true;
+            } else {
+                hideInputError(modal.find('input[name=value]'));
+            }
+        }
+        if (error) return;
 
         // Calculate Data
-        var localWeb3 = new Web3(new Web3.providers.HttpProvider(Config.provider));
         var contract = new localWeb3.eth.Contract(contracts.hierarchy.abi, contract);
         var data = contract.methods['execute'].apply(null, [to, localWeb3.utils.toWei(value, 'ether'), "0x00"]).encodeABI();
 
@@ -382,4 +420,17 @@ function selectChanged(rowNumber){
             }
             break;
     }
+}
+
+function showInputError(input, message){
+    input.css('box-shadow', '0 0 0 0.2rem #ff0000');
+    if (input.parent().find('p.error').length === 0) {
+        var pTag = $('<p/>', {style: 'color: red; margin: 5px 0 0 5px;', class: "error"}).html(message);
+        input.parent().append(pTag);
+    }
+}
+
+function hideInputError(input) {
+    input.css('box-shadow', '');
+    input.parent().find('p.error').remove();
 }
