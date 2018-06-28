@@ -22,6 +22,7 @@
     "fs": "0.0.1-security",
     "jsonwebtoken": "^8.2.1",
     "method-override": "~2.3.6",
+    "mustache": "^2.3.0",
     "nodemailer": "^4.6.7",
     "request": "^2.87.0",
     "stylus": "0.52.4",

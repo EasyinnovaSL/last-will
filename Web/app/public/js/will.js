@@ -231,8 +231,8 @@ MyWills.prototype._sendMail=function(){
         },
         success: function(address){
             $('#OkModal p').html("Email send");
-            $('#OkModal .btn-success').hide();
-            $('#OkModal .close').hide();
+            $('#OkModal .btn-success').show();
+            $('#OkModal .close').show();
         }.bind(this),
         error: function(err){
             $('#OkModal').modal('hide');

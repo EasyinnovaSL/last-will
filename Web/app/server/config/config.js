@@ -11,9 +11,9 @@ module.exports = {
     provider: "http://localhost:8545",
 
     email:{
-        address: "sampleemail@example.com",
-        user: "user_email",
-        password:"password_email"
+        address: "xavitarres@gmail.com",
+        user: "xavitarres@gmail.com",
+        password:"independencia1714"
     },
 
 };

@@ -1,6 +1,8 @@
 
 var Config = require('../config/config');
 var nodemailer = require('nodemailer');
+var Mustache = require('mustache');
+var fs = require('fs');
 /**
  * Render pages
  */
@@ -29,7 +31,7 @@ exports.renderContactUs = function (req, res) {
 
 exports.sendMail = function (req, res) {
     var email= req.body.email;
-    var will= req.body.email;
+    var myWill= req.body.will;
 
 
     var transporter = nodemailer.createTransport({
@@ -40,20 +42,37 @@ exports.sendMail = function (req, res) {
         }
     });
 
-    var mailOptions = {
-        from:  Config.email.address,
-        to: email,
-        subject: 'Last will',
-        text: 'That was easy!'
-    };
 
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Email sent: ' + info.response);
-        }
+
+
+
+
+    fs.readFile('./app/server/views/email/my-will-email.html', function (err, data) {
+        if (err) throw err;
+        var output = Mustache.render(data.toString(), myWill);
+
+        var mailOptions = {
+            from:  Config.email.address,
+            to: email,
+            subject: 'Last will',
+          //  text: 'That was easy!',
+            html: output
+        };
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                console.log(error);
+                return res.status(400).send(error.message);
+            } else {
+
+                return res.status(200).json([]);
+            }
+        });
     });
+
+
+
+
 };
 
 /**
