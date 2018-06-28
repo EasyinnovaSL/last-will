@@ -118,25 +118,18 @@ exports.createWillContract = function (req, res) {
         return res.status(400).send("Invalid Params.");
     }
 
-
-    // Ether for witnesses
-    var value = witnesses.split(";").length * 0.001;
-
-    // Demo ether for the smart contract
-    value = value + 0.1;
-
     // recaptcha
     var secretKey = "6LffzGAUAAAAAGxQl-J2mnFZqVkpQb6-AglNclxv";
     var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + recaptcha + "&remoteip=" + req.connection.remoteAddress;
 
-    request(verificationUrl,function(error,response,body) {
-        body = JSON.parse(body);
-        // Success will be true or false depending upon captcha validation.
-        if(body.success !== undefined && !body.success) {
-            return res.status(400).send("Failed captcha verification");
-        }
+     request(verificationUrl,function(error,response,body) {
+         body = JSON.parse(body);
+         // Success will be true or false depending upon captcha validation.
+         if(body.success !== undefined && !body.success) {
+             return res.status(400).send("Failed captcha verification");
+         }
 
-        return exports.sendTransaction('createLastWill', [owner,heirs,percentages,witnesses], {privateKey: Config.mainPrivateKey, from: Config.mainAddress, value: value.toString(), req: req}).then(function(lastWillAddress){
+        return exports.sendTransaction('createLastWill', [owner,heirs,percentages,witnesses], {privateKey: Config.mainPrivateKey, from: Config.mainAddress}).then(function(lastWillAddress){
             return res.status(200).send(lastWillAddress);
         }).catch(function(err){
             return res.status(400).send(err.message);
@@ -206,7 +199,7 @@ exports.getWillContracts = async function (req, res) {
                 }
 
 
-                wills.push({address: willAddress, owner: isOwner, heirs: heirs, balance: balance, witnesses: listWitness});
+                wills.push({address: willAddress, owner: isOwner, heirs: heirs, balance: balance, witnesses: listWitness, ownerAddress: owner});
             }
             return res.status(200).json(wills);
         }
@@ -245,10 +238,6 @@ exports.sendTransaction = function (functionName, parameters, options) {
             // Check input
             if (!options.from || !options.privateKey) {
                 reject(false);
-            }
-            var value = "0x00";
-            if (options.value) {
-                value = web3.utils.toHex( web3.utils.toWei(options.value, 'ether') );
             }
 
             // Get data by params
