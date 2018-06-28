@@ -113,12 +113,12 @@ My Wills
         <div class="modal-dialog modal-lg modal-confirm modal-info">
             <div class="modal-content">
                 <div class="modal-header" style="padding: 20px;">
-                    <h5 style="color: white; margin: 0;">Send Ether</h5>
+                    <h5 style="color: white; margin: 0;">Withdraw Ether</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                         &times;
                     </button>
                 </div>
-                <div class="modal-body" style="padding: 1rem 0;">
+                <div class="modal-body" style="padding: 1rem 0 0 0;">
                     <div class="input-group">
                         <div class="form-group">
                             <label class="card-title display-5" style="margin: 0;">Destination Address:</label>
@@ -145,7 +145,7 @@ My Wills
                             </div>
                         </div>
 
-                        <p style="margin: 0;">Send 0 Eth to MyWill Smart Contract:</p>
+                        <p style="margin: 0;">Send <strong>0</strong> Eth to MyWill Smart Contract:</p>
                         <div class="ellipsis-div" onclick="copyToClipBoard(this);" data-text="" name="addressCopy">
                             <div class="full">
                                 <strong name="address"></strong>
@@ -166,6 +166,8 @@ My Wills
                             </div>
                         </div>
 
+                        <p>Also change the Gas Limit to <strong>70.000</strong>, because this transaction is a contract call.</p>
+
                         <p style="margin: 0;"><i>* You can copy the values by clicking on them</i></p>
 
                         <!--Button-->
@@ -174,6 +176,65 @@ My Wills
                                 <span>Done</span>
                             </button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposit Modal HTML -->
+    <div id="DepositModal" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog modal-lg modal-confirm modal-info">
+            <div class="modal-content">
+                <div class="modal-header" style="padding: 20px;">
+                    <h5 style="color: white; margin: 0;">Deposit Ether</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body text-justify" style="padding: 1rem 0 0 0;">
+                    <div class="first-time">
+                        <p style="margin: 0;">The first time, a fee of <strong name="fee"></strong> will be applied.</p>
+                        <a href="javascript:void(0)" data-toggle="collapse" data-target="#fees-extended" class="fee-details">Show Fee Details</a>
+                        <div id="fees-extended" class="collapse">
+                            The first time you deposit ether, a little fee will be applied for cover the Smart Contract creation and the witnesses actions cost:
+                            <ul>
+                                <li><strong>0.005</strong> For the contract creation</li>
+                                <li><strong>0.001</strong> For each witness</li>
+                            </ul>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="content-real">
+                        <p style="margin: 0;">Send some Ether to the next address, using either an exchanger or an Ethereum Wallet:</p>
+                        <div class="ellipsis-div" onclick="copyToClipBoard(this);" data-text="" name="addressCopy">
+                            <div class="full">
+                                <strong name="address"></strong>
+                            </div>
+                            <div class="end">
+                                <strong name="addressEnd"></strong>
+                                <i class="fa fa-clipboard" style="margin-left: 8px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-ropsten">
+                        <p style="margin: 0;">Send <strong>ROPSTEN</strong> Ether to the next address:</p>
+                        <div class="ellipsis-div" onclick="copyToClipBoard(this);" data-text="" name="addressCopy">
+                            <div class="full">
+                                <strong name="address"></strong>
+                            </div>
+                            <div class="end">
+                                <strong name="addressEnd"></strong>
+                                <i class="fa fa-clipboard" style="margin-left: 8px;"></i>
+                            </div>
+                        </div>
+                        <p>Also, in this TestNet version, you can use the <a target="_blank" href="http://faucet.ropsten.be:3001">Ropsten official faucet</a></p>
+                    </div>
+
+                    <div class="text-center" style="width: 100%;">
+                        <button class="btn btn-success" data-dismiss="modal">
+                            <span>Done!</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -239,7 +300,7 @@ My Wills
                         <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as an heir on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email">
                             <i class="fas fa-envelope-square" style="color: grey"></i>
                         </a>
-                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copy to clipboard!">
+                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!">
                             <i class="fas fa-clipboard" style="color: deepskyblue; font-size: 40px;"></i>
                         </a>
                     </div>
@@ -264,7 +325,7 @@ My Wills
                         <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as a witness on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email">
                             <i class="fas fa-envelope-square" style="color: grey"></i>
                         </a>
-                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copy to clipboard!">
+                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!">
                             <i class="fas fa-clipboard" style="color: deepskyblue; font-size: 40px;"></i>
                         </a>
                     </div>
@@ -357,16 +418,14 @@ My Wills
                     {{#owner}}
                         <!-- Owner actions -->
                         <div class="row">
-                            <div class="input-group col-md-6">
+                            <div class="input-group col-md-12">
                                 <div class="input-group-prepend">
-                                    <button class="btn btn-secondary btn-form display-4 btn-sm deposit" data-address="{{address}}" type="button" style="margin:0px">Deposit Ether</button>
+                                    <button class="btn btn-secondary btn-form display-4 btn-sm deposit" data-address="{{address}}" data-count="{{witnesses.length}}" type="button" style="margin:0px">Deposit Ether</button>
                                 </div>
                                 <div class="input-group-append" style="margin-left: 10px;">
-                                    <button class="btn btn-secondary btn-form display-4 btn-sm send" data-owner="{{ownerAddress}}" data-address="{{address}}" type="button"  style="margin:0px">Send Ether</button>
+                                    <button class="btn btn-secondary btn-form display-4 btn-sm withdraw" data-owner="{{ownerAddress}}" data-address="{{address}}" type="button"  style="margin:0px">Withdraw Ether</button>
                                 </div>
                             </div>
-                            <div class="col-md-3"></div>
-                            <div class="col-md-3"></div>
                         </div>
                     {{/owner}}
                     {{^owner}}
@@ -510,6 +569,14 @@ My Wills
         if (localStorage.getItem("contractType") == "real") {
             $("#chkTestReal").bootstrapToggle('on');
         }
+
+        $('.fee-details').click(function(){
+            $(this).text(function(i,old){
+                var show = "Show Fee Details";
+                var hide = "Hide Fee Details";
+                return old === show ? hide : show;
+            });
+        });
     });
 
 </script>

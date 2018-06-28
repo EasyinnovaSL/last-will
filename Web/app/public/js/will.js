@@ -6,7 +6,7 @@ function MyWills(options) {
     // Buttons Events
     $('#new-will').submit($.proxy(this._saveWill, this));
     $('.wills-container').on('click','button.deposit',$.proxy(this._depositWill,this));
-    $('.wills-container').on('click','button.send',$.proxy(this._sendWill,this));
+    $('.wills-container').on('click','button.withdraw',$.proxy(this._withdrawWill,this));
     // $('.wills-container').on('click','button.withdraw',$.proxy(this._withdrawWill,this));
 
     // Refresh wills when InfoModal is hidden
@@ -39,20 +39,37 @@ function MyWills(options) {
 MyWills.prototype.options = {}
 
 MyWills.prototype._depositWill = function (event) {
-    var contract = $(event.target).attr('data-address');
+    var contract = $(event.target).data('address');
+    var count = $(event.target).data('count');
+    var firstTime = true;
+    var fee = 0.005 + (count * 0.001);
 
-    var html = "<p>Send <strong>ROPSTEN</strong> Ethers to the next address, using either an exchanger or an Ethereum Wallet:</p>"
-               + "<h5>"+contract+"</h5>";
-    if (!realContractSelected()) {
-        html += "<p>Also, in this TestNet version, you can use the <a target=\"_blank\" href=\"http://faucet.ropsten.be:3001\">Ropsten official faucet</a></p>";
+    var modal = $("#DepositModal");
+    modal.find('#fees-extended').collapse('hide');
+    modal.find('.fee-details').text('Show Fee Details');
+    modal.find("[name=address]").html(contract);
+    modal.find("[name=addressEnd]").html(contract.slice(-4));
+    modal.find("[name=addressCopy]").data('text',contract);
+    modal.find("[name=fee]").html(fee + " Eth");
+
+    modal.find(".first-time").hide();
+    if (firstTime) {
+        modal.find(".first-time").show();
     }
 
-    $("#InfoModal").find(".content").html(html);
-    $("#InfoModal").modal('show');
+    if (realContractSelected()){
+        modal.find('.content-real').show();
+        modal.find('.content-ropsten').hide();
+    } else {
+        modal.find('.content-real').hide();
+        modal.find('.content-ropsten').show();
+    }
+
+    modal.modal('show');
 };
 
 
-MyWills.prototype._sendWill = function (event) {
+MyWills.prototype._withdrawWill = function (event) {
     var contractAddress = $(event.target).attr('data-address');
     var ownerAddress = $(event.target).attr('data-owner');
     var modal = $("#SendModal");
