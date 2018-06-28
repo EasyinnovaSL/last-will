@@ -2,6 +2,7 @@ function MyWills(options) {
     jQuery.extend(options, self.options);
     this.lastwill = JSON.parse(localStorage.getItem("lastwill")) || {witness:[],heirs:[],address:''};
     this.confirmationsNeeded = 2;
+    this.lastListOwnerValue = "";
 
     // Buttons Events
     $('#new-will').submit($.proxy(this._saveWill, this));
@@ -16,9 +17,10 @@ function MyWills(options) {
 
     // list Wills input
     $("#listOwner").on('keyup', function(event){
-        if (!event.ctrlKey) {
+        if (!event.ctrlKey &&  this.lastListOwnerValue != $(event.target).val()) {
             var web3 = new Web3();
             var address = $(event.target).val();
+            this.lastListOwnerValue = address;
             if (web3.utils.isAddress(address)) {
                 localStorage.setItem("address", address);
                 this._listWills(address);
