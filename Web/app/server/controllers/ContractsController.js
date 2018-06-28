@@ -252,8 +252,9 @@ exports.getWillContracts = async function (req, res) {
                     });
                 }
 
+                var isDead = parseInt(status)==2?true:null;
 
-                wills.push({address: willAddress, owner: isOwner, heirs: heirs, balance: balance, witnesses: listWitness, ownerAddress: owner, status: parseInt(status)});
+                wills.push({address: willAddress, owner: isOwner, heirs: heirs, balance: balance, witnesses: listWitness, ownerAddress: owner, status: parseInt(status), isDead: isDead});
             }
             return res.status(200).json(wills);
         }
