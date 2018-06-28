@@ -350,7 +350,7 @@ My Wills
                 </div>
                 <div class="card-body">
 
-                    <div class="row">
+                    <div class="row" style="margin-bottom: 10px;">
                         <div class="col-md-6">
                             <div class="row">
                                 <div class="col-md-12">
@@ -408,7 +408,8 @@ My Wills
                     <!-- EtherScan -->
                     <div class="row">
                         <div class="col-md-12" style="margin-top: 5px;">
-                             <a href="https://etherscan.io/address/{{address}}" target="_blank">Check your contract in EtherScan</a>
+                             <a href="https://etherscan.io/address/{{address}}" target="_blank"><img src="assets/images/EtherscanLogo.png" alt="" title="" width="20"> Check your contract in EtherScan</a>
+
                         </div>
                     </div>
 
@@ -418,13 +419,11 @@ My Wills
                     {{#owner}}
                         <!-- Owner actions -->
                         <div class="row">
-                            <div class="input-group col-md-12">
-                                <div class="input-group-prepend">
-                                    <button class="btn btn-secondary btn-form display-4 btn-sm deposit" data-address="{{address}}" data-count="{{witnesses.length}}" type="button" style="margin:0px">Deposit Ether</button>
-                                </div>
-                                <div class="input-group-append" style="margin-left: 10px;">
-                                    <button class="btn btn-secondary btn-form display-4 btn-sm withdraw" data-owner="{{ownerAddress}}" data-address="{{address}}" type="button"  style="margin:0px">Withdraw Ether</button>
-                                </div>
+                            <div class="input-group col-lg-3 col-md-4 col-xs-12">
+                                <button class="btn btn-secondary btn-form display-4 btn-sm deposit" data-address="{{address}}" type="button" style="margin:0px; width: 100%; margin-top: 10px;">Deposit Ether</button>
+                            </div>
+                            <div class="input-group col-lg-3 col-md-4 col-xs-12 mt-xs-5">
+                                <button class="btn btn-secondary btn-form display-4 btn-sm withdraw" data-owner="{{ownerAddress}}" data-address="{{address}}" type="button"  style="margin:0px; width: 100%; margin-top: 10px;">Withdraw Ether</button>
                             </div>
                         </div>
                     {{/owner}}
@@ -450,6 +449,7 @@ My Wills
         transform: translate(0,-50%);
         top: 50%;
         margin: 0 auto;
+        margin: 10px;
     }
 
     @media (max-width: 767px) {
