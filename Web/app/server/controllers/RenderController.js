@@ -1,5 +1,4 @@
-
-var Config = require('../config/config');
+var Contracts = require('./ContractsController');
 
 /**
  * Render pages
@@ -32,7 +31,7 @@ exports.renderContactUs = function (req, res) {
  */
 exports.renderConfiguration = function (req, res, next) {
     res.locals.Config = {
-        provider: Config.provider
+        provider: Contracts.getProvider(req.session.real)
     };
     next();
 };
