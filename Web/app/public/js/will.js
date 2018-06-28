@@ -43,14 +43,14 @@ MyWills.prototype.options = {}
 MyWills.prototype._depositWill = function (event) {
     var contract = $(event.target).data('address');
     var count = $(event.target).data('count');
-    var firstTime = true;
+    var firstTime = parseInt($(event.target).data('status')) === 0;
     var fee = 0.005 + (count * 0.001);
 
     var modal = $("#DepositModal");
     modal.find('#fees-extended').collapse('hide');
     modal.find('.fee-details').text('Show Fee Details');
     modal.find("[name=address]").html(contract);
-    modal.find("[name=addressEnd]").html(contract.slice(-4));
+    modal.find("[name=addressEnd]").html(coPercentagentract.slice(-4));
     modal.find("[name=addressCopy]").data('text',contract);
     modal.find("[name=fee]").html(fee + " Eth");
 
@@ -114,7 +114,6 @@ MyWills.prototype._withdrawWill = function (event) {
                 showInputError(modal.find('input[name=value]'), "The value can't be 0");
                 error = true;
             } else if (valueWei.gt(maxWei)) {
-                console.log("BT");
                 showInputError(modal.find('input[name=value]'), "The maximum value is: " + max + "");
                 error = true;
             } else {
@@ -227,7 +226,6 @@ MyWills.prototype._saveWill = function (event) {
 };
 
 MyWills.prototype._generateLinks = function (lastwill,address) {
-    console.log("Address: " + address);
     lastwill.heirs.forEach(function(item){
         var url = this._createLink("2",item.account,address);
         item.url = url;
@@ -331,7 +329,7 @@ MyWills.prototype.getWills = function (address) {
                    real: realContractSelected()
                },
                success: function(wills){
-                   console.log(wills);
+                   // console.log(wills);
                    resolve(wills);
                },
                error: function(err){
@@ -354,7 +352,6 @@ MyWills.prototype.checkIfAllIn = function () {
     var i=0;
     $( ".percentatgeRepartir" ).each(function( index ) {
         if($( this ).val()!='-'){
-            console.log("Percentage: " + $( this ).val());
             i+=Math.floor(parseFloat($( this ).val().replace(",","."))*1000);
         }
     });

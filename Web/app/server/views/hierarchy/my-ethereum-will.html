@@ -435,19 +435,11 @@ My Wills
                         <!-- Owner actions -->
                         <div class="row">
                             <div class="input-group col-lg-3 col-md-4 col-xs-12">
-                                <button class="btn btn-secondary btn-form display-4 btn-sm deposit" data-address="{{address}}" type="button" style="margin:0px; width: 100%; margin-top: 10px;">Deposit Ether</button>
+                                <button class="btn btn-secondary btn-form display-4 btn-sm deposit" data-address="{{address}}" data-count="{{witnesses.length}}" data-status="{{status}}" type="button" style="margin:0px; width: 100%; margin-top: 10px;">Deposit Ether</button>
                             </div>
                             <div class="input-group col-lg-3 col-md-4 col-xs-12 mt-xs-5">
-                                <button class="btn btn-secondary btn-form display-4 btn-sm withdraw" data-owner="{{ownerAddress}}" data-address="{{address}}" type="button"  style="margin:0px; width: 100%; margin-top: 10px;">Withdraw Ether</button>
+                                <button class="btn btn-secondary btn-form display-4 btn-sm withdraw" data-owner="{{ownerAddress}}" data-address="{{address}}" data-balance="{{balance}}" type="button"  style="margin:0px; width: 100%; margin-top: 10px;">Withdraw Ether</button>
                             </div>
-
-                            <div class="input-group-prepend">
-                                    <button class="btn btn-secondary btn-form display-4 btn-sm deposit" data-address="{{address}}" data-count="{{witnesses.length}}" type="button" style="margin:0px">Deposit Ether</button>
-                                </div>
-                                <div class="input-group-append" style="margin-left: 10px;">
-                                    <button class="btn btn-secondary btn-form display-4 btn-sm withdraw" data-owner="{{ownerAddress}}" data-address="{{address}}" data-balance="{{balance}}" type="button"  style="margin:0px">Withdraw Ether</button>
-                                </div>
-
                         </div>
                     {{/owner}}
                     {{^owner}}

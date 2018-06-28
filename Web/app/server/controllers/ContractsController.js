@@ -221,6 +221,7 @@ exports.getWillContracts = async function (req, res) {
                 balance = parseFloat(balance).toFixed(5);
                 var witnesses = await lwContract.methods.getWitnesses().call({from: exports.getMainAddress(req.session.real)});
                 var data = await lwContract.methods.getHeirs().call({from: exports.getMainAddress(req.session.real)});
+                var status = await lwContract.methods.getStatus().call({from: exports.getMainAddress(req.session.real)});
 
                 var heirsStr = data[0];
                 var percentStr = data[1];
@@ -249,7 +250,7 @@ exports.getWillContracts = async function (req, res) {
                 }
 
 
-                wills.push({address: willAddress, owner: isOwner, heirs: heirs, balance: balance, witnesses: listWitness, ownerAddress: owner});
+                wills.push({address: willAddress, owner: isOwner, heirs: heirs, balance: balance, witnesses: listWitness, ownerAddress: owner, status: parseInt(status)});
             }
             return res.status(200).json(wills);
         }

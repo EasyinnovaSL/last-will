@@ -125,10 +125,10 @@ Heir
 
             var contract = new localWeb3.eth.Contract( getHierarchyContract(contracts).abi, willAddress);
 
-            contract.methods.hasDied().call(function(err, hasDied){
+            contract.methods.getStatus().call(function(err, status){
                 if (err) return reject(err);
 
-                if(hasDied){
+                if(parseInt(status) === 2){
                     $("#text-died").fadeIn("slow");
                     $("#heir-address").fadeIn("slow");
 
