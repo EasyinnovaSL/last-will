@@ -2,6 +2,7 @@ function MyWills(options) {
     jQuery.extend(options, self.options);
     this.lastwill = JSON.parse(localStorage.getItem("lastwill")) || {witness:[],heirs:[],address:''};
     this.confirmationsNeeded = 2;
+    this.lastListOwnerValue = "";
 
     // Buttons Events
     $('#new-will').submit($.proxy(this._saveWill, this));
@@ -16,9 +17,10 @@ function MyWills(options) {
 
     // list Wills input
     $("#listOwner").on('keyup', function(event){
-        if (!event.ctrlKey) {
+        if (!event.ctrlKey &&  this.lastListOwnerValue != $(event.target).val()) {
             var web3 = new Web3();
             var address = $(event.target).val();
+            this.lastListOwnerValue = address;
             if (web3.utils.isAddress(address)) {
                 localStorage.setItem("address", address);
                 this._listWills(address);
@@ -41,20 +43,25 @@ MyWills.prototype.options = {}
 MyWills.prototype._depositWill = function (event) {
     var contract = $(event.target).data('address');
     var count = $(event.target).data('count');
-    var firstTime = true;
+    var firstTime = parseInt($(event.target).data('status')) === 0;
     var fee = 0.005 + (count * 0.001);
 
     var modal = $("#DepositModal");
     modal.find('#fees-extended').collapse('hide');
     modal.find('.fee-details').text('Show Fee Details');
     modal.find("[name=address]").html(contract);
-    modal.find("[name=addressEnd]").html(contract.slice(-4));
+    modal.find("[name=addressEnd]").html(coPercentagentract.slice(-4));
     modal.find("[name=addressCopy]").data('text',contract);
     modal.find("[name=fee]").html(fee + " Eth");
 
     modal.find(".first-time").hide();
     if (firstTime) {
         modal.find(".first-time").show();
+        modal.find("[name=limit]").html("210.000");
+        modal.find("[name=limitCopy]").data('text',"210000");
+    } else {
+        modal.find("[name=limit]").html("50.000");
+        modal.find("[name=limitCopy]").data('text',"50000");
     }
 
     if (realContractSelected()){
@@ -70,20 +77,52 @@ MyWills.prototype._depositWill = function (event) {
 
 
 MyWills.prototype._withdrawWill = function (event) {
-    var contractAddress = $(event.target).attr('data-address');
-    var ownerAddress = $(event.target).attr('data-owner');
+    var contractAddress = $(event.target).data('address');
+    var ownerAddress = $(event.target).data('owner');
+    var contractBalance = $(event.target).data('balance');
     var modal = $("#SendModal");
     modal.find('input[name=to]').val("");
     modal.find('input[name=value]').val("");
+    modal.find('input[name=max]').val(contractBalance);
     modal.find(".input-group").show();
     modal.find(".generate-group").hide();
+    hideInputError(modal.find('input[name=to]'));
+    hideInputError(modal.find('input[name=value]'));
     modal.find("button.generate").off('click').on('click', function(){
+        var localWeb3 = new Web3(new Web3.providers.HttpProvider(getProvider()));
+
         // Get input
         var to = modal.find('input[name=to]').val();
         var value = modal.find('input[name=value]').val();
+        var max = modal.find('input[name=max]').val();
+
+        // Check input
+        var error = false;
+        if (!localWeb3.utils.isAddress(to)) {
+            showInputError(modal.find('input[name=to]'), "Wrong address");
+            error = true;
+        } else {
+            hideInputError(modal.find('input[name=to]'));
+        }
+        if (!value) {
+            showInputError(modal.find('input[name=value]'), "Wrong value");
+            error = true;
+        } else {
+            var valueWei = new localWeb3.utils.BN(localWeb3.utils.toWei(value, 'ether'));
+            var maxWei = new localWeb3.utils.BN(localWeb3.utils.toWei(max, 'ether'));
+            if (valueWei.isZero()) {
+                showInputError(modal.find('input[name=value]'), "The value can't be 0");
+                error = true;
+            } else if (valueWei.gt(maxWei)) {
+                showInputError(modal.find('input[name=value]'), "The maximum value is: " + max + "");
+                error = true;
+            } else {
+                hideInputError(modal.find('input[name=value]'));
+            }
+        }
+        if (error) return;
 
         // Calculate Data
-        var localWeb3 = new Web3(new Web3.providers.HttpProvider(getProvider()));
         var contract = new localWeb3.eth.Contract(contracts.hierarchy.abi, contract);
         var data = contract.methods['execute'].apply(null, [to, localWeb3.utils.toWei(value, 'ether'), "0x00"]).encodeABI();
 
@@ -187,7 +226,6 @@ MyWills.prototype._saveWill = function (event) {
 };
 
 MyWills.prototype._generateLinks = function (lastwill,address) {
-    console.log("Address: " + address);
     lastwill.heirs.forEach(function(item){
         var url = this._createLink("2",item.account,address);
         item.url = url;
@@ -221,6 +259,16 @@ MyWills.prototype._listWills = function (forcedAddress = null) {
             Mustache.parse(template);   // optional, speeds up future uses
             var rendered = Mustache.render(template, {'wills': wills});
             $('.wills-container').html(rendered);
+
+            //Select the correct etherscan URL
+            var isRealNetwork = realContractSelected();
+
+            if(!isRealNetwork){
+                $("a.etherscan").each(function (index, value) {
+                    $(this).attr('href', $(this).attr('href').replace("https://etherscan.io/", "https://ropsten.etherscan.io/"));
+                });
+            }
+
         } else {
             $('.wills-container').html("");
         }
@@ -281,7 +329,7 @@ MyWills.prototype.getWills = function (address) {
                    real: realContractSelected()
                },
                success: function(wills){
-                   console.log(wills);
+                   // console.log(wills);
                    resolve(wills);
                },
                error: function(err){
@@ -304,7 +352,6 @@ MyWills.prototype.checkIfAllIn = function () {
     var i=0;
     $( ".percentatgeRepartir" ).each(function( index ) {
         if($( this ).val()!='-'){
-            console.log("Percentage: " + $( this ).val());
             i+=Math.floor(parseFloat($( this ).val().replace(",","."))*1000);
         }
     });
@@ -382,4 +429,17 @@ function selectChanged(rowNumber){
             }
             break;
     }
+}
+
+function showInputError(input, message){
+    input.css('box-shadow', '0 0 0 0.2rem #ff0000');
+    if (input.parent().find('p.error').length === 0) {
+        var pTag = $('<p/>', {style: 'color: red; margin: 5px 0 0 5px;', class: "error"}).html(message);
+        input.parent().append(pTag);
+    }
+}
+
+function hideInputError(input) {
+    input.css('box-shadow', '');
+    input.parent().find('p.error').remove();
 }

@@ -1,6 +1,6 @@
 module.exports = {
     production: false,
-    captcha: true,
+    captcha: false,
 
     // Real
     mainPrivateKeyReal: "0x645a8e4cd9fbae14668ddae997bc72a27f052f1727657f3f86a1a9cf1beec400",

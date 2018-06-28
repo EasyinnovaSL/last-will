@@ -118,6 +118,7 @@ My Wills
                 </div>
                 <div class="modal-body" style="padding: 1rem 0 0 0;">
                     <div class="input-group">
+                        <input type="text" name="max" style="display: none;">
                         <div class="form-group">
                             <label class="card-title display-5" style="margin: 0;">Destination Address:</label>
                             <input type="text" class="form-control" style="padding: 0px 0px 0px 10px; line-height: 23px; font-size: 14px;background: white;" placeholder="0x (hexadecimal)" name="to">
@@ -196,7 +197,7 @@ My Wills
                         <a href="javascript:void(0)" data-toggle="collapse" data-target="#fees-extended" class="fee-details">Show Fee Details</a>
                         <div id="fees-extended" class="collapse">
                             The first time you deposit ether, a little fee will be applied for cover the Smart Contract creation and the witnesses actions cost:
-                            <ul>
+                            <ul style="margin: 0;">
                                 <li><strong>0.005</strong> For the contract creation</li>
                                 <li><strong>0.001</strong> For each witness</li>
                             </ul>
@@ -214,6 +215,13 @@ My Wills
                                 <i class="fa fa-clipboard" style="margin-left: 8px;"></i>
                             </div>
                         </div>
+                        <p style="margin: 0;">Set the Gas Limit to:</p>
+                        <div class="ellipsis-div" onclick="copyToClipBoard(this);" data-text="" name="limitCopy">
+                            <div class="full">
+                                <strong name="limit"></strong>
+                                <i class="fa fa-clipboard" style="margin-left: 8px;"></i>
+                            </div>
+                        </div>
                     </div>
                     <div class="content-ropsten">
                         <p style="margin: 0;">Send <strong>ROPSTEN</strong> Ether to the next address:</p>
@@ -226,7 +234,15 @@ My Wills
                                 <i class="fa fa-clipboard" style="margin-left: 8px;"></i>
                             </div>
                         </div>
-                        <p>Also, in this TestNet version, you can use the <a target="_blank" href="http://faucet.ropsten.be:3001">Ropsten official faucet</a></p>
+                        <p style="margin: 0;">Set the Gas Limit to:</p>
+                        <div class="ellipsis-div" onclick="copyToClipBoard(this);" data-text="" name="limitCopy">
+                            <div class="full">
+                                <strong name="limit"></strong>
+                                <i class="fa fa-clipboard" style="margin-left: 8px;"></i>
+                            </div>
+                        </div>
+                        <hr>
+                        <p>Also, in the TestNet, you can use the <a target="_blank" href="http://faucet.ropsten.be:3001">Ropsten official faucet</a></p>
                     </div>
 
                     <div class="text-center" style="width: 100%;">
@@ -348,7 +364,7 @@ My Wills
                 </div>
                 <div class="card-body">
 
-                    <div class="row">
+                    <div class="row" style="margin-bottom: 10px;">
                         <div class="col-md-6">
                             <div class="row">
                                 <div class="col-md-12">
@@ -406,7 +422,7 @@ My Wills
                     <!-- EtherScan -->
                     <div class="row">
                         <div class="col-md-12" style="margin-top: 5px;">
-                             <a href="https://etherscan.io/address/{{address}}" target="_blank">Check your contract in EtherScan</a>
+                             <a href="https://etherscan.io/address/{{address}}" class="etherscan" target="_blank"><img src="assets/images/EtherscanLogo.png" alt="" title="" width="20"> Check your contract in EtherScan</a>
                         </div>
                     </div>
 
@@ -416,13 +432,11 @@ My Wills
                     {{#owner}}
                         <!-- Owner actions -->
                         <div class="row">
-                            <div class="input-group col-md-12">
-                                <div class="input-group-prepend">
-                                    <button class="btn btn-secondary btn-form display-4 btn-sm deposit" data-address="{{address}}" data-count="{{witnesses.length}}" type="button" style="margin:0px">Deposit Ether</button>
-                                </div>
-                                <div class="input-group-append" style="margin-left: 10px;">
-                                    <button class="btn btn-secondary btn-form display-4 btn-sm withdraw" data-owner="{{ownerAddress}}" data-address="{{address}}" type="button"  style="margin:0px">Withdraw Ether</button>
-                                </div>
+                            <div class="input-group col-lg-3 col-md-4 col-xs-12">
+                                <button class="btn btn-secondary btn-form display-4 btn-sm deposit" data-address="{{address}}" data-count="{{witnesses.length}}" data-status="{{status}}" type="button" style="margin:0px; width: 100%; margin-top: 10px;">Deposit Ether</button>
+                            </div>
+                            <div class="input-group col-lg-3 col-md-4 col-xs-12 mt-xs-5">
+                                <button class="btn btn-secondary btn-form display-4 btn-sm withdraw" data-owner="{{ownerAddress}}" data-address="{{address}}" data-balance="{{balance}}" type="button"  style="margin:0px; width: 100%; margin-top: 10px;">Withdraw Ether</button>
                             </div>
                         </div>
                     {{/owner}}
@@ -448,6 +462,7 @@ My Wills
         transform: translate(0,-50%);
         top: 50%;
         margin: 0 auto;
+        margin: 10px;
     }
 
     @media (max-width: 767px) {
@@ -513,7 +528,8 @@ My Wills
     }
 
     .ellipsis-div {
-        width: 100%;
+        width: auto;
+        max-width: 100%;
         padding: 2px 10px;
         background-color: #dedede;
         color: #5d5d5d;
@@ -527,7 +543,6 @@ My Wills
         text-overflow: ellipsis;
         overflow:hidden;
         white-space:nowrap;
-        margin-right: -4px;
     }
     .ellipsis-div > .end {
         flex: 1 0 content;

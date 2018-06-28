@@ -27,7 +27,7 @@
 
    `2_upload_contract.bat`
    
-4. Start web
+3. Start web
 
    `3-start_node.bat`
    
