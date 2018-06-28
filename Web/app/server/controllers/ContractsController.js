@@ -14,9 +14,9 @@ var web3 = new Web3(new Web3.providers.HttpProvider(Config.provider));
 web3.eth.personal = new Web3EthPersonal(Config.provider);
 
 var urlContractBacktolifeTest = "../contractBackToLife.json";
-var urlContractHierarchyTest = "../contractHierarchy.json";
-var urlContractBacktolifeReal = "../Production/contractBackToLife.json";
-var urlContractHierarchyReal = "../Production/contractHierarchy.json";
+var urlContractHierarchyTest = "../contractMyWill.json";
+var urlContractBacktolifeReal = "../Production/Ropsten/contractBackToLife.json";
+var urlContractHierarchyReal = "../Production/Ropsten/contractMyWill.json";
 
 // Read contract info
 FileSystem.readFile(urlContractBacktolifeTest, 'utf8', function (err,data) {
@@ -80,39 +80,32 @@ exports.createWillContract = function (req, res) {
     var witnesses = req.body.witnesses;
     var recaptcha = req.body.recaptcha;
 
-    if(recaptcha === undefined || recaptcha === '' || recaptcha === null) {
-        return res.status(400).send("Please select captcha.");
-    }
+    // if(recaptcha === undefined || recaptcha === '' || recaptcha === null) {
+    //     return res.status(400).send("Please select captcha.");
+    // }
 
     if (!owner || !heirs || !percentages || !witnesses) {
         return res.status(400).send("Invalid Params.");
     }
 
-
-    // Ether for witnesses
-    var value = witnesses.split(";").length * 0.001;
-
-    // Demo ether for the smart contract
-    value = value + 0.1;
-
     // recaptcha
     var secretKey = "6LffzGAUAAAAAGxQl-J2mnFZqVkpQb6-AglNclxv";
     var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + recaptcha + "&remoteip=" + req.connection.remoteAddress;
 
-    request(verificationUrl,function(error,response,body) {
-        body = JSON.parse(body);
-        // Success will be true or false depending upon captcha validation.
-        if(body.success !== undefined && !body.success) {
-            return res.status(400).send("Failed captcha verification");
-        }
+    // request(verificationUrl,function(error,response,body) {
+    //     body = JSON.parse(body);
+    //     // Success will be true or false depending upon captcha validation.
+    //     if(body.success !== undefined && !body.success) {
+    //         return res.status(400).send("Failed captcha verification");
+    //     }
 
-        return exports.sendTransaction('createLastWill', [owner,heirs,percentages,witnesses], {privateKey: Config.mainPrivateKey, from: Config.mainAddress, value: value.toString()}).then(function(lastWillAddress){
+        return exports.sendTransaction('createLastWill', [owner,heirs,percentages,witnesses], {privateKey: Config.mainPrivateKey, from: Config.mainAddress}).then(function(lastWillAddress){
             return res.status(200).send(lastWillAddress);
         }).catch(function(err){
             return res.status(400).send(err.message);
         });
 
-    });
+    // });
 
 
 
@@ -173,7 +166,7 @@ exports.getWillContracts = async function (req, res) {
                     });
                 }
 
-                wills.push({address: willAddress, owner: isOwner, heirs: heirs, balance: balance, witnesses: witnesses});
+                wills.push({address: willAddress, owner: isOwner, heirs: heirs, balance: balance, witnesses: witnesses, ownerAddress: owner});
             }
             return res.status(200).json(wills);
         }
@@ -213,10 +206,6 @@ exports.sendTransaction = function (functionName, parameters, options) {
             if (!options.from || !options.privateKey) {
                 reject(false);
             }
-            var value = "0x00";
-            if (options.value) {
-                value = web3.utils.toHex( web3.utils.toWei(options.value, 'ether') );
-            }
 
             // Get data by params
             if (parameters === null) {
@@ -234,8 +223,8 @@ exports.sendTransaction = function (functionName, parameters, options) {
                 nonce: web3.utils.toHex(nonce),
                 gasPrice: web3.utils.toHex(1000000000), // 1GWei
                 gasLimit: web3.utils.toHex(2000000),
-                to: exports.getContract()._address,
-                value: value,
+                to: exports.getContract()._address.toLowerCase(),
+                value: "0x00",
                 data: data
             };
             var tx = new EthereumTx(rawTx);

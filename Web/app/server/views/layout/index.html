@@ -33,7 +33,7 @@
 		}
 		.my-loader {
 			border: 16px solid #f3f3f3; /* Light grey */
-			border-top: 16px solid #3498db; /* Blue */
+			border-top: 16px solid #e80000;; /* Red */
 			border-radius: 50%;
 			width: 120px;
 			height: 120px;
@@ -56,6 +56,9 @@
 		.btn-share i {
 			font-size: 45px;
 		}
+        .form-group {
+            width: 100%;
+        }
 	</style>
 
 </head>
@@ -227,7 +230,9 @@
 		</div>
 	</div>
 
-
+    <div id="generic-loader" style="width: 100%; text-align: center; display:none;">
+        <div class="my-loader"></div>
+    </div>
 
   <!-- Load smart contract variables -->
 <% if (typeof contracts !== 'undefined' && contracts) { %>
@@ -246,12 +251,23 @@
 <!--Main JS-->
 <script>
 	function copyToClipBoard(me) {
+	    // Get text and copy it
         var copyText = $(me).data('text');
         var $temp = $("<input>");
         $("body").append($temp);
         $temp.val(copyText).select();
         document.execCommand("copy");
         $temp.remove();
+        // Show tolltip
+        $(me).tooltip({
+            toggle: "manual",
+            placement: "bottom",
+            title: "Copied!",
+        });
+        $(me).tooltip('show');
+        setTimeout(function() {
+            $(me).tooltip('hide')
+        }, 1000);
 	}
 </script>
 <script src="/js/heritage.js"></script>
