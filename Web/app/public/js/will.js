@@ -5,6 +5,7 @@ function MyWills(options) {
 
     // Buttons Events
     $('#new-will').submit($.proxy(this._saveWill, this));
+    $('.wills-container').on('click','button.deposit',$.proxy(this._depositWill,this));
     $('.wills-container').on('click','button.send',$.proxy(this._sendWill,this));
     // $('.wills-container').on('click','button.withdraw',$.proxy(this._withdrawWill,this));
 
@@ -37,7 +38,7 @@ function MyWills(options) {
 
 MyWills.prototype.options = {}
 
-MyWills.prototype._sendWill = function (event) {
+MyWills.prototype._depositWill = function (event) {
     var contract = $(event.target).attr('data-address');
 
     var html = "<p>Send <strong>ROPSTEN</strong> Ethers to the next address, using either an exchanger or an Ethereum Wallet:</p>"
@@ -50,21 +51,37 @@ MyWills.prototype._sendWill = function (event) {
     $("#InfoModal").modal('show');
 };
 
-MyWills.prototype._withdrawWill = function (event) {
+
+MyWills.prototype._sendWill = function (event) {
     var contractAddress = $(event.target).attr('data-address');
-    var inputValue = parseFloat($('input[name=value-'+contractAddress+']').val());
-    if (!isNaN(inputValue)) {
-        var contract = web3.eth.contract(contracts.hierarchy.abi).at(contractAddress);
-        var value = web3.toWei(inputValue, "ether");
-        contract.transferBalanceWithAmount.sendTransaction(web3.eth.defaultAccount, value, function (err) {
-            if (err) {
-                $('#ErrorModal').modal('show');
-                return;
-            }
-            $('#OkModal').modal('show');
-            this._listWills();
-        }.bind(this));
-    }
+    var ownerAddress = $(event.target).attr('data-owner');
+    var modal = $("#SendModal");
+    modal.find('input[name=to]').val("");
+    modal.find('input[name=value]').val("");
+    modal.find(".input-group").show();
+    modal.find(".generate-group").hide();
+    modal.find("button.generate").off('click').on('click', function(){
+        // Get input
+        var to = modal.find('input[name=to]').val();
+        var value = modal.find('input[name=value]').val();
+
+        // Calculate Data
+        var localWeb3 = new Web3(new Web3.providers.HttpProvider(Config.provider));
+        var contract = new localWeb3.eth.Contract(contracts.hierarchy.abi, contract);
+        var data = contract.methods['execute'].apply(null, [to, localWeb3.utils.toWei(value, 'ether'), "0x00"]).encodeABI();
+
+        // Show info
+        modal.find(".generate-group strong[name=owner]").html(ownerAddress);
+        modal.find(".generate-group strong[name=ownerEnd]").html(ownerAddress.slice(-4));
+        modal.find(".generate-group strong[name=address]").html(contractAddress);
+        modal.find(".generate-group strong[name=addressEnd]").html(contractAddress.slice(-4));
+        modal.find(".generate-group div[name=addressCopy]").data('text',contractAddress);
+        modal.find(".generate-group strong[name=data]").html(data);
+        modal.find(".generate-group div[name=dataCopy]").data('text',data);
+        modal.find(".input-group").hide();
+        modal.find(".generate-group").show();
+    });
+    modal.modal('show');
 };
 
 MyWills.prototype._saveWill = function (event) {
@@ -180,7 +197,7 @@ MyWills.prototype._generateLinks = function (lastwill,address) {
 MyWills.prototype._listWills = function (forcedAddress = null) {
     var address = localStorage.getItem("address") || forcedAddress;
     if (address === null) return;
-    $('.wills-container').html($("#generic-loader").clone());
+    $('.wills-container').html($("#generic-loader").clone().show());
     this.getWills(address).then(function(wills){
         if (wills !== null && wills && wills.length !== 0) {
             var template = $('#will-template').html();

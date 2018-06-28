@@ -149,12 +149,6 @@ exports.createWillContract = function (req, res) {
     }
 
 
-    // Ether for witnesses
-    var value = witnesses.split(";").length * 0.001;
-
-    // Demo ether for the smart contract
-    value = value + 0.1;
-
     if (Config.captcha) {
         // recaptcha
         var secretKey = "6LffzGAUAAAAAGxQl-J2mnFZqVkpQb6-AglNclxv";
@@ -171,7 +165,6 @@ exports.createWillContract = function (req, res) {
             return exports.sendTransaction('createLastWill', [owner, heirs, percentages, witnesses], {
                 privateKey: exports.getPrivateKey(req.session.real),
                 from: exports.getMainAddress(req.session.real),
-                value: value.toString(),
                 req: req
             }).then(function (lastWillAddress) {
                 return res.status(200).send(lastWillAddress);
@@ -245,7 +238,17 @@ exports.getWillContracts = async function (req, res) {
                     });
                 }
 
-                wills.push({address: willAddress, owner: isOwner, heirs: heirs, balance: balance, witnesses: witnesses});
+                //Witnesses
+                var listWitness = [];
+                var witnessesList = witnesses.split(";");
+                for (var i in witnessesList) {
+                    listWitness.push({
+                        address: witnessesList[i],
+                    });
+                }
+
+
+                wills.push({address: willAddress, owner: isOwner, heirs: heirs, balance: balance, witnesses: listWitness, ownerAddress: owner});
             }
             return res.status(200).json(wills);
         }
@@ -288,10 +291,6 @@ exports.sendTransaction = function (functionName, parameters, options) {
                 reject(false);
             }
             var web3 = exports.getWeb3(options.req.session.real);
-            var value = "0x00";
-            if (options.value) {
-                value = web3.utils.toHex( web3.utils.toWei(options.value, 'ether') );
-            }
 
             // Get data by params
             if (parameters === null) {

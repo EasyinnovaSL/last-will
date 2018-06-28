@@ -51,7 +51,7 @@ My Wills
                             </div>
                             <div class="row">
 
-                                <div class="g-recaptcha col-md-4 offset-md-4" data-sitekey="6LffzGAUAAAAAAD0UhJuWZvnbMtlTZxM2WXBkQUP"></div>
+                                <div class="g-recaptcha col-md-4 offset-md-4" data-sitekey="6LffzGAUAAAAAAD0UhJuWZvnbMtlTZxM2WXBkQUP" style="width: auto; margin-left: auto; margin-right: auto;"></div>
 
                             </div>
 
@@ -100,7 +100,7 @@ My Wills
                     </div>
                 </div>
 
-                <div class="wills-container">
+                <div class="wills-container" style="margin-bottom: 10px;">
 
                 </div>
             </div>
@@ -108,7 +108,102 @@ My Wills
 
     </div>
 
+    <!-- Send Modal HTML -->
+    <div id="SendModal" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog modal-lg modal-confirm modal-info">
+            <div class="modal-content">
+                <div class="modal-header" style="padding: 20px;">
+                    <h5 style="color: white; margin: 0;">Send Ether</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body" style="padding: 1rem 0;">
+                    <div class="input-group">
+                        <div class="form-group">
+                            <label class="card-title display-5" style="margin: 0;">Destination Address:</label>
+                            <input type="text" class="form-control" style="padding: 0px 0px 0px 10px; line-height: 23px; font-size: 14px;background: white;" placeholder="0x (hexadecimal)" name="to">
+                        </div>
+                        <div class="form-group">
+                            <label class="card-title display-5" style="margin: 0;">Amount:</label>
+                            <input type="text" class="form-control" style="background: white; padding: 0px 0px 0px 10px;line-height: 23px;font-size: 14px;" aria-label="Amount (to the nearest dollar)" value="" name="value">
+                        </div>
+                        <div class="text-center" style="width: 100%;">
+                            <button class="btn btn-success generate">
+                                <span>Generate Transaction</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="generate-group">
+                        <p style="margin: 0;">With the owner account:</p>
+                        <div class="ellipsis-div">
+                            <div class="full">
+                                <strong name="owner"></strong>
+                            </div>
+                            <div class="end">
+                                <strong name="ownerEnd"></strong>
+                            </div>
+                        </div>
+
+                        <p style="margin: 0;">Send 0 Eth to MyWill Smart Contract:</p>
+                        <div class="ellipsis-div" onclick="copyToClipBoard(this);" data-text="" name="addressCopy">
+                            <div class="full">
+                                <strong name="address"></strong>
+                            </div>
+                            <div class="end">
+                                <strong name="addressEnd"></strong>
+                                <i class="fa fa-clipboard" style="margin-left: 8px;"></i>
+                            </div>
+                        </div>
+
+                        <p style="margin: 0;">With the extra data field:</p>
+                        <div class="ellipsis-div" onclick="copyToClipBoard(this);" data-text="" name="dataCopy">
+                            <div class="full">
+                                <strong name="data"></strong>
+                            </div>
+                            <div class="end">
+                                <i class="fa fa-clipboard" style="margin-left: 8px;"></i>
+                            </div>
+                        </div>
+
+                        <p style="margin: 0;"><i>* You can copy the values by clicking on them</i></p>
+
+                        <!--Button-->
+                        <div class="text-center">
+                            <button class="btn btn-success" data-dismiss="modal">
+                                <span>Done</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </section>
+
+
+
+<!-- The Modal -->
+<div class="modal fade" id="myAddressModal" style="padding: 10px;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header" style="background: #3acaea; color: white;">
+                <h4 class="modal-title">Address</h4>
+                <button type="button" class="close" data-dismiss="modal" style="font-size: 32px;">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body text-center" style="word-wrap: break-word;"></div>
+
+        </div>
+    </div>
+</div>
+
+
+
 
 <script src="/js/contracts.js"></script>
 <script src="/js/will.js"></script>
@@ -203,11 +298,25 @@ My Wills
                             </div>
                             {{#heirs}}
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <p class="card-text">
-                                            <i class="fa fa-dollar-sign"></i> <span style="margin-right: 10px;">{{percentage}}%</span>
-                                            <i class="fa fa-user"></i> <span style="margin-right: 10px;">{{address}}</span>
-                                        </p>
+                                    <div class="col-md-12 d-none d-sm-block">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <i class="fa fa-dollar-sign"></i> <span style="margin-right: 10px;">{{percentage}}%</span>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <i class="fa fa-user"></i> <span style="margin-right: 10px;">{{address}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 d-sm-none" style="margin:  0 auto; margin-top: 5px;">
+                                                <span class="btn btn-sm btn-light" href="javascript:void(0)" style="margin: 0; font-size: 16px !important;">
+                                                     <i class="fa fa-dollar-sign"></i> &nbsp; {{percentage}}%
+                                                </span>
+
+                                                <a class="btn btn-sm btn-light show-witness-address" href="javascript:void(0)" style="margin: 0; font-size: 16px !important;" data-toggle="modal" data-target="#myAddressModal" onclick="updateAddressModal('{{address}}');">
+                                                    <i class="fa fa-user"></i> &nbsp; Address
+                                                </a>
                                     </div>
                                 </div>
                             {{/heirs}}
@@ -220,15 +329,28 @@ My Wills
                             </div>
                             {{#witnesses}}
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-12 d-none d-sm-block">
                                         <p class="card-text">
                                             <i class="fa fa-user"></i> {{address}}
                                         </p>
+                                    </div>
+                                    <div class="col-xs-12 d-sm-none" style="margin:  0 auto; margin-top: 5px;">
+                                        <a class="btn btn-sm btn-light show-witness-address" href="javascript:void(0)" style="margin: 0; font-size: 16px !important;" data-toggle="modal" data-target="#myAddressModal" onclick="updateAddressModal('{{address}}');">
+                                            <i class="fa fa-user"></i> &nbsp; Address
+                                        </a>
                                     </div>
                                 </div>
                             {{/witnesses}}
                         </div>
                     </div>
+
+                    <!-- EtherScan -->
+                    <div class="row">
+                        <div class="col-md-12" style="margin-top: 5px;">
+                             <a href="https://etherscan.io/address/{{address}}" target="_blank">Check your contract in EtherScan</a>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="card-footer">
@@ -237,12 +359,11 @@ My Wills
                         <div class="row">
                             <div class="input-group col-md-6">
                                 <div class="input-group-prepend">
-                                    <button class="btn btn-secondary btn-form display-4 btn-sm send" data-address="{{address}}" type="button" style="margin:0px">Deposit Ether</button>
+                                    <button class="btn btn-secondary btn-form display-4 btn-sm deposit" data-address="{{address}}" type="button" style="margin:0px">Deposit Ether</button>
                                 </div>
-                                <!--<input type="text" class="form-control" name="value-{{address}}" placeholder="0.00" aria-label="" aria-describedby="basic-addon1">-->
-                                <!--<div class="input-group-append">-->
-                                    <!--<button class="btn btn-sm btn-outline-secondary withdraw" data-address="{{address}}" type="button"  style="margin:0px">Withdraw</button>-->
-                                <!--</div>-->
+                                <div class="input-group-append" style="margin-left: 10px;">
+                                    <button class="btn btn-secondary btn-form display-4 btn-sm send" data-owner="{{ownerAddress}}" data-address="{{address}}" type="button"  style="margin:0px">Send Ether</button>
+                                </div>
                             </div>
                             <div class="col-md-3"></div>
                             <div class="col-md-3"></div>
@@ -262,6 +383,15 @@ My Wills
 
 </script>
 <style>
+
+
+    #myAddressModal .modal-dialog {
+        -webkit-transform: translate(0,-50%);
+        -o-transform: translate(0,-50%);
+        transform: translate(0,-50%);
+        top: 50%;
+        margin: 0 auto;
+    }
 
     @media (max-width: 767px) {
         .g-recaptcha {
@@ -324,9 +454,40 @@ My Wills
 
         border-radius: .25rem;
     }
+
+    .ellipsis-div {
+        width: 100%;
+        padding: 2px 10px;
+        background-color: #dedede;
+        color: #5d5d5d;
+        display:inline-flex;
+        flex-wrap:nowrap;
+        border-radius: 5px;
+        margin-bottom: 1rem;
+    }
+    .ellipsis-div > .full {
+        flex: 0 1 content;
+        text-overflow: ellipsis;
+        overflow:hidden;
+        white-space:nowrap;
+        margin-right: -4px;
+    }
+    .ellipsis-div > .end {
+        flex: 1 0 content;
+        white-space:nowrap;
+    }
 </style>
 
+
 <script>
+
+
+    function updateAddressModal(userAddress){
+        $('#myAddressModal div.modal-body').html(String(userAddress));
+    }
+
+
+
 
     $(document).ready(function () {
         // Load wills plugin
