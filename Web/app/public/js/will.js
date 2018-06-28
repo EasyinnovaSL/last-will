@@ -50,7 +50,7 @@ MyWills.prototype._depositWill = function (event) {
     modal.find('#fees-extended').collapse('hide');
     modal.find('.fee-details').text('Show Fee Details');
     modal.find("[name=address]").html(contract);
-    modal.find("[name=addressEnd]").html(coPercentagentract.slice(-4));
+    modal.find("[name=addressEnd]").html(contract.slice(-4));
     modal.find("[name=addressCopy]").data('text',contract);
     modal.find("[name=fee]").html(fee + " Eth");
 
@@ -263,7 +263,7 @@ MyWills.prototype._listWills = function (forcedAddress = null) {
             //Select the correct etherscan URL
             var isRealNetwork = realContractSelected();
 
-            if(!isRealNetwork){
+            if(!isRealNetwork || !contracts.production){
                 $("a.etherscan").each(function (index, value) {
                     $(this).attr('href', $(this).attr('href').replace("https://etherscan.io/", "https://ropsten.etherscan.io/"));
                 });

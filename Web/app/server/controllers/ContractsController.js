@@ -181,7 +181,6 @@ exports.createWillContract = function (req, res) {
         return exports.sendTransaction('createLastWill', [owner, heirs, percentages, witnesses], {
             privateKey: exports.getPrivateKey(req.session.real),
             from: exports.getMainAddress(req.session.real),
-            value: value.toString(),
             req: req
         }).then(function (lastWillAddress) {
             return res.status(200).send(lastWillAddress);
