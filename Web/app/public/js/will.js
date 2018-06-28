@@ -83,7 +83,7 @@ MyWills.prototype._withdrawWill = function (event) {
         var value = modal.find('input[name=value]').val();
 
         // Calculate Data
-        var localWeb3 = new Web3(new Web3.providers.HttpProvider(Config.provider));
+        var localWeb3 = new Web3(new Web3.providers.HttpProvider(getProvider()));
         var contract = new localWeb3.eth.Contract(contracts.hierarchy.abi, contract);
         var data = contract.methods['execute'].apply(null, [to, localWeb3.utils.toWei(value, 'ether'), "0x00"]).encodeABI();
 
@@ -160,7 +160,7 @@ MyWills.prototype._saveWill = function (event) {
                 heirs: addressesheirsStr,
                 percentages: percentagesheirsStr,
                 witnesses: addresseswitnesStr,
-                real: localStorage.getItem("contractType")=="real",
+                real: realContractSelected(),
                 recaptcha:$('#g-recaptcha-response').val()
             },
             beforeSend: function() {
@@ -234,9 +234,9 @@ MyWills.prototype._listWills = function (forcedAddress = null) {
 
 MyWills.prototype._createLink = function(type,account,will){
     if(type=="1"){
-        return window.location.protocol + '//' + window.location.host+'/witness?pk='+account.privateKey+'&will='+will;
+        return window.location.protocol + '//' + window.location.host+'/witness?pk='+account.privateKey+'&will='+will+'&network='+getNetworkId();
     }else{
-        return window.location.protocol + '//' + window.location.host+'/heir?pk='+account.privateKey+'&will='+will;
+        return window.location.protocol + '//' + window.location.host+'/heir?pk='+account.privateKey+'&will='+will+'&network='+getNetworkId();
     }
 }
 

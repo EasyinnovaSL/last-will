@@ -241,13 +241,6 @@
 	</script>
 <% } %>
 
-<!-- Load server config file -->
-<% if (typeof Config !== 'undefined' && Config) { %>
-	<script type="application/javascript">
-		var Config = JSON.parse('<%- JSON.stringify(Config); %>');
-	</script>
-<% } %>
-
 <!--Main JS-->
 <script>
 	function copyToClipBoard(me) {
