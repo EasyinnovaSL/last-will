@@ -2,19 +2,19 @@
 
 1. Install:
 
-* Run with administrator privileges:
+    Run with administrator privileges:
 
-`npm install --global truffle`
+    `npm install --global truffle`
 
-`npm install --global ganache-cli`
+    `npm install --global ganache-cli`
 
 2. Run inside the folder Web:
 
-  `npm install`
+    `npm install`
 
 3. Run inside the folder Smart Contract:
 
-  `npm install`
+    `npm install`
 
   
 ### Run Application
@@ -32,3 +32,35 @@
    `3-start_node.bat`
    
    Open a browser (not EDGE) and go to http://localhost:3001
+   
+   
+### How To Verify a truffle deployed Smart Contract in Etherscan?
+
+1. Install truffle-flattener
+
+    `npm install truffle-flattener -g`
+    
+2. Run in "Smart Contract" folder:
+
+    `truffle-flattener "contracts/BackToLife.sol" > Output.sol`
+    
+3. The generated file contains the code to paste in Etherscan
+
+4. (Optional) Get the input parameters ABI:
+
+    * Go to:
+    
+        https://npm.runkit.com/ethereumjs-abi
+        
+    * Code (example):
+            
+            var abi = require("ethereumjs-abi")
+
+            var parameterTypes = ["address"];
+            var parameterValues = ["0x337c204fa619a86b3608ae05be85d20bbaa2fc6f"];
+
+            console.log(abi.rawEncode(parameterTypes, parameterValues).toString('hex'));
+            
+5. Check the solidity compiler version with:
+
+    ``truffle version``
