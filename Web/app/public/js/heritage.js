@@ -62,11 +62,3 @@ Heritage.prototype.getWitnesses = function(){
     }.bind(this));
 };
 
-Heritage.prototype.hasDied = function(){
-    return new Promise(function(resolve, reject){
-        this.contract.methods.hasDied().call({from: web3.eth.defaultAccount},function(err, value){
-            if (err) return reject(err);
-            resolve(value);
-        });
-    }.bind(this));
-};

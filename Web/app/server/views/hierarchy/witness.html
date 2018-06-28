@@ -52,13 +52,15 @@ Witness
 
     $(document).ready(function () {
 
-        var localWeb3 = new Web3(new Web3.providers.HttpProvider(Config.provider));
+        loadNetwork('<%- network %>');
+
+        var localWeb3 = new Web3(new Web3.providers.HttpProvider(getProvider()));
 
         var account = localWeb3.eth.accounts.wallet.add('<%- pk %>');
 
         var willAddress = "<%- will %>";
 
-        var contract = new localWeb3.eth.Contract(getHierarchyContract(contracts).abi, willAddress);
+        var contract = new localWeb3.eth.Contract(getHierarchyContract().abi, willAddress);
 
         contract.methods.hasVoted().call({from: account.address.toLowerCase(), to: willAddress.toLowerCase()}, function(err, iVoted){
             if (err) {

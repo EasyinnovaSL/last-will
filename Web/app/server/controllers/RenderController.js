@@ -3,6 +3,8 @@ var Config = require('../config/config');
 var nodemailer = require('nodemailer');
 var Mustache = require('mustache');
 var fs = require('fs');
+var Contracts = require('./ContractsController');
+
 /**
  * Render pages
  */
@@ -17,10 +19,10 @@ exports.renderRequirements = function(req,res){
     return res.render('hierarchy/requirements');
 };
 exports.renderWitness = function(req,res){
-    return res.render('hierarchy/witness',{pk:req.query.pk, will:req.query.will});
+    return res.render('hierarchy/witness',{pk:req.query.pk, will:req.query.will, network:req.query.network});
 };
 exports.renderHeir = function(req,res){
-    return res.render('hierarchy/heir-detail',{pk: req.query.pk, will: req.query.will});
+    return res.render('hierarchy/heir-detail',{pk: req.query.pk, will: req.query.will, network:req.query.network});
 };
 exports.renderAboutUs = function (req, res) {
     return res.render('hierarchy/about-us');
@@ -41,11 +43,6 @@ exports.sendMail = function (req, res) {
             pass: Config.email.password
         }
     });
-
-
-
-
-
 
     fs.readFile('./app/server/views/email/my-will-email.html', function (err, data) {
         if (err) throw err;
@@ -69,10 +66,6 @@ exports.sendMail = function (req, res) {
             }
         });
     });
-
-
-
-
 };
 
 /**

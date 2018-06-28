@@ -10,30 +10,56 @@ var contract;
 var willAbi;
 var contractReal;
 var willAbiReal;
-var web3 = new Web3(new Web3.providers.HttpProvider(Config.provider));
-web3.eth.personal = new Web3EthPersonal(Config.provider);
 
-var Production = false;
-var urlContractBacktolifeLocal = "../contractBackToLife.json";
-var urlContractHierarchyLocal = "../contractMyWill.json";
-var urlContractBacktolifeTest = "../Production/Ropsten/contractBackToLife.json";
-var urlContractHierarchyTest = "../Production/Ropsten/contractMyWill.json";
-var urlContractBacktolifeReal = "../Production/Main/contractBackToLife.json";
-var urlContractHierarchyReal = "../Production/Main/contractMyWill.json";
+exports.getWeb3 = function(real) {
+    var web3 = new Web3(new Web3.providers.HttpProvider(exports.getProvider(real)));
+    web3.eth.personal = new Web3EthPersonal(exports.getProvider(real));
+    return web3;
+}
+
+exports.getMainAddress = function(real) {
+    if (Config.production) {
+        if (real) return Config.mainAddressReal;
+        else return Config.mainAddressRopsten;
+    } else {
+        if (real) return Config.mainAddressRopsten;
+        else return Config.mainAddressLocal;
+    }
+}
+
+exports.getPrivateKey = function(real) {
+    if (Config.production) {
+        if (real) return Config.mainPrivateKeyReal;
+        else return Config.mainPrivateKeyRopsten;
+    } else {
+        if (real) return Config.mainPrivateKeyRopsten;
+        else return Config.mainPrivateKeyLocal;
+    }
+}
+
+exports.getProvider = function(real) {
+    if (Config.production) {
+        if (real) return Config.providerReal;
+        else return Config.providerRopsten;
+    } else {
+        if (real) return Config.providerRopsten;
+        else return Config.providerLocal;
+    }
+}
 
 exports.getContractBacktoLife = function(real) {
     if (real) {
-        return Production ? urlContractBacktolifeReal : urlContractBacktolifeTest;
+        return Config.production ? Config.urlContractBacktolifeReal : Config.urlContractBacktolifeRopsten;
     } else {
-        return Production ? urlContractBacktolifeTest : urlContractBacktolifeLocal;
+        return Config.production ? Config.urlContractBacktolifeRopsten : Config.urlContractBacktolifeLocal;
     }
 }
 
 exports.getContractMywill = function(real) {
     if (real) {
-        return Production ? urlContractHierarchyReal : urlContractHierarchyTest;
+        return Config.production ? Config.urlContractHierarchyReal : Config.urlContractHierarchyRopsten;
     } else {
-        return Production ? urlContractHierarchyTest : urlContractHierarchyLocal;
+        return Config.production ? Config.urlContractHierarchyRopsten: Config.urlContractHierarchyLocal;
     }
 }
 
@@ -43,6 +69,7 @@ FileSystem.readFile(exports.getContractBacktoLife(false), 'utf8', function (err,
     var config = JSON.parse(data);
     var abi = config.abi;
     var contractAddress = config.address;
+    var web3 = exports.getWeb3(false);
     contract = new web3.eth.Contract(abi,contractAddress);
 });
 FileSystem.readFile(exports.getContractMywill(false), 'utf8', function (err,data) {
@@ -57,6 +84,7 @@ FileSystem.readFile(exports.getContractBacktoLife(true), 'utf8', function (err,d
     var config = JSON.parse(data);
     var abi = config.abi;
     var contractAddress = config.address;
+    var web3 = exports.getWeb3(true);
     contractReal = new web3.eth.Contract(abi,contractAddress);
 });
 FileSystem.readFile(exports.getContractMywill(true), 'utf8', function (err,data) {
@@ -80,19 +108,23 @@ exports.getContract = function(req) {
  */
 exports.getContractsInfo = function (req, res, next) {
     // Read contracts
-    var baseContract = FileSystem.readFileSync(exports.getContractBacktoLife(false));
-    if (!baseContract) return res.redirect("/error");
-    var hierarchyContract = FileSystem.readFileSync(exports.getContractMywill(false));
-    if (!hierarchyContract) return res.redirect("/error");
+    var baseContractTest = FileSystem.readFileSync(exports.getContractBacktoLife(false));
+    if (!baseContractTest) return res.redirect("/error");
+    var hierarchyContractTest = FileSystem.readFileSync(exports.getContractMywill(false));
+    if (!hierarchyContractTest) return res.redirect("/error");
     var baseContractReal = FileSystem.readFileSync(exports.getContractBacktoLife(true));
     if (!baseContractReal) return res.redirect("/error");
     var hierarchyContractReal = FileSystem.readFileSync(exports.getContractMywill(true));
     if (!hierarchyContractReal) return res.redirect("/error");
     res.locals.contracts = {
-        base: JSON.parse(baseContract),
-        hierarchy: JSON.parse(hierarchyContract),
+        baseTest: JSON.parse(baseContractTest),
+        hierarchyTest: JSON.parse(hierarchyContractTest),
         baseReal: JSON.parse(baseContractReal),
         hierarchyReal: JSON.parse(hierarchyContractReal),
+        providerTest: exports.getProvider(false),
+        providerReal: exports.getProvider(true),
+        production: Config.production,
+        captcha: Config.captcha
     };
 
     // Continue
@@ -110,8 +142,10 @@ exports.createWillContract = function (req, res) {
     var recaptcha = req.body.recaptcha;
     req.session.real = req.body.real == "true";
 
-    if(recaptcha === undefined || recaptcha === '' || recaptcha === null) {
-        return res.status(400).send("Please select captcha.");
+    if (Config.captcha) {
+        if (recaptcha === undefined || recaptcha === '' || recaptcha === null) {
+            return res.status(400).send("Please select captcha.");
+        }
     }
 
     if (!owner || !heirs || !percentages || !witnesses) {
@@ -119,31 +153,41 @@ exports.createWillContract = function (req, res) {
     }
 
 
-    // Ether for witnesses
-    var value = witnesses.split(";").length * 0.001;
+    if (Config.captcha) {
+        // recaptcha
+        var secretKey = "6LffzGAUAAAAAGxQl-J2mnFZqVkpQb6-AglNclxv";
+        var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + recaptcha + "&remoteip=" + req.connection.remoteAddress;
 
-    // Demo ether for the smart contract
-    value = value + 0.1;
+        request(verificationUrl, function (error, response, body) {
+            body = JSON.parse(body);
 
-    // recaptcha
-    var secretKey = "6LffzGAUAAAAAGxQl-J2mnFZqVkpQb6-AglNclxv";
-    var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + recaptcha + "&remoteip=" + req.connection.remoteAddress;
+            // Success will be true or false depending upon captcha validation.
+            if (body.success !== undefined && !body.success) {
+                return res.status(400).send("Failed captcha verification");
+            }
 
-    request(verificationUrl,function(error,response,body) {
-        body = JSON.parse(body);
-        // Success will be true or false depending upon captcha validation.
-        if(body.success !== undefined && !body.success) {
-            return res.status(400).send("Failed captcha verification");
-        }
+            return exports.sendTransaction('createLastWill', [owner, heirs, percentages, witnesses], {
+                privateKey: exports.getPrivateKey(req.session.real),
+                from: exports.getMainAddress(req.session.real),
+                req: req
+            }).then(function (lastWillAddress) {
+                return res.status(200).send(lastWillAddress);
+            }).catch(function (err) {
+                return res.status(400).send(err.message);
+            });
 
-        return exports.sendTransaction('createLastWill', [owner,heirs,percentages,witnesses], {privateKey: Config.mainPrivateKey, from: Config.mainAddress, value: value.toString(), req: req}).then(function(lastWillAddress){
+        });
+    } else {
+        return exports.sendTransaction('createLastWill', [owner, heirs, percentages, witnesses], {
+            privateKey: exports.getPrivateKey(req.session.real),
+            from: exports.getMainAddress(req.session.real),
+            req: req
+        }).then(function (lastWillAddress) {
             return res.status(200).send(lastWillAddress);
-        }).catch(function(err){
+        }).catch(function (err) {
             return res.status(400).send(err.message);
         });
-
-    });
-
+    }
 
 
 };
@@ -159,13 +203,14 @@ exports.getWillContracts = async function (req, res) {
         return res.status(400).send("Invalid Params.");
     }
 
-    exports.getContract(req).methods.getContracts(owner).call({from: Config.mainAddress}, async function(err, addressesStr){
+    exports.getContract(req).methods.getContracts(owner).call({from: exports.getMainAddress(req.session.real)}, async function(err, addressesStr){
         if (err) {
             return res.status(400).send(err.message);
         } else {
             var wills = [];
             if (addressesStr.slice(-1) === ";") addressesStr = addressesStr.substring(0, addressesStr.length -1);
             var adrList = addressesStr.split(";");
+            var web3 = exports.getWeb3(req.session.real);
 
             // For each will contract
             for (let willAddress of adrList) {
@@ -173,11 +218,13 @@ exports.getWillContracts = async function (req, res) {
 
                 var lwContract = new web3.eth.Contract(exports.getWillAbi(req),willAddress);
 
-                // var isOwner = await lwContract.methods.isOwner(owner).call({from: Config.mainAddress});
+                // var isOwner = await lwContract.methods.isOwner(owner).call({from: exports.getMainAddress(req.session.real)});
                 var isOwner = true;
-                var balance = web3.utils.fromWei(await lwContract.methods.getBalance().call({from: Config.mainAddress}), 'ether');
-                var witnesses = await lwContract.methods.getWitnesses().call({from: Config.mainAddress});
-                var data = await lwContract.methods.getHeirs().call({from: Config.mainAddress});
+                var balance = web3.utils.fromWei(await lwContract.methods.getBalance().call({from: exports.getMainAddress(req.session.real)}), 'ether');
+                balance = parseFloat(balance).toFixed(5);
+                var witnesses = await lwContract.methods.getWitnesses().call({from: exports.getMainAddress(req.session.real)});
+                var data = await lwContract.methods.getHeirs().call({from: exports.getMainAddress(req.session.real)});
+                var status = await lwContract.methods.getStatus().call({from: exports.getMainAddress(req.session.real)});
 
                 var heirsStr = data[0];
                 var percentStr = data[1];
@@ -196,7 +243,18 @@ exports.getWillContracts = async function (req, res) {
                     });
                 }
 
-                wills.push({address: willAddress, owner: isOwner, heirs: heirs, balance: balance, witnesses: witnesses});
+                //Witnesses
+                var listWitness = [];
+                var witnessesList = witnesses.split(";");
+                for (var i in witnessesList) {
+                    listWitness.push({
+                        address: witnessesList[i],
+                    });
+                }
+
+                var isDead = parseInt(status)==2?true:null;
+
+                wills.push({address: willAddress, owner: isOwner, heirs: heirs, balance: balance, witnesses: listWitness, ownerAddress: owner, status: parseInt(status), isDead: isDead});
             }
             return res.status(200).json(wills);
         }
@@ -206,9 +264,11 @@ exports.getWillContracts = async function (req, res) {
 /**
  * Get Last Will Contract Address
  */
-exports.getLastWillContract = function (owner,contract) {
+exports.getLastWillContract = function (owner,req) {
     return new Promise(async function (resolve, reject) {
-        contract.methods.getContracts(owner).call({from: Config.mainAddress}, function (err, addressesStr) {
+        var contract = exports.getContract(req);
+        var mainAddress = exports.getMainAddress(req.session.real);
+        contract.methods.getContracts(owner).call({from: mainAddress}, function (err, addressesStr) {
             if (err) return reject(err);
 
             // Empty
@@ -236,10 +296,7 @@ exports.sendTransaction = function (functionName, parameters, options) {
             if (!options.from || !options.privateKey) {
                 reject(false);
             }
-            var value = "0x00";
-            if (options.value) {
-                value = web3.utils.toHex( web3.utils.toWei(options.value, 'ether') );
-            }
+            var web3 = exports.getWeb3(options.req.session.real);
 
             // Get data by params
             if (parameters === null) {
@@ -266,12 +323,12 @@ exports.sendTransaction = function (functionName, parameters, options) {
             tx.sign(privateKey);
 
             // Get Last contract address
-            var lastWillAddress = await exports.getLastWillContract(parameters[0],contract);
+            var lastWillAddress = await exports.getLastWillContract(parameters[0],options.req);
 
             // Send transaction
             var serializedTx = tx.serialize();
             web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).on('confirmation', async function (number, receipt){
-                var currentLastWillAddress = await exports.getLastWillContract(parameters[0],contract);
+                var currentLastWillAddress = await exports.getLastWillContract(parameters[0],options.req);
                 if (lastWillAddress !== currentLastWillAddress) {
                     return resolve(currentLastWillAddress);
                 }

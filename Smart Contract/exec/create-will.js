@@ -22,8 +22,8 @@ module.exports = async function(callback) {
         var myWillAddresses = strAddresses.split(';');
         var myWillAddress = myWillAddresses[myWillAddresses.length -1];
 
-        console.log("Owner: " + owner);
-        console.log("Address: " + myWillAddress);
+        // console.log("Owner: " + owner);
+        // console.log("Address: " + myWillAddress);
 
     });
 

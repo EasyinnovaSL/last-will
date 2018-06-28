@@ -49,10 +49,8 @@ My Wills
                             <div class="input-group-btn" style="display: flex;justify-content: center;">
                                 <div class="mbr-section-btn"><a onclick="addRowGeneric()" class="btn btn-md btn-secondary display-4" style="    padding: 10px;"><span class="mbri-plus"></span></a></div>
                             </div>
-                            <div class="row">
-
-                                <div class="g-recaptcha col-md-4 offset-md-4" data-sitekey="6LffzGAUAAAAAAD0UhJuWZvnbMtlTZxM2WXBkQUP"></div>
-
+                            <div class="row" id="rowCaptcha">
+                                <div class="g-recaptcha col-md-4 offset-md-4" data-sitekey="6LffzGAUAAAAAAD0UhJuWZvnbMtlTZxM2WXBkQUP" style="width: auto; margin-left: auto; margin-right: auto;"></div>
                             </div>
 
                             <div class="row">
@@ -100,7 +98,7 @@ My Wills
                     </div>
                 </div>
 
-                <div class="wills-container">
+                <div class="wills-container" style="margin-bottom: 10px;">
 
                 </div>
             </div>
@@ -108,7 +106,179 @@ My Wills
 
     </div>
 
+    <!-- Send Modal HTML -->
+    <div id="SendModal" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog modal-lg modal-confirm modal-info">
+            <div class="modal-content">
+                <div class="modal-header" style="padding: 20px;">
+                    <h5 style="color: white; margin: 0;">Withdraw Ether</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body" style="padding: 1rem 0 0 0;">
+                    <div class="input-group">
+                        <input type="text" name="max" style="display: none;">
+                        <div class="form-group">
+                            <label class="card-title display-5" style="margin: 0;">Destination Address:</label>
+                            <input type="text" class="form-control" style="padding: 0px 0px 0px 10px; line-height: 23px; font-size: 14px;background: white;" placeholder="0x (hexadecimal)" name="to">
+                        </div>
+                        <div class="form-group">
+                            <label class="card-title display-5" style="margin: 0;">Amount:</label>
+                            <input type="text" class="form-control" style="background: white; padding: 0px 0px 0px 10px;line-height: 23px;font-size: 14px;" aria-label="Amount (to the nearest dollar)" value="" name="value">
+                        </div>
+                        <div class="text-center" style="width: 100%;">
+                            <button class="btn btn-success generate">
+                                <span>Generate Transaction</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="generate-group">
+                        <p style="margin: 0;">With the owner account:</p>
+                        <div class="ellipsis-div">
+                            <div class="full">
+                                <strong name="owner"></strong>
+                            </div>
+                            <div class="end">
+                                <strong name="ownerEnd"></strong>
+                            </div>
+                        </div>
+
+                        <p style="margin: 0;">Send <strong>0</strong> Eth to MyWill Smart Contract:</p>
+                        <div class="ellipsis-div" onclick="copyToClipBoard(this);" data-text="" name="addressCopy">
+                            <div class="full">
+                                <strong name="address"></strong>
+                            </div>
+                            <div class="end">
+                                <strong name="addressEnd"></strong>
+                                <i class="fa fa-clipboard" style="margin-left: 8px;"></i>
+                            </div>
+                        </div>
+
+                        <p style="margin: 0;">With the extra data field:</p>
+                        <div class="ellipsis-div" onclick="copyToClipBoard(this);" data-text="" name="dataCopy">
+                            <div class="full">
+                                <strong name="data"></strong>
+                            </div>
+                            <div class="end">
+                                <i class="fa fa-clipboard" style="margin-left: 8px;"></i>
+                            </div>
+                        </div>
+
+                        <p>Also change the Gas Limit to <strong>70.000</strong>, because this transaction is a contract call.</p>
+
+                        <p style="margin: 0;"><i>* You can copy the values by clicking on them</i></p>
+
+                        <!--Button-->
+                        <div class="text-center">
+                            <button class="btn btn-success" data-dismiss="modal">
+                                <span>Done</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposit Modal HTML -->
+    <div id="DepositModal" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog modal-lg modal-confirm modal-info">
+            <div class="modal-content">
+                <div class="modal-header" style="padding: 20px;">
+                    <h5 style="color: white; margin: 0;">Deposit Ether</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body text-justify" style="padding: 1rem 0 0 0;">
+                    <div class="first-time">
+                        <p style="margin: 0;">The first time, a fee of <strong name="fee"></strong> will be applied.</p>
+                        <a href="javascript:void(0)" data-toggle="collapse" data-target="#fees-extended" class="fee-details">Show Fee Details</a>
+                        <div id="fees-extended" class="collapse">
+                            The first time you deposit ether, a little fee will be applied for cover the Smart Contract creation and the witnesses actions cost:
+                            <ul style="margin: 0;">
+                                <li><strong>0.005</strong> For the contract creation</li>
+                                <li><strong>0.001</strong> For each witness</li>
+                            </ul>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="content-real">
+                        <p style="margin: 0;">Send some Ether to the next address, using either an exchanger or an Ethereum Wallet:</p>
+                        <div class="ellipsis-div" onclick="copyToClipBoard(this);" data-text="" name="addressCopy">
+                            <div class="full">
+                                <strong name="address"></strong>
+                            </div>
+                            <div class="end">
+                                <strong name="addressEnd"></strong>
+                                <i class="fa fa-clipboard" style="margin-left: 8px;"></i>
+                            </div>
+                        </div>
+                        <p style="margin: 0;">Set the Gas Limit to:</p>
+                        <div class="ellipsis-div" onclick="copyToClipBoard(this);" data-text="" name="limitCopy">
+                            <div class="full">
+                                <strong name="limit"></strong>
+                                <i class="fa fa-clipboard" style="margin-left: 8px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-ropsten">
+                        <p style="margin: 0;">Send <strong>ROPSTEN</strong> Ether to the next address:</p>
+                        <div class="ellipsis-div" onclick="copyToClipBoard(this);" data-text="" name="addressCopy">
+                            <div class="full">
+                                <strong name="address"></strong>
+                            </div>
+                            <div class="end">
+                                <strong name="addressEnd"></strong>
+                                <i class="fa fa-clipboard" style="margin-left: 8px;"></i>
+                            </div>
+                        </div>
+                        <p style="margin: 0;">Set the Gas Limit to:</p>
+                        <div class="ellipsis-div" onclick="copyToClipBoard(this);" data-text="" name="limitCopy">
+                            <div class="full">
+                                <strong name="limit"></strong>
+                                <i class="fa fa-clipboard" style="margin-left: 8px;"></i>
+                            </div>
+                        </div>
+                        <hr>
+                        <p>Also, in the TestNet, you can use the <a target="_blank" href="http://faucet.ropsten.be:3001">Ropsten official faucet</a></p>
+                    </div>
+
+                    <div class="text-center" style="width: 100%;">
+                        <button class="btn btn-success" data-dismiss="modal">
+                            <span>Done!</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </section>
+
+
+
+<!-- The Modal -->
+<div class="modal fade" id="myAddressModal" style="padding: 10px;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header" style="background: #3acaea; color: white;">
+                <h4 class="modal-title">Address</h4>
+                <button type="button" class="close" data-dismiss="modal" style="font-size: 32px;">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body text-center" style="word-wrap: break-word;"></div>
+
+        </div>
+    </div>
+</div>
+
+
+
 
 <script src="/js/contracts.js"></script>
 <script src="/js/will.js"></script>
@@ -144,7 +314,7 @@ My Wills
                         <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as an heir on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email">
                             <i class="fas fa-envelope-square" style="color: grey"></i>
                         </a>
-                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copy to clipboard!">
+                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!">
                             <i class="fas fa-clipboard" style="color: deepskyblue; font-size: 40px;"></i>
                         </a>
                     </div>
@@ -169,7 +339,7 @@ My Wills
                         <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as a witness on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email">
                             <i class="fas fa-envelope-square" style="color: grey"></i>
                         </a>
-                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copy to clipboard!">
+                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!">
                             <i class="fas fa-clipboard" style="color: deepskyblue; font-size: 40px;"></i>
                         </a>
                     </div>
@@ -213,7 +383,7 @@ My Wills
                 </div>
                 <div class="card-body">
 
-                    <div class="row">
+                    <div class="row" style="margin-bottom: 10px;">
                         <div class="col-md-6">
                             <div class="row">
                                 <div class="col-md-12">
@@ -222,11 +392,25 @@ My Wills
                             </div>
                             {{#heirs}}
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <p class="card-text">
-                                            <i class="fa fa-dollar-sign"></i> <span style="margin-right: 10px;">{{percentage}}%</span>
-                                            <i class="fa fa-user"></i> <span style="margin-right: 10px;">{{address}}</span>
-                                        </p>
+                                    <div class="col-md-12 d-none d-sm-block">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <i class="fa fa-dollar-sign"></i> <span style="margin-right: 10px;">{{percentage}}%</span>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <i class="fa fa-user"></i> <span style="margin-right: 10px;">{{address}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 d-sm-none" style="margin:  0 auto; margin-top: 5px;">
+                                                <span class="btn btn-sm btn-light" href="javascript:void(0)" style="margin: 0; font-size: 16px !important;">
+                                                     <i class="fa fa-dollar-sign"></i> &nbsp; {{percentage}}%
+                                                </span>
+
+                                                <a class="btn btn-sm btn-light show-witness-address" href="javascript:void(0)" style="margin: 0; font-size: 16px !important;" data-toggle="modal" data-target="#myAddressModal" onclick="updateAddressModal('{{address}}');">
+                                                    <i class="fa fa-user"></i> &nbsp; Address
+                                                </a>
                                     </div>
                                 </div>
                             {{/heirs}}
@@ -239,40 +423,50 @@ My Wills
                             </div>
                             {{#witnesses}}
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-12 d-none d-sm-block">
                                         <p class="card-text">
                                             <i class="fa fa-user"></i> {{address}}
                                         </p>
+                                    </div>
+                                    <div class="col-xs-12 d-sm-none" style="margin:  0 auto; margin-top: 5px;">
+                                        <a class="btn btn-sm btn-light show-witness-address" href="javascript:void(0)" style="margin: 0; font-size: 16px !important;" data-toggle="modal" data-target="#myAddressModal" onclick="updateAddressModal('{{address}}');">
+                                            <i class="fa fa-user"></i> &nbsp; Address
+                                        </a>
                                     </div>
                                 </div>
                             {{/witnesses}}
                         </div>
                     </div>
+
+                    <!-- EtherScan -->
+                    <div class="row">
+                        <div class="col-md-12" style="margin-top: 5px;">
+                             <a href="https://etherscan.io/address/{{address}}" class="etherscan" target="_blank"><img src="assets/images/EtherscanLogo.png" alt="" title="" width="20"> Check your contract in EtherScan</a>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="card-footer">
-                    {{#owner}}
+                    {{#isDead}}
                         <!-- Owner actions -->
                         <div class="row">
-                            <div class="input-group col-md-6">
-                                <div class="input-group-prepend">
-                                    <button class="btn btn-secondary btn-form display-4 btn-sm send" data-address="{{address}}" type="button" style="margin:0px">Deposit Ether</button>
-                                </div>
-                                <!--<input type="text" class="form-control" name="value-{{address}}" placeholder="0.00" aria-label="" aria-describedby="basic-addon1">-->
-                                <!--<div class="input-group-append">-->
-                                    <!--<button class="btn btn-sm btn-outline-secondary withdraw" data-address="{{address}}" type="button"  style="margin:0px">Withdraw</button>-->
-                                <!--</div>-->
+                            <div class="input-group col-md-12">
+                                <span style="color:gray">This contract is exhausted. No actions can be taken on it</span>
                             </div>
-                            <div class="col-md-3"></div>
-                            <div class="col-md-3"></div>
                         </div>
-                    {{/owner}}
-                    {{^owner}}
-                        <!-- Hier actions -->
-                        <!--<button class="btn btn-sm btn-primary declare-dead" data-address="{{address}}">-->
-                            <!--Declare as dead-->
-                        <!--</button>-->
-                    {{/owner}}
+                    {{/isDead}}
+                    {{^isDead}}
+                        <!-- Owner actions -->
+                        <div class="row">
+                            <div class="input-group col-lg-3 col-md-4 col-xs-12">
+                                <button class="btn btn-secondary btn-form display-4 btn-sm deposit" data-address="{{address}}" data-count="{{witnesses.length}}" data-status="{{status}}" type="button" style="margin:0px; width: 100%; margin-top: 10px;">Deposit Ether</button>
+                            </div>
+                            <div class="input-group col-lg-3 col-md-4 col-xs-12 mt-xs-5">
+                                <button class="btn btn-secondary btn-form display-4 btn-sm withdraw" data-owner="{{ownerAddress}}" data-address="{{address}}" data-balance="{{balance}}" type="button"  style="margin:0px; width: 100%; margin-top: 10px;">Withdraw Ether</button>
+                            </div>
+                        </div>
+                    {{/isDead}}
                 </div>
             </div>
         </div>
@@ -281,6 +475,16 @@ My Wills
 
 </script>
 <style>
+
+
+    #myAddressModal .modal-dialog {
+        -webkit-transform: translate(0,-50%);
+        -o-transform: translate(0,-50%);
+        transform: translate(0,-50%);
+        top: 50%;
+        margin: 0 auto;
+        margin: 10px;
+    }
 
     @media (max-width: 767px) {
         .g-recaptcha {
@@ -343,31 +547,80 @@ My Wills
 
         border-radius: .25rem;
     }
+
+    .ellipsis-div {
+        width: auto;
+        max-width: 100%;
+        padding: 2px 10px;
+        background-color: #dedede;
+        color: #5d5d5d;
+        display:inline-flex;
+        flex-wrap:nowrap;
+        border-radius: 5px;
+        margin-bottom: 1rem;
+    }
+    .ellipsis-div > .full {
+        flex: 0 1 content;
+        text-overflow: ellipsis;
+        overflow:hidden;
+        white-space:nowrap;
+    }
+    .ellipsis-div > .end {
+        flex: 1 0 content;
+        white-space:nowrap;
+    }
 </style>
+
 
 <script>
 
-    $(document).ready(function () {
+
+    function updateAddressModal(userAddress){
+        $('#myAddressModal div.modal-body').html(String(userAddress));
+    }
+
+    function loadWills() {
         // Load wills plugin
-        var will = new MyWills({contract: getBaseContract(contracts), hierarchy: getHierarchyContract(contracts)});
+        var will = new MyWills({contract: getBaseContract(), hierarchy: getHierarchyContract()});
 
         // Load Previous Last Will
         var jsonWill = localStorage.getItem("lastwill");
         if (jsonWill) {
             will.renderLastWill(JSON.parse(jsonWill));
         }
+    }
+
+    $(document).ready(function () {
+        // Load wills
+        loadWills();
 
         $("#chkTestReal").change(function() {
             var nettype = "test";
             if ($(this).is(":checked")) nettype = "real";
-            var oldval = localStorage.getItem("contractType");
-            localStorage.setItem("contractType",nettype);
-            if (oldval != nettype) location.reload();
+            var oldval = localStorage.getItem("network");
+            localStorage.setItem("network",nettype);
+            if (oldval != nettype) {
+                //location.reload();
+                loadWills();
+            }
         });
 
-        if (localStorage.getItem("contractType") == "real") {
+        if (localStorage.getItem("network") == "real") {
             $("#chkTestReal").bootstrapToggle('on');
         }
+
+        $('.fee-details').click(function(){
+            $(this).text(function(i,old){
+                var show = "Show Fee Details";
+                var hide = "Hide Fee Details";
+                return old === show ? hide : show;
+            });
+        });
+
+        if (!contracts.captcha) {
+            $("#rowCaptcha").hide();
+        }
+
     });
 
 </script>
