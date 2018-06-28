@@ -408,8 +408,7 @@ My Wills
                     <!-- EtherScan -->
                     <div class="row">
                         <div class="col-md-12" style="margin-top: 5px;">
-                             <a href="https://etherscan.io/address/{{address}}" target="_blank"><img src="assets/images/EtherscanLogo.png" alt="" title="" width="20"> Check your contract in EtherScan</a>
-
+                             <a href="https://etherscan.io/address/{{address}}" class="etherscan" target="_blank"><img src="assets/images/EtherscanLogo.png" alt="" title="" width="20"> Check your contract in EtherScan</a>
                         </div>
                     </div>
 
@@ -544,9 +543,6 @@ My Wills
     function updateAddressModal(userAddress){
         $('#myAddressModal div.modal-body').html(String(userAddress));
     }
-
-
-
 
     $(document).ready(function () {
         // Load wills plugin

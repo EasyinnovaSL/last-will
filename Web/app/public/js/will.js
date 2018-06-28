@@ -221,6 +221,16 @@ MyWills.prototype._listWills = function (forcedAddress = null) {
             Mustache.parse(template);   // optional, speeds up future uses
             var rendered = Mustache.render(template, {'wills': wills});
             $('.wills-container').html(rendered);
+
+            //Select the correct etherscan URL
+            var isRealNetwork = realContractSelected();
+
+            if(!isRealNetwork){
+                $("a.etherscan").each(function (index, value) {
+                    $(this).attr('href', $(this).attr('href').replace("https://etherscan.io/", "https://ropsten.etherscan.io/"));
+                });
+            }
+
         } else {
             $('.wills-container').html("");
         }
