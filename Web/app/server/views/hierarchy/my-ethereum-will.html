@@ -49,10 +49,8 @@ My Wills
                             <div class="input-group-btn" style="display: flex;justify-content: center;">
                                 <div class="mbr-section-btn"><a onclick="addRowGeneric()" class="btn btn-md btn-secondary display-4" style="    padding: 10px;"><span class="mbri-plus"></span></a></div>
                             </div>
-                            <div class="row">
-
+                            <div class="row" id="rowCaptcha">
                                 <div class="g-recaptcha col-md-4 offset-md-4" data-sitekey="6LffzGAUAAAAAAD0UhJuWZvnbMtlTZxM2WXBkQUP" style="width: auto; margin-left: auto; margin-right: auto;"></div>
-
                             </div>
 
                             <div class="row">
@@ -560,25 +558,33 @@ My Wills
         $('#myAddressModal div.modal-body').html(String(userAddress));
     }
 
-    $(document).ready(function () {
+    function loadWills() {
         // Load wills plugin
-        var will = new MyWills({contract: getBaseContract(contracts), hierarchy: getHierarchyContract(contracts)});
+        var will = new MyWills({contract: getBaseContract(), hierarchy: getHierarchyContract()});
 
         // Load Previous Last Will
         var jsonWill = localStorage.getItem("lastwill");
         if (jsonWill) {
             will.renderLastWill(JSON.parse(jsonWill));
         }
+    }
+
+    $(document).ready(function () {
+        // Load wills
+        loadWills();
 
         $("#chkTestReal").change(function() {
             var nettype = "test";
             if ($(this).is(":checked")) nettype = "real";
-            var oldval = localStorage.getItem("contractType");
-            localStorage.setItem("contractType",nettype);
-            if (oldval != nettype) location.reload();
+            var oldval = localStorage.getItem("network");
+            localStorage.setItem("network",nettype);
+            if (oldval != nettype) {
+                //location.reload();
+                loadWills();
+            }
         });
 
-        if (localStorage.getItem("contractType") == "real") {
+        if (localStorage.getItem("network") == "real") {
             $("#chkTestReal").bootstrapToggle('on');
         }
 
@@ -589,6 +595,11 @@ My Wills
                 return old === show ? hide : show;
             });
         });
+
+        if (!contracts.captcha) {
+            $("#rowCaptcha").hide();
+        }
+
     });
 
 </script>

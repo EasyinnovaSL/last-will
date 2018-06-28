@@ -1,6 +1,6 @@
 module.exports = {
     production: false,
-    captcha: true,
+    captcha: false,
 
     // Real
     mainPrivateKeyReal: "0x645a8e4cd9fbae14668ddae997bc72a27f052f1727657f3f86a1a9cf1beec400",
@@ -9,12 +9,12 @@ module.exports = {
     urlContractBacktolifeReal: "../Production/Main/contractBackToLife.json",
     urlContractHierarchyReal: "../Production/Main/contractMyWill.json",
 
-    // Rinkeby
+    // Rinkeby (not used)
     mainPrivateKeyRinkeby: "0x645a8e4cd9fbae14668ddae997bc72a27f052f1727657f3f86a1a9cf1beec400",
     mainAddressRinkeby: "0x3bdec9a3d0378738a36bc484d234bdd035072a7a",
     providerRinkeby: "https://rinkeby.infura.io/VzAp7t8qZU2Sn4vuyupa",
-    urlContractBacktolifeRinkeby: "../Production/Ropsten/contractBackToLife.json",
-    urlContractHierarchyRinkeby: "../Production/Ropsten/contractMyWill.json",
+    urlContractBacktolifeRinkeby: "../Production/Rinkeby/contractBackToLife.json",
+    urlContractHierarchyRinkeby: "../Production/Rinkeby/contractMyWill.json",
 
     // Ropsten
     mainPrivateKeyRopsten: "0x645a8e4cd9fbae14668ddae997bc72a27f052f1727657f3f86a1a9cf1beec400",

@@ -110,7 +110,9 @@ Heir
 
     $(document).ready(function () {
 
-        localWeb3 = new Web3(new Web3.providers.HttpProvider(Config.provider));
+        loadNetwork('<%- network %>');
+
+        localWeb3 = new Web3(new Web3.providers.HttpProvider(getProvider()));
 
         var privateKey = "<%- pk %>";
         var willAddress = "<%- will %>";
@@ -123,7 +125,7 @@ Heir
             account = localWeb3.eth.accounts.privateKeyToAccount(privateKey);
             heirAddress = account.address;
 
-            var contract = new localWeb3.eth.Contract( getHierarchyContract(contracts).abi, willAddress);
+            var contract = new localWeb3.eth.Contract( getHierarchyContract().abi, willAddress);
 
             contract.methods.getStatus().call(function(err, status){
                 if (err) return reject(err);

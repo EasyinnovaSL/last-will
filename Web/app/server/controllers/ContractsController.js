@@ -108,19 +108,23 @@ exports.getContract = function(req) {
  */
 exports.getContractsInfo = function (req, res, next) {
     // Read contracts
-    var baseContract = FileSystem.readFileSync(exports.getContractBacktoLife(false));
-    if (!baseContract) return res.redirect("/error");
-    var hierarchyContract = FileSystem.readFileSync(exports.getContractMywill(false));
-    if (!hierarchyContract) return res.redirect("/error");
+    var baseContractTest = FileSystem.readFileSync(exports.getContractBacktoLife(false));
+    if (!baseContractTest) return res.redirect("/error");
+    var hierarchyContractTest = FileSystem.readFileSync(exports.getContractMywill(false));
+    if (!hierarchyContractTest) return res.redirect("/error");
     var baseContractReal = FileSystem.readFileSync(exports.getContractBacktoLife(true));
     if (!baseContractReal) return res.redirect("/error");
     var hierarchyContractReal = FileSystem.readFileSync(exports.getContractMywill(true));
     if (!hierarchyContractReal) return res.redirect("/error");
     res.locals.contracts = {
-        base: JSON.parse(baseContract),
-        hierarchy: JSON.parse(hierarchyContract),
+        baseTest: JSON.parse(baseContractTest),
+        hierarchyTest: JSON.parse(hierarchyContractTest),
         baseReal: JSON.parse(baseContractReal),
         hierarchyReal: JSON.parse(hierarchyContractReal),
+        providerTest: exports.getProvider(false),
+        providerReal: exports.getProvider(true),
+        production: Config.production,
+        captcha: Config.captcha
     };
 
     // Continue
@@ -177,7 +181,6 @@ exports.createWillContract = function (req, res) {
         return exports.sendTransaction('createLastWill', [owner, heirs, percentages, witnesses], {
             privateKey: exports.getPrivateKey(req.session.real),
             from: exports.getMainAddress(req.session.real),
-            value: value.toString(),
             req: req
         }).then(function (lastWillAddress) {
             return res.status(200).send(lastWillAddress);
