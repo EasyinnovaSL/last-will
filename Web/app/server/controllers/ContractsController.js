@@ -196,7 +196,17 @@ exports.getWillContracts = async function (req, res) {
                     });
                 }
 
-                wills.push({address: willAddress, owner: isOwner, heirs: heirs, balance: balance, witnesses: witnesses});
+                //Witnesses
+                var listWitness = [];
+                var witnessesList = witnesses.split(";");
+                for (var i in witnessesList) {
+                    listWitness.push({
+                        address: witnessesList[i],
+                    });
+                }
+
+
+                wills.push({address: willAddress, owner: isOwner, heirs: heirs, balance: balance, witnesses: listWitness});
             }
             return res.status(200).json(wills);
         }
