@@ -218,6 +218,7 @@ exports.getWillContracts = async function (req, res) {
                 // var isOwner = await lwContract.methods.isOwner(owner).call({from: exports.getMainAddress(req.session.real)});
                 var isOwner = true;
                 var balance = web3.utils.fromWei(await lwContract.methods.getBalance().call({from: exports.getMainAddress(req.session.real)}), 'ether');
+                balance = parseFloat(balance).toFixed(5);
                 var witnesses = await lwContract.methods.getWitnesses().call({from: exports.getMainAddress(req.session.real)});
                 var data = await lwContract.methods.getHeirs().call({from: exports.getMainAddress(req.session.real)});
 

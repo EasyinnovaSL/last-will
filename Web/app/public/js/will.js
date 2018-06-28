@@ -2,6 +2,7 @@ function MyWills(options) {
     jQuery.extend(options, self.options);
     this.lastwill = JSON.parse(localStorage.getItem("lastwill")) || {witness:[],heirs:[],address:''};
     this.confirmationsNeeded = 2;
+    this.lastListOwnerValue = "";
 
     // Buttons Events
     $('#new-will').submit($.proxy(this._saveWill, this));
@@ -16,9 +17,10 @@ function MyWills(options) {
 
     // list Wills input
     $("#listOwner").on('keyup', function(event){
-        if (!event.ctrlKey) {
+        if (!event.ctrlKey &&  this.lastListOwnerValue != $(event.target).val()) {
             var web3 = new Web3();
             var address = $(event.target).val();
+            this.lastListOwnerValue = address;
             if (web3.utils.isAddress(address)) {
                 localStorage.setItem("address", address);
                 this._listWills(address);
@@ -259,6 +261,16 @@ MyWills.prototype._listWills = function (forcedAddress = null) {
             Mustache.parse(template);   // optional, speeds up future uses
             var rendered = Mustache.render(template, {'wills': wills});
             $('.wills-container').html(rendered);
+
+            //Select the correct etherscan URL
+            var isRealNetwork = realContractSelected();
+
+            if(!isRealNetwork){
+                $("a.etherscan").each(function (index, value) {
+                    $(this).attr('href', $(this).attr('href').replace("https://etherscan.io/", "https://ropsten.etherscan.io/"));
+                });
+            }
+
         } else {
             $('.wills-container').html("");
         }
