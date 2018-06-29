@@ -2952,13 +2952,13 @@ ul.social-buttons li {
 }
 
 ul.social-buttons li a {
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   display: block;
   border-radius: 50px;
   text-decoration: none;
   font-size: 30px;
-  line-height: 60px;
+  line-height: 35px;
   color: white;
 }
 
