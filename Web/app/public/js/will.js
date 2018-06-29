@@ -1,5 +1,6 @@
 function getLastWill() {
-    var lastWillObject = localStorage.getItem("lastwill");
+    var networkId = getNetworkId();
+    var lastWillObject = localStorage.getItem("lastwill"+networkId);
     if (lastWillObject) {
         var lastWill = JSON.parse(lastWillObject);
         var timestamp = lastWill.timestamp;
@@ -7,7 +8,7 @@ function getLastWill() {
         var now = new Date().getTime();
         var h = 1;
         if (now > timestamp + (h*60*60*1000)) {
-            localStorage.removeItem("lastwill");
+            localStorage.removeItem("lastwill"+networkId);
         } else {
             return jsonWill;
         }
@@ -16,14 +17,20 @@ function getLastWill() {
 }
 
 function setLastWill(lastwill) {
+    var networkId = getNetworkId();
     var object = {value: lastwill, timestamp: new Date().getTime()}
-    localStorage.setItem("lastwill", JSON.stringify(object));
+    localStorage.setItem("lastwill"+networkId, JSON.stringify(object));
+}
+
+function removeLastWill() {
+    var networkId = getNetworkId();
+    localStorage.removeItem("lastwill"+networkId);
 }
 
 function MyWills(options) {
     jQuery.extend(options, self.options);
-    var lastwill = getLastWill();
-    this.lastwill = lastwill || {witness:[],heirs:[],address:''};
+    var _lastwill = getLastWill();
+    this.lastwill = _lastwill || {witness:[],heirs:[],address:''};
     this.confirmationsNeeded = 2;
     this.lastListOwnerValue = "";
 
@@ -66,7 +73,7 @@ function MyWills(options) {
     }
 
     // Load Previous Last Will
-    if (lastwill) {
+    if (_lastwill) {
         this.renderLastWill(this.lastwill);
         $("#last-will-links").show();
         $("#new-will-form").hide();
@@ -116,7 +123,7 @@ MyWills.prototype._depositWill = function (event) {
 MyWills.prototype._showNewWillForm = function(event) {
     $("#new-will-form").show();
     $("#last-will-links").hide();
-    // TODO remove last will form coockie / session
+    removeLastWill();
 };
 
 MyWills.prototype._withdrawWill = function (event) {
@@ -289,8 +296,10 @@ MyWills.prototype._generateLinks = function (lastwill,address) {
     $('#OkModal .btn-success').show();
     $('#OkModal .close').show();
     this.renderLastWill();
-    this._listWills();
+    $("#last-will-links").show();
+    $("#new-will-form").hide();
 
+    this._listWills();
 
 };
 
