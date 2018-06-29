@@ -652,10 +652,6 @@ a:hover {
 .form-control > .mbr-iconfont {
   font-size: 1.76rem;
 }
-.form-control,
-.form-control:focus {
-  border: 1px solid #e8e8e8;
-}
 .form-active .form-control:invalid {
   border-color: red;
 }
