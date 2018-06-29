@@ -313,7 +313,7 @@ exports.sendTransaction = function (functionName, parameters, options) {
             var nonce = await web3.eth.getTransactionCount(options.from);
             var rawTx = {
                 nonce: web3.utils.toHex(nonce),
-                gasPrice: web3.utils.toHex(1000000000), // 1GWei
+                gasPrice: web3.utils.toHex(3000000000), // 3GWei
                 gasLimit: web3.utils.toHex(2000000),
                 to: contract._address,
                 value: 0x00,
