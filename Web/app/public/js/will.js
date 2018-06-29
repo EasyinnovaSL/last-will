@@ -1,6 +1,36 @@
+function getLastWill() {
+    var networkId = getNetworkId();
+    var lastWillObject = localStorage.getItem("lastwill"+networkId);
+    if (lastWillObject) {
+        var lastWill = JSON.parse(lastWillObject);
+        var timestamp = lastWill.timestamp;
+        var jsonWill = lastWill.value;
+        var now = new Date().getTime();
+        var h = 1;
+        if (now > timestamp + (h*60*60*1000)) {
+            localStorage.removeItem("lastwill"+networkId);
+        } else {
+            return jsonWill;
+        }
+    }
+    return null;
+}
+
+function setLastWill(lastwill) {
+    var networkId = getNetworkId();
+    var object = {value: lastwill, timestamp: new Date().getTime()}
+    localStorage.setItem("lastwill"+networkId, JSON.stringify(object));
+}
+
+function removeLastWill() {
+    var networkId = getNetworkId();
+    localStorage.removeItem("lastwill"+networkId);
+}
+
 function MyWills(options) {
     jQuery.extend(options, self.options);
-    this.lastwill = JSON.parse(localStorage.getItem("lastwill")) || {witness:[],heirs:[],address:''};
+    var _lastwill = getLastWill();
+    this.lastwill = _lastwill || {witness:[],heirs:[],address:''};
     this.confirmationsNeeded = 2;
     this.lastListOwnerValue = "";
 
@@ -8,10 +38,15 @@ function MyWills(options) {
     $('#new-will').submit($.proxy(this._saveWill, this));
     $('.wills-container').on('click','button.deposit',$.proxy(this._depositWill,this));
     $('.wills-container').on('click','button.withdraw',$.proxy(this._withdrawWill,this));
-    // $('.wills-container').on('click','button.withdraw',$.proxy(this._withdrawWill,this));
 
-    // Refresh wills when InfoModal is hidden
+    // Refresh wills when InfoModal, SendModal and WithdrawModal is hidden
     $('#InfoModal').on('hidden.bs.modal', function () {
+        this._listWills();
+    }.bind(this));
+    $('#SendModal').on('hidden.bs.modal', function () {
+        this._listWills();
+    }.bind(this));
+    $('#DepositModal').on('hidden.bs.modal', function () {
         this._listWills();
     }.bind(this));
 
@@ -35,6 +70,16 @@ function MyWills(options) {
     if (savedAddress !== null) {
         $("#listOwner").val(savedAddress);
         this._listWills(savedAddress);
+    }
+
+    // Load Previous Last Will
+    if (_lastwill) {
+        this.renderLastWill(this.lastwill);
+        $("#last-will-links").show();
+        $("#new-will-form").hide();
+    } else {
+        $("#last-will-links").hide();
+        $("#new-will-form").show();
     }
 }
 
@@ -75,6 +120,11 @@ MyWills.prototype._depositWill = function (event) {
     modal.modal('show');
 };
 
+MyWills.prototype._showNewWillForm = function(event) {
+    $("#new-will-form").show();
+    $("#last-will-links").hide();
+    removeLastWill();
+};
 
 MyWills.prototype._withdrawWill = function (event) {
     var contractAddress = $(event.target).data('address');
@@ -239,14 +289,18 @@ MyWills.prototype._generateLinks = function (lastwill,address) {
     }.bind(this));
 
     this.lastwill = lastwill;
-    localStorage.setItem("lastwill", JSON.stringify(this.lastwill));
+    setLastWill(lastwill);
 
     // Final render
-    $('#OkModal p').html("Last Will created successfully!");
+    $('#OkModal p').html("Last Will created successfully!<br><strong>Make sure to send the generated links or backup them.</strong>");
     $('#OkModal .btn-success').show();
     $('#OkModal .close').show();
     this.renderLastWill();
+    $("#last-will-links").show();
+    $("#new-will-form").hide();
+
     this._listWills();
+
 };
 
 MyWills.prototype._listWills = function (forcedAddress = null) {
@@ -351,6 +405,7 @@ MyWills.prototype.renderLastWill = function () {
     $('#last-will-links').html(rendered);
     $('[data-toggle="tooltip"]').tooltip();
     $('#send-email').click($.proxy(this._sendMail,this));
+    $('#create-new-last-will').on('click', $.proxy(this._showNewWillForm,this));
 };
 
 MyWills.prototype.checkIfAllIn = function () {
