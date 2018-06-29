@@ -1282,7 +1282,7 @@ pre {
 html,
 body {
   height: auto;
-  min-height: 100vh;
+  background-color: #232323;
 }
 .dropup .dropdown-toggle::after {
   display: none;
