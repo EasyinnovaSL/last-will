@@ -19,47 +19,47 @@ exports.getWeb3 = function(real) {
 
 exports.getMainAddress = function(real) {
     if (Config.production) {
-        if (real) return Config.mainAddressReal;
-        else return Config.mainAddressRopsten;
+        if (real) return Config.main.address;
+        else return Config.ropsten.address;
     } else {
-        if (real) return Config.mainAddressRopsten;
-        else return Config.mainAddressLocal;
+        if (real) return Config.ropsten.address;
+        else return Config.local.address;
     }
 }
 
 exports.getPrivateKey = function(real) {
     if (Config.production) {
-        if (real) return Config.mainPrivateKeyReal;
-        else return Config.mainPrivateKeyRopsten;
+        if (real) return Config.main.privateKey;
+        else return Config.ropsten.privateKey;
     } else {
-        if (real) return Config.mainPrivateKeyRopsten;
-        else return Config.mainPrivateKeyLocal;
+        if (real) return Config.ropsten.privateKey;
+        else return Config.local.privateKey;
     }
 }
 
 exports.getProvider = function(real) {
     if (Config.production) {
-        if (real) return Config.providerReal;
-        else return Config.providerRopsten;
+        if (real) return Config.main.provider;
+        else return Config.ropsten.provider;
     } else {
-        if (real) return Config.providerRopsten;
-        else return Config.providerLocal;
+        if (real) return Config.ropsten.provider;
+        else return Config.local.provider;
     }
 }
 
 exports.getContractBacktoLife = function(real) {
     if (real) {
-        return Config.production ? Config.urlContractBacktolifeReal : Config.urlContractBacktolifeRopsten;
+        return Config.production ? Config.main.contractBackToLife : Config.ropsten.contractBackToLife;
     } else {
-        return Config.production ? Config.urlContractBacktolifeRopsten : Config.urlContractBacktolifeLocal;
+        return Config.production ? Config.ropsten.contractBackToLife : Config.local.contractBackToLife;
     }
 }
 
 exports.getContractMywill = function(real) {
     if (real) {
-        return Config.production ? Config.urlContractHierarchyReal : Config.urlContractHierarchyRopsten;
+        return Config.production ? Config.main.contractMyWill : Config.ropsten.contractMyWill;
     } else {
-        return Config.production ? Config.urlContractHierarchyRopsten: Config.urlContractHierarchyLocal;
+        return Config.production ? Config.ropsten.contractMyWill: Config.local.contractMyWill;
     }
 }
 

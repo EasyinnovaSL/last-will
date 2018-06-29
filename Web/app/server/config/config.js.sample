@@ -1,34 +1,36 @@
 module.exports = {
     production: false,
-    captcha: false,
+        captcha: false,
 
-    // Real
-    mainPrivateKeyReal: "",
-    mainAddressReal: "",
-    providerReal: "",
-    urlContractBacktolifeReal: "",
-    urlContractHierarchyReal: "",
+        // Real
+        main: {
+            seed: "",
+            privateKey: "",
+            address: "",
+            provider: "",
+            contractBackToLife: "",
+            contractMyWill: "",
+        },
 
-    // Rinkeby (not used)
-    mainPrivateKeyRinkeby: "",
-    mainAddressRinkeby: "",
-    providerRinkeby: "",
-    urlContractBacktolifeRinkeby: "",
-    urlContractHierarchyRinkeby: "",
+        // Ropsten
+        ropsten: {
+            seed: "",
+            privateKey: "",
+            address: "",
+            provider: "",
+            contractBackToLife: "",
+            contractMyWill: "",
+        },
 
-    // Ropsten
-    mainPrivateKeyRopsten: "",
-    mainAddressRopsten: "",
-    providerRopsten: "",
-    urlContractBacktolifeRopsten: "",
-    urlContractHierarchyRopsten: "",
-
-    // Localhost
-    mainPrivateKeyLocal: "",
-    mainAddressLocal: "",
-    providerLocal: "",
-    urlContractBacktolifeLocal: "",
-    urlContractHierarchyLocal: "",
+        // Localhost
+        local: {
+            seed: "",
+            privateKey: "0x66c14ddb845e629975e138a5c28ad5a72a73552ea65b3d3ec99810c82751cc35",
+            address: "0xff1fbfe19950b12ace5101de1459d765e062cb59",
+            provider: "http://localhost:8545",
+            contractBackToLife: "../contractBackToLife.json",
+            contractMyWill: "../contractMyWill.json",
+        },
 
     email:{
         address: "",

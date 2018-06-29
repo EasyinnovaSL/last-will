@@ -1,6 +1,6 @@
 
 var HDWalletProvider = require("truffle-hdwallet-provider");
-var seed = "utility unit joke key fit hip carpet phrase license bread undo eager";
+var Config = require('../Web/app/server/config/config');
 
 module.exports = {
     solc: {
@@ -18,18 +18,16 @@ module.exports = {
             gas: 4612388,
             //gasPrice: 9000000000 // 9 GWei
         },
-        rinkeby: {
+        main: {
             provider: function() {
-                return new HDWalletProvider(seed, "https://rinkeby.infura.io/VzAp7t8qZU2Sn4vuyupa")
-                // Main account: 0x3bdec9a3d0378738a36bc484d234bdd035072a7a
+                return new HDWalletProvider(Config.main.seed, "https://mainnet.infura.io/VzAp7t8qZU2Sn4vuyupa")
             },
-            network_id: 4,
-            gasPrice: 1000000000 // 1 GWei
+            network_id: 1,
+            gasPrice: 2000000000 // 2 GWei
         },
         ropsten: {
             provider: function() {
-                return new HDWalletProvider(seed, "https://ropsten.infura.io/VzAp7t8qZU2Sn4vuyupa")
-                // Main account: 0x3bdec9a3d0378738a36bc484d234bdd035072a7a
+                return new HDWalletProvider(Config.ropsten.seed, "https://ropsten.infura.io/VzAp7t8qZU2Sn4vuyupa")
             },
             network_id: 3,
             gasPrice: 4000000000 // 4 GWei
