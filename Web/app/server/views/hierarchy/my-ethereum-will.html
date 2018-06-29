@@ -28,7 +28,7 @@ My Wills
             </div>
         </div>
 
-        <div class="row">
+        <div class="row" id="new-will-form" style="display: none;">
             <div class="mbr-white col-md-12 content-container wills-form">
                 <div class="card will-card">
                     <div class="card-body">
@@ -85,7 +85,7 @@ My Wills
                         <div class="card will-card">
                             <div class="card-body">
 
-                                <h5 class="card-title display-1" style="color:#e80000;">List Wills</h5>
+                                <h5 class="card-title display-1" style="color:#e80000;">Created Wills</h5>
 
                                 <br>
 
@@ -395,32 +395,41 @@ My Wills
 
             {{/witness}}
 
+            <!-- send mail action -->
+            <div class="row">
+                <div class="input-group col-md-6">
+                    <div class="input-group-prepend"><label class="input-group-text" for="inputGroupSelect01" style="
+                        border: 1px solid #ced4da;
+                        margin: 0px;
+                        padding: 0px 10px;
+                        font-size: 14px;
+                        color: #e80000;
+                    "><i class="fa fa-envelope"></i></label></div>
+                   <input id="input-email" type="email" class="form-control" name="value-0x278741d6fe3ab34f2c71dc1f6fbd80db3a88d16c" placeholder="enter email address" aria-label="" aria-describedby="basic-addon1" style="    height: 42px;
+                        padding: 0px 10px;
+                        margin: 0px;
+                        font-size: 15px;
+                        /* line-height: 15px; */
+                        min-height: 42px;">
+                     <div class="input-group-append">
+                        <button id="send-email" class="btn btn-secondary btn-form display-4 btn-sm sendtype="button" style="margin:0px">Send Mail</button>
+                    </div>
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3"></div>
+            </div>
+
         </div>
         <div class="card-footer">
-                            <!-- send mail action -->
-                        <div class="row">
-                            <div class="input-group col-md-6">
-<div class="input-group-prepend"><label class="input-group-text" for="inputGroupSelect01" style="
-    border: 1px solid #ced4da;
-    margin: 0px;
-    padding: 0px 10px;
-    font-size: 14px;
-    color: #e80000;
-"><i class="fa fa-envelope"></i></label></div>
-                               <input id="input-email" type="email" class="form-control" name="value-0x278741d6fe3ab34f2c71dc1f6fbd80db3a88d16c" placeholder="enter email address" aria-label="" aria-describedby="basic-addon1" style="    height: 42px;
-    padding: 0px 10px;
-    margin: 0px;
-    font-size: 15px;
-    /* line-height: 15px; */
-    min-height: 42px;">
- <div class="input-group-append">
-                                    <button id="send-email" class="btn btn-secondary btn-form display-4 btn-sm sendtype="button" style="margin:0px">Send Mail</button>
-                                </div>
-                            </div>
-                            <div class="col-md-3"></div>
-                            <div class="col-md-3"></div>
-                        </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>Make sure to send the generated links. If you create a new Last Will, this links will be lost, but the Last Will will be completely functional.</p>
+                    <div class="input-group-btn" style="display: flex;justify-content: center;">
+                        <button id="create-new-last-will" type="submit" class="btn btn-sm btn-secondary btn-form display-4">I want to create a new Last Will</button>
+                    </div>
                 </div>
+            </div>
+        </div>
     </div>
  </div>
 </script>
@@ -636,12 +645,6 @@ My Wills
     function loadWills() {
         // Load wills plugin
         var will = new MyWills({contract: getBaseContract(), hierarchy: getHierarchyContract()});
-
-        // Load Previous Last Will
-        var jsonWill = localStorage.getItem("lastwill");
-        if (jsonWill) {
-            will.renderLastWill(JSON.parse(jsonWill));
-        }
     }
 
     $(document).ready(function () {

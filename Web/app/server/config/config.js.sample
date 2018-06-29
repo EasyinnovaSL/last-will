@@ -32,6 +32,7 @@ module.exports = {
         contractMyWill: "../contractMyWill.json",
     },
 
+    // Must be GMAIL
     email:{
         address: "",
         user: "",

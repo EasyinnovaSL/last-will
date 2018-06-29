@@ -8,10 +8,15 @@ function MyWills(options) {
     $('#new-will').submit($.proxy(this._saveWill, this));
     $('.wills-container').on('click','button.deposit',$.proxy(this._depositWill,this));
     $('.wills-container').on('click','button.withdraw',$.proxy(this._withdrawWill,this));
-    // $('.wills-container').on('click','button.withdraw',$.proxy(this._withdrawWill,this));
 
-    // Refresh wills when InfoModal is hidden
+    // Refresh wills when InfoModal, SendModal and WithdrawModal is hidden
     $('#InfoModal').on('hidden.bs.modal', function () {
+        this._listWills();
+    }.bind(this));
+    $('#SendModal').on('hidden.bs.modal', function () {
+        this._listWills();
+    }.bind(this));
+    $('#DepositModal').on('hidden.bs.modal', function () {
         this._listWills();
     }.bind(this));
 
@@ -35,6 +40,16 @@ function MyWills(options) {
     if (savedAddress !== null) {
         $("#listOwner").val(savedAddress);
         this._listWills(savedAddress);
+    }
+
+    // Load Previous Last Will
+    if (this.lastwill) {
+        this.renderLastWill(this.lastwill);
+        $("#last-will-links").show();
+        $("#new-will-form").hide();
+    } else {
+        $("#last-will-links").hide();
+        $("#new-will-form").show();
     }
 }
 
@@ -75,6 +90,11 @@ MyWills.prototype._depositWill = function (event) {
     modal.modal('show');
 };
 
+MyWills.prototype._showNewWillForm = function(event) {
+    $("#new-will-form").show();
+    $("#last-will-links").hide();
+    // TODO remove last will form coockie / session
+};
 
 MyWills.prototype._withdrawWill = function (event) {
     var contractAddress = $(event.target).data('address');
@@ -242,7 +262,7 @@ MyWills.prototype._generateLinks = function (lastwill,address) {
     localStorage.setItem("lastwill", JSON.stringify(this.lastwill));
 
     // Final render
-    $('#OkModal p').html("Last Will created successfully!");
+    $('#OkModal p').html("Last Will created successfully!<br><strong>Make sure to send the generated links or backup them.</strong>");
     $('#OkModal .btn-success').show();
     $('#OkModal .close').show();
     this.renderLastWill();
@@ -351,6 +371,7 @@ MyWills.prototype.renderLastWill = function () {
     $('#last-will-links').html(rendered);
     $('[data-toggle="tooltip"]').tooltip();
     $('#send-email').click($.proxy(this._sendMail,this));
+    $('#create-new-last-will').on('click', $.proxy(this._showNewWillForm,this));
 };
 
 MyWills.prototype.checkIfAllIn = function () {
