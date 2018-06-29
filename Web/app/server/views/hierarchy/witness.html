@@ -17,7 +17,7 @@ Witness
                     You are a witness
                 </h1>
                 <p class="mbr-text pb-3 mbr-fonts-style display-5 align-left">
-                    If you are here, it means that you are the witness of the person that sent you this link. This person give you the responsibility of deciding whether he/she is dead.
+                    If you are here, it means that you are the witness of the person that sent you this link. This person gave you the responsibility of deciding whether he/she is dead.
                     When he/she dies, just press the button, and his/her last will will be executed.
                 </p>
             </div>
@@ -80,7 +80,7 @@ Witness
                         if (!(balanceSender > 0)) {
                             $('#ErrorModal').find('.modal-body').find('p').html("Your account <strong>"+
                                 account.address.toLowerCase() +
-                                "</strong> don't have enough balance. <br> Please add ether to make the action");
+                                "</strong> doesn't have enough balance. <br> Please add some ether to make the action");
 
                             $('#ErrorModal').modal('show');
 
@@ -95,7 +95,7 @@ Witness
                                             if(err.message.includes("sender doesn't have enough funds")){
                                                 $('#ErrorModal').find('.modal-body').find('p').html("Your account <strong>"+
                                                     account.address.toLowerCase() +
-                                                    "</strong> don't have enough balance. <br> Please add ether to make the action");
+                                                    "</strong> doesn't have enough balance. <br> Please add some ether to make the action");
                                             }else{
                                                 $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong.');
                                             }

@@ -15,22 +15,24 @@ module.exports = {
             port: 8545,
             network_id: "7",
             from: "0xff1fbfe19950b12ace5101de1459d765e062cb59",
-            gas: 4612388,
+            gas: 4600000,
             //gasPrice: 9000000000 // 9 GWei
         },
         main: {
             provider: function() {
-                return new HDWalletProvider(Config.main.seed, "https://mainnet.infura.io/VzAp7t8qZU2Sn4vuyupa")
+                return new HDWalletProvider(Config.main.seed, Config.main.provider)
             },
             network_id: 1,
+            gas: 4600000,
             gasPrice: 2000000000 // 2 GWei
         },
         ropsten: {
             provider: function() {
-                return new HDWalletProvider(Config.ropsten.seed, "https://ropsten.infura.io/VzAp7t8qZU2Sn4vuyupa")
+                return new HDWalletProvider(Config.ropsten.seed, Config.ropsten.provider)
             },
             network_id: 3,
-            gasPrice: 4000000000 // 4 GWei
+            gas: 4600000,
+            gasPrice: 2000000000 // 2 GWei
         }
     }
 };
