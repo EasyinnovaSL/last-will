@@ -338,22 +338,22 @@ My Wills
                             <label style="margin: 0; font-size: 16px !important; font-weight: bold;">
                                    <span class="mbri-user" style="margin-right: 5px;"></span> Heir
                             </label>
-                            <div class="row">
+                            <div class="row" style="margin-top:10px">
 
-                                    <div class="col-xs-12 d-sm-none">
+                                    <div class="col-xs-12 d-sm-none" >
                                         <span class="btn btn-sm btn-light" href="javascript:void(0)" style="margin: 0; font-size: 16px !important;">
                                              <i class="fa fa-dollar-sign"></i> &nbsp; {{percentage}}%
                                         </span>
                                     </div>
 
-                                    <div class="col-xs-12 d-sm-none">
-                                            <a class="btn btn-sm btn-share" href="whatsapp://send?text=You have been chosen as an heir on the _*Back To Life*_ platform: {{escapedUrl}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp">
+                                <div class="col-xs-12 d-sm-none" style="    padding: 5px;">
+                                            <a class="btn btn-sm btn-share" href="whatsapp://send?text=You have been chosen as an heir on the _*Back To Life*_ platform: {{escapedUrl}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp" style="border:none">
                                                 <i class="fab fa-whatsapp"></i>
                                             </a>
-                                            <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as an heir on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email">
+                                            <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as an heir on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email" style="border:none">
                                                   <span class="mbri-letter"></span>
                                             </a>
-                                            <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard!">
+                                            <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copy to clipboard!" style="border:none">
                                                 <span class="mbri-calendar"></span>
                                             </a>
                                     </div>
@@ -368,7 +368,7 @@ My Wills
                 <div class="input-group mb-3 d-none d-sm-flex">
                     <div class="input-group-prepend" style="width: 180px;">
                         <label class="input-group-text" for="will-role" style="width: 100%;background-color:white">
-                           <span class="mbri-user" style="margin-right: 5px;font-size: 21px;color: black;"></span> &nbsp; Witness
+                           <span class="mbri-preview" style="margin-right: 5px;font-size: 21px;color: black;"></span> &nbsp; Witness
                         </label>
                     </div>
                    <div class="input-group-prepend d-none d-sm-block">
@@ -393,13 +393,13 @@ My Wills
                 <div class="row">
                     <div class="col-xs-12 d-sm-none" style="margin:  0 auto; margin-top: 5px;">
                             <label style="margin: 0; font-size: 16px !important; font-weight: bold;">
-                                  <i class="fa fa-eye" style="margin-right: 5px;"></i> Witness
+                                <span class="mbri-preview" style="margin-right: 5px;"></span> Witness
                             </label>
-                            <div class="row">
+                            <div class="row" style="margin-top: 10px;">
                                     <div class="col-xs-12 d-sm-none">
-                                        <a class="btn btn-sm btn-share" href="whatsapp://send?text=You have been chosen as a witness on the _*Back To Life*_ platform: {{escapedUrl}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp"><i class="fab fa-whatsapp-square" style=""></i></a>
-                                        <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as a witness on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email"><i class="fas fa-envelope-square" style=""></i></a>
-                                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-clipboard" style=" font-size: 40px;"></i></a>
+                                        <a class="btn btn-sm btn-share" href="whatsapp://send?text=You have been chosen as a witness on the _*Back To Life*_ platform: {{escapedUrl}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                                        <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as a witness on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email"><span class="mbri-letter"></span></a>
+                                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!"><span class="mbri-calendar"></span></a>
                                     </div>
                             </div>
                     </div>
@@ -408,8 +408,8 @@ My Wills
             {{/witness}}
 
             <!-- send mail action -->
-            <div class="row">
-                <p class="col-md-12">You can optionally receive a copy of the links into your email (keep it in a secret secure place)</p>
+            <div class="row" style="margin-top: 15px;">
+                <p class="col-md-12">You can optionally receive a copy of the links into your email (keep it in a secret and secure place)</p>
                 <div class="input-group col-md-6">
                     <div class="input-group-prepend"><label class="input-group-text" for="inputGroupSelect01" style="
                         border: 1px solid #ced4da;
@@ -424,7 +424,7 @@ My Wills
                         margin: 0px;
                         font-size: 15px;
                         /* line-height: 15px; */
-                        min-height: 42px;
+                        /*min-height: 42px;*/
                         border: 1px solid #ced4da;
     background-color:white;">
                      <div class="input-group-append">
@@ -504,12 +504,12 @@ My Wills
                                 <div class="row">
                                     <div class="col-md-12 d-none d-sm-block">
                                         <p class="card-text">
-                                          <span class="mbri-user"></span> {{address}}
+                                          <span class="mbri-preview"></span> {{address}}
                                         </p>
                                     </div>
                                     <div class="col-xs-12 d-sm-none" style="margin:  0 auto; margin-top: 5px;">
                                         <a class="btn btn-sm btn-light show-witness-address" href="javascript:void(0)" style="margin: 0; font-size: 16px !important;" data-toggle="modal" data-target="#myAddressModal" onclick="updateAddressModal('{{address}}');">
-                                          <span class="mbri-user"></span> &nbsp; Address
+                                          <span class="mbri-preview"></span> &nbsp; Address
                                         </a>
                                     </div>
                                 </div>
