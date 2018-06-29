@@ -639,10 +639,8 @@ My Wills
         var will = new MyWills({contract: getBaseContract(), hierarchy: getHierarchyContract()});
 
         // Load Previous Last Will
-        var jsonWill = localStorage.getItem("lastwill");
-        if (jsonWill) {
-            will.renderLastWill(JSON.parse(jsonWill));
-        }
+        var jsonWill = getLastWill();
+        if (jsonWill != null) will.renderLastWill(jsonWill);
     }
 
     $(document).ready(function () {

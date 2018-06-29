@@ -1,6 +1,28 @@
+function getLastWill() {
+    var lastWillObject = localStorage.getItem("lastwill");
+    if (lastWillObject) {
+        var lastWill = JSON.parse(lastWillObject);
+        var timestamp = lastWill.timestamp;
+        var jsonWill = lastWill.value;
+        var now = new Date().getTime();
+        var h = 1;
+        if (now > timestamp + (h*60*60*1000)) {
+            localStorage.removeItem("lastwill");
+        } else {
+            return jsonWill;
+        }
+    }
+    return null;
+}
+
+function setLastWill(lastwill) {
+    var object = {value: lastwill, timestamp: new Date().getTime()}
+    localStorage.setItem("lastwill", JSON.stringify(object));
+}
+
 function MyWills(options) {
     jQuery.extend(options, self.options);
-    this.lastwill = JSON.parse(localStorage.getItem("lastwill")) || {witness:[],heirs:[],address:''};
+    this.lastwill = getLastWill() || {witness:[],heirs:[],address:''};
     this.confirmationsNeeded = 2;
     this.lastListOwnerValue = "";
 
@@ -239,7 +261,7 @@ MyWills.prototype._generateLinks = function (lastwill,address) {
     }.bind(this));
 
     this.lastwill = lastwill;
-    localStorage.setItem("lastwill", JSON.stringify(this.lastwill));
+    setLastWill(lastwill);
 
     // Final render
     $('#OkModal p').html("Last Will created successfully!");
