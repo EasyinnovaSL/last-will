@@ -27,6 +27,16 @@ function removeLastWill() {
     localStorage.removeItem("lastwill"+networkId);
 }
 
+function getAddress() {
+    var networkId = getNetworkId();
+    localStorage.getItem("address"+networkId);
+}
+
+function setAddress(address) {
+    var networkId = getNetworkId();
+    localStorage.setItem("address"+networkId, address);
+}
+
 function MyWills(options) {
     jQuery.extend(options, self.options);
     var _lastwill = getLastWill();
@@ -57,7 +67,7 @@ function MyWills(options) {
             var address = $(event.target).val();
             this.lastListOwnerValue = address;
             if (web3.utils.isAddress(address)) {
-                localStorage.setItem("address", address);
+                setAddress(address);
                 this._listWills(address);
             } else {
                 $(".wills-container").html("");
@@ -66,7 +76,7 @@ function MyWills(options) {
     }.bind(this));
 
     // Read saved address from cache
-    var savedAddress = localStorage.getItem("address") || null;
+    var savedAddress = getAddress() || null;
     if (savedAddress !== null) {
         $("#listOwner").val(savedAddress);
         this._listWills(savedAddress);
@@ -260,7 +270,7 @@ MyWills.prototype._saveWill = function (event) {
                 $('#OkModal .close').hide();
             },
             success: function(address){
-                    localStorage.setItem("address",ownerAddress);
+                    setAddress(ownerAddress);
                     $("#listOwner").val(ownerAddress);
                     this._generateLinks(lastwill,address);
             }.bind(this),
@@ -304,7 +314,7 @@ MyWills.prototype._generateLinks = function (lastwill,address) {
 };
 
 MyWills.prototype._listWills = function (forcedAddress = null) {
-    var address = localStorage.getItem("address") || forcedAddress;
+    var address = getAddress() || forcedAddress;
     if (address === null) return;
     $('.wills-container').html($("#generic-loader").clone().show());
     this.getWills(address).then(function(wills){
