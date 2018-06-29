@@ -326,7 +326,7 @@ My Wills
                         <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as an heir on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email">
                            <span class="mbri-letter"></span>
                         </a>
-                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!">
+                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard">
                           <span class="mbri-calendar"></span>
                         </a>
                     </div>
@@ -353,7 +353,7 @@ My Wills
                                             <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as an heir on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email">
                                                   <span class="mbri-letter"></span>
                                             </a>
-                                            <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!">
+                                            <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard!">
                                                 <span class="mbri-calendar"></span>
                                             </a>
                                     </div>
@@ -382,7 +382,7 @@ My Wills
                         <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as a witness on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email">
                            <span class="mbri-letter"></span>
                         </a>
-                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!">
+                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard">
                                <span class="mbri-calendar"></span>
                         </a>
                     </div>
@@ -399,7 +399,7 @@ My Wills
                                     <div class="col-xs-12 d-sm-none">
                                         <a class="btn btn-sm btn-share" href="whatsapp://send?text=You have been chosen as a witness on the _*Back To Life*_ platform: {{escapedUrl}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp"><i class="fab fa-whatsapp-square" style=""></i></a>
                                         <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as a witness on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email"><i class="fas fa-envelope-square" style=""></i></a>
-                                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!"><i class="fas fa-clipboard" style=" font-size: 40px;"></i></a>
+                                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-clipboard" style=" font-size: 40px;"></i></a>
                                     </div>
                             </div>
                     </div>
@@ -409,7 +409,7 @@ My Wills
 
             <!-- send mail action -->
             <div class="row">
-                <p class="col-md-12">You can optionally receive a copy of the links into your email (keep it in a secret and secure place)</p>
+                <p class="col-md-12">You can optionally receive a copy of the links into your email (keep it in a secret secure place)</p>
                 <div class="input-group col-md-6">
                     <div class="input-group-prepend"><label class="input-group-text" for="inputGroupSelect01" style="
                         border: 1px solid #ced4da;
@@ -439,7 +439,7 @@ My Wills
         <div class="card-footer">
             <div class="row">
                 <div class="col-md-12">
-                    <p>Make sure to send the generated links. If you create a new Last Will, this links will be lost, but the Last Will will be completely functional.</p>
+                    <p>If you create a new Last Will, this information about the last one created will not be shown anymore. Make sure to send or copy the above links!</p>
                     <div class="input-group-btn" style="display: flex;justify-content: center;">
                         <button id="create-new-last-will" type="submit" class="btn btn-sm btn-secondary btn-form display-4">I want to create a new Last Will</button>
                     </div>
@@ -463,7 +463,7 @@ My Wills
                 <div class="card-body">
 
                     <div class="row" style="margin-bottom: 10px;">
-                        <div class="col-md-6">
+                        <div class="col-md-7">
                             <div class="row">
                                 <div class="col-md-12">
                                     <h6 class="text-muted">Heirs:</h6>
@@ -494,7 +494,7 @@ My Wills
                                 </div>
                             {{/heirs}}
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <div class="row">
                                 <div class="col-md-12">
                                     <h6 class="text-muted">Witnesses:</h6>
