@@ -294,28 +294,28 @@ My Wills
             {{#heirs}}
                 <div class="input-group mb-3  d-none d-sm-flex">
                     <div class="input-group-prepend" style="width: 100px;">
-                        <label class="input-group-text" for="will-role" style="width: 100%;">
-                            <i class="fa fa-user" style="margin-right: 5px;"></i> Heir
+                        <label class="input-group-text" for="will-role" style="width: 100%;border: 1px solid #ced4da;margin: 0px;padding: 0px 10px;font-style: normal;background-color: white;">
+                            <i class="fa fa-user" style="margin-right: 5px;font-size: 21px;color: #e80000;"></i> &nbsp; Heir
                         </label>
                     </div>
                     <div class="input-group-prepend" style="width: 80px;">
-                        <label class="input-group-text" for="will-role" style="width: 100%;">
-                            <i class="fas fa-percentage" style="margin-right: 5px;"></i> {{percentage}}
+                        <label class="input-group-text" for="will-role" style="width: 100%;border: 1px solid #ced4da;margin: 0px;padding: 0px 10px;font-style: normal;background-color: white;">
+                            <i class="fas fa-percentage" style="margin-right: 5px;font-size: 23px;color: #e80000;"></i> &nbsp;{{percentage}}
                         </label>
                     </div>
                     <div class="input-group-prepend d-none d-sm-block">
-                        <label class="input-group-text" style="height: 100%"><i class="fa fa-link"></i></label>
+                        <label class="input-group-text" style="height: 100%;border: 1px solid #ced4da;margin: 0px;padding: 0px 10px;font-size: 21px;color: #e80000;font-style: normal;background-color: white;"><i class="fa fa-link"></i></label>
                     </div>
-                    <input type="text" class="form-control d-none d-sm-block" style="padding: 8px;line-height: 23px;font-size: 14px; border: 1px solid #ced4da;" value="{{url}}" disabled>
+                    <input type="text" class="form-control d-none d-sm-block" style="padding: 8px;line-height: 23px;font-size: 14px; border: 1px solid #ced4da;background-color: white;" value="{{url}}" disabled>
                     <div class="input-group-append" style="border: 1px solid #ced4da; background-color: white;">
                         <a class="btn btn-sm btn-share" href="whatsapp://send?text=You have been chosen as an heir on the _*Back To Life*_ platform: {{escapedUrl}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp">
-                            <i class="fab fa-whatsapp-square" style="color: green"></i>
+                            <i class="fab fa-whatsapp-square" style=""></i>
                         </a>
                         <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as an heir on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email">
-                            <i class="fas fa-envelope-square" style="color: grey"></i>
+                            <i class="fas fa-envelope-square" style=""></i>
                         </a>
                         <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!">
-                            <i class="fas fa-clipboard" style="color: deepskyblue; font-size: 40px;"></i>
+                            <i class="fas fa-clipboard" style=" font-size: 40px;"></i>
                         </a>
                     </div>
                 </div>
@@ -336,13 +336,13 @@ My Wills
 
                                     <div class="col-xs-12 d-sm-none">
                                             <a class="btn btn-sm btn-share" href="whatsapp://send?text=You have been chosen as an heir on the _*Back To Life*_ platform: {{escapedUrl}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp">
-                                                <i class="fab fa-whatsapp-square" style="color: green"></i>
+                                                <i class="fab fa-whatsapp-square"></i>
                                             </a>
                                             <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as an heir on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email">
-                                                <i class="fas fa-envelope-square" style="color: grey"></i>
+                                                <i class="fas fa-envelope-square" ></i>
                                             </a>
                                             <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!">
-                                                <i class="fas fa-clipboard" style="color: deepskyblue; font-size: 40px;"></i>
+                                                <i class="fas fa-clipboard" style=" font-size: 40px;"></i>
                                             </a>
                                     </div>
                             </div>
@@ -355,23 +355,23 @@ My Wills
             {{#witness}}
                 <div class="input-group mb-3 d-none d-sm-flex">
                     <div class="input-group-prepend" style="width: 180px;">
-                        <label class="input-group-text" for="will-role" style="width: 100%;">
-                            <i class="fa fa-user" style="margin-right: 5px;"></i> Witness
+                        <label class="input-group-text" for="will-role" style="width: 100%;background-color:white">
+                            <i class="fa fa-user" style="margin-right: 5px;font-size: 21px;color: #e80000;"></i> &nbsp; Witness
                         </label>
                     </div>
-                    <div class="input-group-prepend d-none d-sm-block">
-                        <label class="input-group-text" style="height: 100%"><i class="fa fa-link"></i></label>
+                   <div class="input-group-prepend d-none d-sm-block">
+                        <label class="input-group-text" style="height: 100%;border: 1px solid #ced4da;margin: 0px;padding: 0px 10px;font-size: 21px;color: #e80000;font-style: normal;background-color: white;"><i class="fa fa-link"></i></label>
                     </div>
-                    <input type="text" class="form-control d-none d-sm-block" style="padding: 8px;line-height: 23px;font-size: 14px; border: 1px solid #ced4da;" value="{{url}}" disabled>
+                    <input type="text" class="form-control d-none d-sm-block" style="padding: 8px;line-height: 23px;font-size: 14px; border: 1px solid #ced4da;background-color:white" value="{{url}}" disabled>
                     <div class="input-group-append" style="border: 1px solid #ced4da; background-color: white;">
                         <a class="btn btn-sm btn-share" href="whatsapp://send?text=You have been chosen as a witness on the _*Back To Life*_ platform: {{escapedUrl}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp">
-                            <i class="fab fa-whatsapp-square" style="color: green"></i>
+                            <i class="fab fa-whatsapp-square" style=""></i>
                         </a>
                         <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as a witness on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email">
-                            <i class="fas fa-envelope-square" style="color: grey"></i>
+                            <i class="fas fa-envelope-square" style=""></i>
                         </a>
                         <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!">
-                            <i class="fas fa-clipboard" style="color: deepskyblue; font-size: 40px;"></i>
+                            <i class="fas fa-clipboard" style="font-size: 40px;"></i>
                         </a>
                     </div>
                 </div>
@@ -385,9 +385,9 @@ My Wills
                             </label>
                             <div class="row">
                                     <div class="col-xs-12 d-sm-none">
-                                        <a class="btn btn-sm btn-share" href="whatsapp://send?text=You have been chosen as a witness on the _*Back To Life*_ platform: {{escapedUrl}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp"><i class="fab fa-whatsapp-square" style="color: green"></i></a>
-                                        <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as a witness on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email"><i class="fas fa-envelope-square" style="color: grey"></i></a>
-                                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!"><i class="fas fa-clipboard" style="color: deepskyblue; font-size: 40px;"></i></a>
+                                        <a class="btn btn-sm btn-share" href="whatsapp://send?text=You have been chosen as a witness on the _*Back To Life*_ platform: {{escapedUrl}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp"><i class="fab fa-whatsapp-square" style=""></i></a>
+                                        <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as a witness on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email"><i class="fas fa-envelope-square" style=""></i></a>
+                                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!"><i class="fas fa-clipboard" style=" font-size: 40px;"></i></a>
                                     </div>
                             </div>
                     </div>
@@ -403,6 +403,7 @@ My Wills
                             <div class="input-group col-md-6">
 <div class="input-group-prepend"><label class="input-group-text" for="inputGroupSelect01" style="
     border: 1px solid #ced4da;
+    background-color:white;
     margin: 0px;
     padding: 0px 10px;
     font-size: 14px;
@@ -412,6 +413,8 @@ My Wills
     padding: 0px 10px;
     margin: 0px;
     font-size: 15px;
+    border: 1px solid #ced4da;
+    background-color:white;
     /* line-height: 15px; */
     min-height: 42px;">
  <div class="input-group-append">
@@ -434,7 +437,7 @@ My Wills
             <div class="card will-card" id="{{address}}">
                 <div class="card-header">
                     <span class="float-right" style="font-size: 20px;">{{balance}} Eth</span>
-                    <span class="float-left" style="font-size: 20px;">Will</span>
+                    <span class="float-left display-1" style="font-size: 3rem;color: #e80000;">Will</span>
                 </div>
                 <div class="card-body">
 
