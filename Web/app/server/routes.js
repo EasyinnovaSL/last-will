@@ -11,9 +11,6 @@ module.exports = function (app) {
     // Home
     app.get('/', RenderController.renderHome);
 
-    // Load config file
-    app.all('*', RenderController.renderConfiguration);
-
     // Render hierarchy contracts list
     app.get('/my-wills', ContractsController.getContractsInfo, RenderController.renderMyWills);
 
@@ -25,6 +22,9 @@ module.exports = function (app) {
 
     // Create new Will Contract
     app.post('/will', ContractsController.createWillContract);
+
+    // Create new Will Contract
+    app.post('/send-mail', RenderController.sendMail);
 
     // List my contracts
     app.post('/contracts', ContractsController.getWillContracts);

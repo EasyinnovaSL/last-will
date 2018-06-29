@@ -49,10 +49,8 @@ My Wills
                             <div class="input-group-btn" style="display: flex;justify-content: center;">
                                 <div class="mbr-section-btn"><a onclick="addRowGeneric()" class="btn btn-md btn-secondary display-4" style="    padding: 10px;"><span class="mbri-plus"></span></a></div>
                             </div>
-                            <div class="row">
-
+                            <div class="row" id="rowCaptcha">
                                 <div class="g-recaptcha col-md-4 offset-md-4" data-sitekey="6LffzGAUAAAAAAD0UhJuWZvnbMtlTZxM2WXBkQUP" style="width: auto; margin-left: auto; margin-right: auto;"></div>
-
                             </div>
 
                             <div class="row">
@@ -120,6 +118,7 @@ My Wills
                 </div>
                 <div class="modal-body" style="padding: 1rem 0 0 0;">
                     <div class="input-group">
+                        <input type="text" name="max" style="display: none;">
                         <div class="form-group">
                             <label class="card-title display-5" style="margin: 0;">Destination Address:</label>
                             <input type="text" class="form-control" style="padding: 0px 0px 0px 10px; line-height: 23px; font-size: 14px;background: white;" placeholder="0x (hexadecimal)" name="to">
@@ -198,7 +197,7 @@ My Wills
                         <a href="javascript:void(0)" data-toggle="collapse" data-target="#fees-extended" class="fee-details">Show Fee Details</a>
                         <div id="fees-extended" class="collapse">
                             The first time you deposit ether, a little fee will be applied for cover the Smart Contract creation and the witnesses actions cost:
-                            <ul>
+                            <ul style="margin: 0;">
                                 <li><strong>0.005</strong> For the contract creation</li>
                                 <li><strong>0.001</strong> For each witness</li>
                             </ul>
@@ -216,6 +215,13 @@ My Wills
                                 <i class="fa fa-clipboard" style="margin-left: 8px;"></i>
                             </div>
                         </div>
+                        <p style="margin: 0;">Set the Gas Limit to:</p>
+                        <div class="ellipsis-div" onclick="copyToClipBoard(this);" data-text="" name="limitCopy">
+                            <div class="full">
+                                <strong name="limit"></strong>
+                                <i class="fa fa-clipboard" style="margin-left: 8px;"></i>
+                            </div>
+                        </div>
                     </div>
                     <div class="content-ropsten">
                         <p style="margin: 0;">Send <strong>ROPSTEN</strong> Ether to the next address:</p>
@@ -228,7 +234,15 @@ My Wills
                                 <i class="fa fa-clipboard" style="margin-left: 8px;"></i>
                             </div>
                         </div>
-                        <p>Also, in this TestNet version, you can use the <a target="_blank" href="http://faucet.ropsten.be:3001">Ropsten official faucet</a></p>
+                        <p style="margin: 0;">Set the Gas Limit to:</p>
+                        <div class="ellipsis-div" onclick="copyToClipBoard(this);" data-text="" name="limitCopy">
+                            <div class="full">
+                                <strong name="limit"></strong>
+                                <i class="fa fa-clipboard" style="margin-left: 8px;"></i>
+                            </div>
+                        </div>
+                        <hr>
+                        <p>Also, in the TestNet, you can use the <a target="_blank" href="http://faucet.ropsten.be:3001">Ropsten official faucet</a></p>
                     </div>
 
                     <div class="text-center" style="width: 100%;">
@@ -382,7 +396,26 @@ My Wills
             {{/witness}}
 
         </div>
-
+        <div class="card-footer">
+                            <!-- send mail action -->
+                        <div class="row">
+                            <div class="input-group col-md-6">
+<div class="input-group-prepend"><label class="input-group-text" for="inputGroupSelect01" style="
+    border: 1px solid #ced4da;
+    margin: 0px;
+    padding: 0px 10px;
+    font-size: 14px;
+    color: #e80000;
+"><i class="fa fa-envelope"></i></label></div>
+                               <input id="input-email" type="email" class="form-control" name="value-0x278741d6fe3ab34f2c71dc1f6fbd80db3a88d16c" placeholder="enter email address" aria-label="" aria-describedby="basic-addon1">
+ <div class="input-group-append">
+                                    <button id="send-email" class="btn btn-secondary btn-form display-4 btn-sm sendtype="button" style="margin:0px">Send Mail</button>
+                                </div>
+                            </div>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3"></div>
+                        </div>
+                </div>
     </div>
  </div>
 </script>
@@ -464,23 +497,25 @@ My Wills
                 </div>
 
                 <div class="card-footer">
-                    {{#owner}}
+                    {{#isDead}}
+                        <!-- Owner actions -->
+                        <div class="row">
+                            <div class="input-group col-md-12">
+                                <span style="color:gray">This contract is exhausted. No actions can be taken on it</span>
+                            </div>
+                        </div>
+                    {{/isDead}}
+                    {{^isDead}}
                         <!-- Owner actions -->
                         <div class="row">
                             <div class="input-group col-lg-3 col-md-4 col-xs-12">
-                                <button class="btn btn-secondary btn-form display-4 btn-sm deposit" data-address="{{address}}" type="button" style="margin:0px; width: 100%; margin-top: 10px;">Deposit Ether</button>
+                                <button class="btn btn-secondary btn-form display-4 btn-sm deposit" data-address="{{address}}" data-count="{{witnesses.length}}" data-status="{{status}}" type="button" style="margin:0px; width: 100%; margin-top: 10px;">Deposit Ether</button>
                             </div>
                             <div class="input-group col-lg-3 col-md-4 col-xs-12 mt-xs-5">
-                                <button class="btn btn-secondary btn-form display-4 btn-sm withdraw" data-owner="{{ownerAddress}}" data-address="{{address}}" type="button"  style="margin:0px; width: 100%; margin-top: 10px;">Withdraw Ether</button>
+                                <button class="btn btn-secondary btn-form display-4 btn-sm withdraw" data-owner="{{ownerAddress}}" data-address="{{address}}" data-balance="{{balance}}" type="button"  style="margin:0px; width: 100%; margin-top: 10px;">Withdraw Ether</button>
                             </div>
                         </div>
-                    {{/owner}}
-                    {{^owner}}
-                        <!-- Hier actions -->
-                        <!--<button class="btn btn-sm btn-primary declare-dead" data-address="{{address}}">-->
-                            <!--Declare as dead-->
-                        <!--</button>-->
-                    {{/owner}}
+                    {{/isDead}}
                 </div>
             </div>
         </div>
@@ -563,7 +598,8 @@ My Wills
     }
 
     .ellipsis-div {
-        width: 100%;
+        width: auto;
+        max-width: 100%;
         padding: 2px 10px;
         background-color: #dedede;
         color: #5d5d5d;
@@ -577,7 +613,6 @@ My Wills
         text-overflow: ellipsis;
         overflow:hidden;
         white-space:nowrap;
-        margin-right: -4px;
     }
     .ellipsis-div > .end {
         flex: 1 0 content;
@@ -593,25 +628,33 @@ My Wills
         $('#myAddressModal div.modal-body').html(String(userAddress));
     }
 
-    $(document).ready(function () {
+    function loadWills() {
         // Load wills plugin
-        var will = new MyWills({contract: getBaseContract(contracts), hierarchy: getHierarchyContract(contracts)});
+        var will = new MyWills({contract: getBaseContract(), hierarchy: getHierarchyContract()});
 
         // Load Previous Last Will
         var jsonWill = localStorage.getItem("lastwill");
         if (jsonWill) {
             will.renderLastWill(JSON.parse(jsonWill));
         }
+    }
+
+    $(document).ready(function () {
+        // Load wills
+        loadWills();
 
         $("#chkTestReal").change(function() {
             var nettype = "test";
             if ($(this).is(":checked")) nettype = "real";
-            var oldval = localStorage.getItem("contractType");
-            localStorage.setItem("contractType",nettype);
-            if (oldval != nettype) location.reload();
+            var oldval = localStorage.getItem("network");
+            localStorage.setItem("network",nettype);
+            if (oldval != nettype) {
+                //location.reload();
+                loadWills();
+            }
         });
 
-        if (localStorage.getItem("contractType") == "real") {
+        if (localStorage.getItem("network") == "real") {
             $("#chkTestReal").bootstrapToggle('on');
         }
 
@@ -622,6 +665,11 @@ My Wills
                 return old === show ? hide : show;
             });
         });
+
+        if (!contracts.captcha) {
+            $("#rowCaptcha").hide();
+        }
+
     });
 
 </script>

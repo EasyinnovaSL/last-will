@@ -208,8 +208,8 @@ contract MyWill {
         return msg.sender == owner;
     }
 
-    function hasDied() returns (bool){
-        return status == Status.DEAD;
+    function getStatus() returns (Status){
+        return status;
     }
 
     function getHeirs() returns (string, string) {

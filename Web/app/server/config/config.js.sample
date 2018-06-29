@@ -1,0 +1,39 @@
+module.exports = {
+    production: false,
+    captcha: false,
+
+    // Real
+    mainPrivateKeyReal: "",
+    mainAddressReal: "",
+    providerReal: "",
+    urlContractBacktolifeReal: "",
+    urlContractHierarchyReal: "",
+
+    // Rinkeby (not used)
+    mainPrivateKeyRinkeby: "",
+    mainAddressRinkeby: "",
+    providerRinkeby: "",
+    urlContractBacktolifeRinkeby: "",
+    urlContractHierarchyRinkeby: "",
+
+    // Ropsten
+    mainPrivateKeyRopsten: "",
+    mainAddressRopsten: "",
+    providerRopsten: "",
+    urlContractBacktolifeRopsten: "",
+    urlContractHierarchyRopsten: "",
+
+    // Localhost
+    mainPrivateKeyLocal: "",
+    mainAddressLocal: "",
+    providerLocal: "",
+    urlContractBacktolifeLocal: "",
+    urlContractHierarchyLocal: "",
+
+    email:{
+        address: "",
+        user: "",
+        password:""
+    },
+
+};
