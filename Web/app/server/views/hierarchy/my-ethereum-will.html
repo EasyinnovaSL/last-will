@@ -295,27 +295,39 @@ My Wills
                 <div class="input-group mb-3  d-none d-sm-flex">
                     <div class="input-group-prepend" style="width: 100px;">
                         <label class="input-group-text" for="will-role" style="width: 100%;border: 1px solid #ced4da;margin: 0px;padding: 0px 10px;font-style: normal;background-color: white;">
-                            <i class="fa fa-user" style="margin-right: 5px;font-size: 21px;color: #e80000;"></i> &nbsp; Heir
+                            <span class="mbri-user" style="margin-right: 5px;font-size: 21px;color: black;"></span> &nbsp; Heir
                         </label>
                     </div>
                     <div class="input-group-prepend" style="width: 80px;">
                         <label class="input-group-text" for="will-role" style="width: 100%;border: 1px solid #ced4da;margin: 0px;padding: 0px 10px;font-style: normal;background-color: white;">
-                            <i class="fas fa-percentage" style="margin-right: 5px;font-size: 23px;color: #e80000;"></i> &nbsp;{{percentage}}
+
+                             <label class="" for="inputGroupSelect01" style="    font-size: 23px;
+    line-height: 23px;
+    text-align: center;
+    color: black;
+    font-style: normal;
+    background-color: white;
+    margin-bottom: 0px;">%</label>&nbsp;{{percentage}}
                         </label>
                     </div>
                     <div class="input-group-prepend d-none d-sm-block">
-                        <label class="input-group-text" style="height: 100%;border: 1px solid #ced4da;margin: 0px;padding: 0px 10px;font-size: 21px;color: #e80000;font-style: normal;background-color: white;"><i class="fa fa-link"></i></label>
+                        <label class="input-group-text" style="height: 100%;border: 1px solid #ced4da;margin: 0px;padding: 0px 10px;font-size: 21px;color: black;font-style: normal;background-color: white;"><span class="mbri-link"></span></label>
                     </div>
                     <input type="text" class="form-control d-none d-sm-block" style="padding: 8px;line-height: 23px;font-size: 14px; border: 1px solid #ced4da;background-color: white;" value="{{url}}" disabled>
-                    <div class="input-group-append" style="border: 1px solid #ced4da; background-color: white;">
-                        <a class="btn btn-sm btn-share" href="whatsapp://send?text=You have been chosen as an heir on the _*Back To Life*_ platform: {{escapedUrl}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp">
-                            <i class="fab fa-whatsapp-square" style=""></i>
+                    <div class="input-group-append">
+
+                        <a class="btn btn-sm btn-share" href="whatsapp://send?text=You have been chosen as an heir on the _*Back To Life*_ platform: {{escapedUrl}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp" style="font-size:32px;border: 1px solid #ced4da;
+    margin: 0px;
+    padding: 0px 10px;
+    font-size: 23px;
+    color: #e80000;">
+                            <i class="fab fa-whatsapp" style=""></i>
                         </a>
                         <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as an heir on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email">
-                            <i class="fas fa-envelope-square" style=""></i>
+                           <span class="mbri-letter"></span>
                         </a>
                         <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!">
-                            <i class="fas fa-clipboard" style=" font-size: 40px;"></i>
+                          <span class="mbri-calendar"></span>
                         </a>
                     </div>
                 </div>
@@ -324,7 +336,7 @@ My Wills
                 <div class="row">
                     <div class="col-xs-12 d-sm-none" style="margin:  0 auto; margin-top: 5px;">
                             <label style="margin: 0; font-size: 16px !important; font-weight: bold;">
-                                   <i class="fa fa-user" style="margin-right: 5px;"></i> Heir
+                                   <span class="mbri-user" style="margin-right: 5px;"></span> Heir
                             </label>
                             <div class="row">
 
@@ -336,13 +348,13 @@ My Wills
 
                                     <div class="col-xs-12 d-sm-none">
                                             <a class="btn btn-sm btn-share" href="whatsapp://send?text=You have been chosen as an heir on the _*Back To Life*_ platform: {{escapedUrl}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp">
-                                                <i class="fab fa-whatsapp-square"></i>
+                                                <i class="fab fa-whatsapp"></i>
                                             </a>
                                             <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as an heir on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email">
-                                                <i class="fas fa-envelope-square" ></i>
+                                                  <span class="mbri-letter"></span>
                                             </a>
                                             <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!">
-                                                <i class="fas fa-clipboard" style=" font-size: 40px;"></i>
+                                                <span class="mbri-calendar"></span>
                                             </a>
                                     </div>
                             </div>
@@ -356,22 +368,22 @@ My Wills
                 <div class="input-group mb-3 d-none d-sm-flex">
                     <div class="input-group-prepend" style="width: 180px;">
                         <label class="input-group-text" for="will-role" style="width: 100%;background-color:white">
-                            <i class="fa fa-user" style="margin-right: 5px;font-size: 21px;color: #e80000;"></i> &nbsp; Witness
+                           <span class="mbri-user" style="margin-right: 5px;font-size: 21px;color: black;"></span> &nbsp; Witness
                         </label>
                     </div>
                    <div class="input-group-prepend d-none d-sm-block">
-                        <label class="input-group-text" style="height: 100%;border: 1px solid #ced4da;margin: 0px;padding: 0px 10px;font-size: 21px;color: #e80000;font-style: normal;background-color: white;"><i class="fa fa-link"></i></label>
+                        <label class="input-group-text" style="height: 100%;border: 1px solid #ced4da;margin: 0px;padding: 0px 10px;font-size: 21px;color: black;font-style: normal;background-color: white;"><span class="mbri-link"></span></label>
                     </div>
                     <input type="text" class="form-control d-none d-sm-block" style="padding: 8px;line-height: 23px;font-size: 14px; border: 1px solid #ced4da;background-color:white" value="{{url}}" disabled>
                     <div class="input-group-append" style="border: 1px solid #ced4da; background-color: white;">
                         <a class="btn btn-sm btn-share" href="whatsapp://send?text=You have been chosen as a witness on the _*Back To Life*_ platform: {{escapedUrl}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp">
-                            <i class="fab fa-whatsapp-square" style=""></i>
+                            <i class="fab fa-whatsapp" style=""></i>
                         </a>
                         <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as a witness on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email">
-                            <i class="fas fa-envelope-square" style=""></i>
+                           <span class="mbri-letter"></span>
                         </a>
                         <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!">
-                            <i class="fas fa-clipboard" style="font-size: 40px;"></i>
+                               <span class="mbri-calendar"></span>
                         </a>
                     </div>
                 </div>
@@ -407,7 +419,7 @@ My Wills
     margin: 0px;
     padding: 0px 10px;
     font-size: 14px;
-    color: #e80000;
+    color: black;
 "><i class="fa fa-envelope"></i></label></div>
                                <input id="input-email" type="email" class="form-control" name="value-0x278741d6fe3ab34f2c71dc1f6fbd80db3a88d16c" placeholder="enter email address" aria-label="" aria-describedby="basic-addon1" style="    height: 42px;
     padding: 0px 10px;
@@ -456,7 +468,7 @@ My Wills
                                                 <i class="fa fa-dollar-sign"></i> <span style="margin-right: 10px;">{{percentage}}%</span>
                                             </div>
                                             <div class="col-md-9">
-                                                <span><i class="fa fa-user" style="margin-right: 10px;"></i>{{address}}</span>
+                                                <span><span class="mbri-user" style="margin-right: 10px;"></span>{{address}}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -467,7 +479,7 @@ My Wills
                                                 </span>
 
                                                 <a class="btn btn-sm btn-light show-witness-address" href="javascript:void(0)" style="margin: 0; font-size: 16px !important;" data-toggle="modal" data-target="#myAddressModal" onclick="updateAddressModal('{{address}}');">
-                                                    <i class="fa fa-user"></i> &nbsp; Address
+                                                    <span class="mbri-user"></span> &nbsp; Address
                                                 </a>
                                     </div>
                                 </div>
@@ -483,12 +495,12 @@ My Wills
                                 <div class="row">
                                     <div class="col-md-12 d-none d-sm-block">
                                         <p class="card-text">
-                                            <i class="fa fa-user"></i> {{address}}
+                                          <span class="mbri-user"></span> {{address}}
                                         </p>
                                     </div>
                                     <div class="col-xs-12 d-sm-none" style="margin:  0 auto; margin-top: 5px;">
                                         <a class="btn btn-sm btn-light show-witness-address" href="javascript:void(0)" style="margin: 0; font-size: 16px !important;" data-toggle="modal" data-target="#myAddressModal" onclick="updateAddressModal('{{address}}');">
-                                            <i class="fa fa-user"></i> &nbsp; Address
+                                          <span class="mbri-user"></span> &nbsp; Address
                                         </a>
                                     </div>
                                 </div>

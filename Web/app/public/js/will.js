@@ -403,13 +403,13 @@ function addRowGeneric(){
         "    margin: 0px;\n" +
         "    padding: 0px 10px;\n" +
         "    font-size: 23px;\n" +
-        "    color: #e80000;\n" +
+        "    color: black;\n" +
         "    font-style: normal;\n" +
-        "    background-color: white;'><i class='fa fa-user'></i></label></div><select class='custom-select'  onchange='selectChanged(\""+numberOfFields+"\")' style='height: 49px;' id='inputGroupSelect"+numberOfFields+"'><option value='1'>Witness</option><option value='2'>Heir</option><option value='3' selected>Heir & Witness</option></select><div class='input-group-prepend'><label class='input-group-text' for='inputGroupSelect01' style='    border: 1px solid #ced4da;\n" +
+        "    background-color: white;'><span class='mbri-user'></span></label></div><select class='custom-select'  onchange='selectChanged(\""+numberOfFields+"\")' style='height: 49px;' id='inputGroupSelect"+numberOfFields+"'><option value='1'>Witness</option><option value='2'>Heir</option><option value='3' selected>Heir & Witness</option></select><div class='input-group-prepend'><label class='input-group-text' for='inputGroupSelect01' style='    border: 1px solid #ced4da;\n" +
         "    margin: 0px;\n" +
         "    padding: 0px 10px;\n" +
         "    font-size: 23px;\n" +
-        "    color: #e80000;\n" +
+        "    color: black;\n" +
         "    font-style: normal;\n" +
         "    background-color: white;'>%</label></div><input type='text' id='percent"+numberOfFields+"' class='form-control percentatgeRepartir' style='background-color: white;border: 1px solid #ced4da; padding: 0px;line-height: 23px;font-size: 14px; text-align:center ' aria-label='Amount (to the nearest dollar)' value=''><div class='input-group-append'><button onclick='deleteRow(\"row"+numberOfFields+"\")' class='btn btn-outline-secondary' style='border: 1px solid #ced4da; margin: 0px; padding: 0px 10px; font-size: 23px; color: #e80000;' type='button' ><span class='mbri-trash'></span></button></div></div>");
     numberOfFields++;
