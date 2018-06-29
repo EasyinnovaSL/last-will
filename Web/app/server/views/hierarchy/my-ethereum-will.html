@@ -292,7 +292,7 @@ My Wills
             <br>
             <p>Here are the generated links. Send them to the people you want:</p>
             {{#heirs}}
-                <div class="input-group mb-3">
+                <div class="input-group mb-3  d-none d-sm-flex">
                     <div class="input-group-prepend" style="width: 100px;">
                         <label class="input-group-text" for="will-role" style="width: 100%;">
                             <i class="fa fa-user" style="margin-right: 5px;"></i> Heir
@@ -319,10 +319,41 @@ My Wills
                         </a>
                     </div>
                 </div>
+
+                <!-- Heir Mobile Version -->
+                <div class="row">
+                    <div class="col-xs-12 d-sm-none" style="margin:  0 auto; margin-top: 5px;">
+                            <label style="margin: 0; font-size: 16px !important; font-weight: bold;">
+                                   <i class="fa fa-user" style="margin-right: 5px;"></i> Heir
+                            </label>
+                            <div class="row">
+
+                                    <div class="col-xs-12 d-sm-none">
+                                        <span class="btn btn-sm btn-light" href="javascript:void(0)" style="margin: 0; font-size: 16px !important;">
+                                             <i class="fa fa-dollar-sign"></i> &nbsp; {{percentage}}%
+                                        </span>
+                                    </div>
+
+                                    <div class="col-xs-12 d-sm-none">
+                                            <a class="btn btn-sm btn-share" href="whatsapp://send?text=You have been chosen as an heir on the _*Back To Life*_ platform: {{escapedUrl}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp">
+                                                <i class="fab fa-whatsapp-square" style="color: green"></i>
+                                            </a>
+                                            <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as an heir on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email">
+                                                <i class="fas fa-envelope-square" style="color: grey"></i>
+                                            </a>
+                                            <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!">
+                                                <i class="fas fa-clipboard" style="color: deepskyblue; font-size: 40px;"></i>
+                                            </a>
+                                    </div>
+                            </div>
+                    </div>
+                </div>
+
+
             {{/heirs}}
 
             {{#witness}}
-                <div class="input-group mb-3">
+                <div class="input-group mb-3 d-none d-sm-flex">
                     <div class="input-group-prepend" style="width: 180px;">
                         <label class="input-group-text" for="will-role" style="width: 100%;">
                             <i class="fa fa-user" style="margin-right: 5px;"></i> Witness
@@ -344,6 +375,24 @@ My Wills
                         </a>
                     </div>
                 </div>
+
+
+            <!-- Witness Mobile Version -->
+                <div class="row">
+                    <div class="col-xs-12 d-sm-none" style="margin:  0 auto; margin-top: 5px;">
+                            <label style="margin: 0; font-size: 16px !important; font-weight: bold;">
+                                  <i class="fa fa-eye" style="margin-right: 5px;"></i> Witness
+                            </label>
+                            <div class="row">
+                                    <div class="col-xs-12 d-sm-none">
+                                        <a class="btn btn-sm btn-share" href="whatsapp://send?text=You have been chosen as a witness on the _*Back To Life*_ platform: {{escapedUrl}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp"><i class="fab fa-whatsapp-square" style="color: green"></i></a>
+                                        <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as a witness on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email"><i class="fas fa-envelope-square" style="color: grey"></i></a>
+                                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!"><i class="fas fa-clipboard" style="color: deepskyblue; font-size: 40px;"></i></a>
+                                    </div>
+                            </div>
+                    </div>
+                </div>
+
             {{/witness}}
 
         </div>
