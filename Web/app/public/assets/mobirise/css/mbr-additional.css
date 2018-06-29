@@ -2939,3 +2939,39 @@ body {
 .cid-qVoXFLzP9X .media-container-row .mbr-text {
   text-align: center;
 }
+
+ul.social-buttons {
+  text-align: center;
+  margin: 0 !important;
+  padding: 0px;
+}
+
+ul.social-buttons li {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+ul.social-buttons li a {
+  width: 40px;
+  height: 40px;
+  display: block;
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: 30px;
+  line-height: 35px;
+  color: white;
+}
+
+ul.social-buttons li a.brandico-linkedin {
+  background-color: #0e76a8;
+}
+
+ul.linkedin li a {
+  transition: transform 0.5s ease-in-out;
+}
+
+ul.linkedin li:hover a {
+  transform: rotateX(180deg) rotateY(180deg) rotateZ(180deg);
+}
+
+
