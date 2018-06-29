@@ -395,11 +395,11 @@ My Wills
                             <label style="margin: 0; font-size: 16px !important; font-weight: bold;">
                                   <i class="fa fa-eye" style="margin-right: 5px;"></i> Witness
                             </label>
-                            <div class="row">
+                            <div class="row" style="margin-top: 10px;">
                                     <div class="col-xs-12 d-sm-none">
-                                        <a class="btn btn-sm btn-share" href="whatsapp://send?text=You have been chosen as a witness on the _*Back To Life*_ platform: {{escapedUrl}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp"><i class="fab fa-whatsapp-square" style=""></i></a>
-                                        <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as a witness on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email"><i class="fas fa-envelope-square" style=""></i></a>
-                                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copy to Clipboard"><i class="fas fa-clipboard" style=" font-size: 40px;"></i></a>
+                                        <a class="btn btn-sm btn-share" href="whatsapp://send?text=You have been chosen as a witness on the _*Back To Life*_ platform: {{escapedUrl}}" data-action="share/whatsapp/share" data-toggle="tooltip" data-placement="top" title="Share via WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                                        <a class="btn btn-sm btn-share" href="mailto:?subject=Shared Link&body=You have been chosen as a witness on the Back To Life platform: {{escapedUrl}}" data-toggle="tooltip" data-placement="top" title="Share via Email"><span class="mbri-letter"></span></a>
+                                        <a class="btn btn-sm btn-share" href="javascript:void(0)" onclick="copyToClipBoard(this);" data-text="{{url}}" data-toggle="tooltip" data-placement="top" title="Copied to clipboard!"><span class="mbri-calendar"></span></a>
                                     </div>
                             </div>
                     </div>
@@ -408,8 +408,8 @@ My Wills
             {{/witness}}
 
             <!-- send mail action -->
-            <div class="row">
-                <p class="col-md-12">You can optionally receive a copy of the links into your email (keep it in a secret secure place)</p>
+            <div class="row" style="margin-top: 15px;">
+                <p class="col-md-12">You can optionally receive a copy of the links into your email (keep it in a secret and secure place)</p>
                 <div class="input-group col-md-6">
                     <div class="input-group-prepend"><label class="input-group-text" for="inputGroupSelect01" style="
                         border: 1px solid #ced4da;
@@ -424,7 +424,7 @@ My Wills
                         margin: 0px;
                         font-size: 15px;
                         /* line-height: 15px; */
-                        min-height: 42px;
+                        /*min-height: 42px;*/
                         border: 1px solid #ced4da;
     background-color:white;">
                      <div class="input-group-append">
