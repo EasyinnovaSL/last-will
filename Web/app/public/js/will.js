@@ -99,35 +99,57 @@ MyWills.prototype._depositWill = function (event) {
     var contract = $(event.target).data('address');
     var count = $(event.target).data('count');
     var firstTime = parseInt($(event.target).data('status')) === 0;
-    var fee = 0.005 + (count * 0.001);
 
-    var modal = $("#DepositModal");
-    modal.find('#fees-extended').collapse('hide');
-    modal.find('.fee-details').text('Show Fee Details');
-    modal.find("[name=address]").html(contract);
-    modal.find("[name=addressEnd]").html(contract.slice(-4));
-    modal.find("[name=addressCopy]").data('text',contract);
-    modal.find("[name=fee]").html(fee + " Eth");
+    // Get the fee from SC
+    var localWeb3 = new Web3(new Web3.providers.HttpProvider(getProvider()));
+    var MyWill = new localWeb3.eth.Contract(getHierarchyContract().abi, contract);
+    MyWill.methods.getCreationWeiCost().call(function(err, creationWeiCost){
+        if (!err) {
+            MyWill.methods.getWitnessWeiCost().call(function(err, witnessWeiCost){
+                if (!err) {
+                    // Check SC for the applied fees
+                    var BN = localWeb3.utils.BN;
+                    var creationCost = new BN(creationWeiCost);
+                    var witnessCost = new BN(witnessWeiCost);
+                    var allWitnessCost = witnessCost.mul(new BN(count));
+                    var totalFeeWei = creationCost.add(allWitnessCost);
+                    var totalFee = localWeb3.utils.fromWei(totalFeeWei, 'ether');
 
-    modal.find(".first-time").hide();
-    if (firstTime) {
-        modal.find(".first-time").show();
-        modal.find("[name=limit]").html("210.000");
-        modal.find("[name=limitCopy]").data('text',"210000");
-    } else {
-        modal.find("[name=limit]").html("50.000");
-        modal.find("[name=limitCopy]").data('text',"50000");
-    }
+                    // Show Modal
+                    var modal = $("#DepositModal");
+                    modal.find('#fees-extended').collapse('hide');
+                    modal.find('.fee-details').text('Show Fee Details');
+                    modal.find("[name=address]").html(contract);
+                    modal.find("[name=addressEnd]").html(contract.slice(-4));
+                    modal.find("[name=addressCopy]").data('text',contract);
+                    modal.find("[name=fee]").html(totalFee + " Eth");
+                    modal.find("[name=feeCreation]").html(localWeb3.utils.fromWei(creationCost, 'ether'));
+                    modal.find("[name=feeWitness]").html(localWeb3.utils.fromWei(witnessCost, 'ether'));
 
-    if (realContractSelected()){
-        modal.find('.content-real').show();
-        modal.find('.content-ropsten').hide();
-    } else {
-        modal.find('.content-real').hide();
-        modal.find('.content-ropsten').show();
-    }
+                    modal.find(".first-time").hide();
+                    if (firstTime) {
+                        modal.find(".first-time").show();
+                        modal.find("[name=limit]").html("210.000");
+                        modal.find("[name=limitCopy]").data('text',"210000");
+                    } else {
+                        modal.find("[name=limit]").html("50.000");
+                        modal.find("[name=limitCopy]").data('text',"50000");
+                    }
 
-    modal.modal('show');
+                    if (realContractSelected()){
+                        modal.find('.content-real').show();
+                        modal.find('.content-ropsten').hide();
+                    } else {
+                        modal.find('.content-real').hide();
+                        modal.find('.content-ropsten').show();
+                    }
+
+                    modal.modal('show');
+
+                }
+            });
+        }
+    });
 };
 
 MyWills.prototype._showNewWillForm = function(event) {

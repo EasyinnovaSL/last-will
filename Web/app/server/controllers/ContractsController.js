@@ -298,11 +298,30 @@ exports.sendTransaction = function (functionName, parameters, options) {
             }
             var web3 = exports.getWeb3(options.req.session.real);
 
-            // Get data by params
+            // Get contract object
+            var contract = exports.getContract(options.req);
+
+            // Get current gas price
+            var gasPrice = await web3.eth.getGasPrice();
+
+            // Add gas cost to parameters
             if (parameters === null) {
                 parameters = [];
             }
-            var contract = exports.getContract(options.req);
+            parameters.push(gasPrice);
+            parameters.push(2000000);
+
+            // Estimate gas price
+            var estimatedGas = await contract.methods[functionName].apply(null, parameters).estimateGas({from: options.from});
+
+            // Update parameters with exact wei cost
+            var index = parameters.indexOf(2000000);
+            if (index > -1) {
+                parameters.splice(index, 1);
+            }
+            parameters.push(estimatedGas);
+
+            // Get data by parameters
             var data = contract.methods[functionName].apply(null, parameters).encodeABI();
 
             // Sign transaction
@@ -313,7 +332,7 @@ exports.sendTransaction = function (functionName, parameters, options) {
             var nonce = await web3.eth.getTransactionCount(options.from);
             var rawTx = {
                 nonce: web3.utils.toHex(nonce),
-                gasPrice: web3.utils.toHex(3000000000), // 3GWei
+                gasPrice: web3.utils.toHex(gasPrice),
                 gasLimit: web3.utils.toHex(2000000),
                 to: contract._address,
                 value: 0x00,
