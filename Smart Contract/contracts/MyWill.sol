@@ -7,6 +7,9 @@ contract MyWill {
 
     using strings for *;
 
+    /* Back To Life SC address */
+    address sender;
+
     /* The club address */
     address club;
 
@@ -28,7 +31,7 @@ contract MyWill {
     mapping (string => bool) mapHeirsVoteOwnerHasDied;
 
     /* The status of the contract*/
-    enum Status {CREATED, ALIVE, DEAD}
+    enum Status {CREATED, ALIVE, DEAD, INIT}
     Status status;
 
     /* EVENTS */
@@ -39,12 +42,18 @@ contract MyWill {
     /* Contract creation */
     /* ***************** */
 
-    function MyWill (address _owner, string _listHeirs, string _listHeirsPercentages, string _listWitnesses, address _club, uint256 _gasPrice, uint256 _gasCost) {
+    function MyWill () {
+        sender = msg.sender;
+        status = Status.INIT;
+    }
+
+    function setParameters(address _owner, string _listHeirs, string _listHeirsPercentages, string _listWitnesses, address _club, uint256 _gasPrice, uint256 _gasCost) onlySender onlyInit {
+        status = Status.CREATED;
+
         club = _club;
         owner = _owner;
         gasPrice = _gasPrice;
         gasCost = _gasCost;
-        status = Status.CREATED;
         listHeirs = _listHeirs;
         listHeirsPercentages = _listHeirsPercentages;
         listWitnesses = _listWitnesses;
@@ -68,6 +77,16 @@ contract MyWill {
 
     modifier onlyOwner() {
         require(msg.sender == owner);
+        _;
+    }
+
+    modifier onlySender() {
+        require(msg.sender == sender);
+        _;
+    }
+
+    modifier onlyInit() {
+        require(status == Status.INIT);
         _;
     }
 

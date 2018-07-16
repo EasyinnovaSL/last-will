@@ -55,7 +55,9 @@ contract BackToLife {
         uint256 listWitnessLength = s.count(delim) + 1;
 
         /* Create the My Will contract */
-        address myWillAddress = new MyWill(owner, _listHeirs, _listHeirsPercentages, _listWitnesses, club, _gasPrice, _gasCost);
+        address myWillAddress = new MyWill();
+        MyWill myWillContract = MyWill(myWillAddress);
+        myWillContract.setParameters(owner, _listHeirs, _listHeirsPercentages, _listWitnesses, club, _gasPrice, _gasCost);
         var myWillAddressString = addressToString(myWillAddress);
         mapOwnerStringContract[owner] =  mapOwnerStringContract[owner].toSlice().concat(myWillAddressString.toSlice()).toSlice().concat(";".toSlice());
     }

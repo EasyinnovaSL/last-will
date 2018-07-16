@@ -14,9 +14,9 @@ module.exports = {
             host: "localhost",
             port: 8545,
             network_id: "7",
-            from: "0xff1fbfe19950b12ace5101de1459d765e062cb59",
+            from: Config.local.address,
             gas: 4600000,
-            //gasPrice: 9000000000 // 9 GWei
+            // gasPrice is set in ganache script
         },
         main: {
             provider: function() {
@@ -24,7 +24,7 @@ module.exports = {
             },
             network_id: 1,
             gas: 4600000,
-            gasPrice: 7000000000 // 7 GWei
+            gasPrice: 8000000000 // 8 GWei
         },
         ropsten: {
             provider: function() {
