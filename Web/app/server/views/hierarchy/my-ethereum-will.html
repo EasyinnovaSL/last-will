@@ -15,18 +15,6 @@ My Wills
 
     <div class="container align-left">
 
-        <div class="row">
-            <div class="col-md-12 test-real-selector">
-                <div class="pull-right">
-                    <style>
-                        .toggle, .toggle-on, .toggle-off { border-radius: 20px; background: white; height:30px !important; width:100px !important; }
-                        .toggle-handle { border-radius: 20px; }
-                    </style>
-                    <label style="color:white">Real network</label>
-                    <input type="checkbox" data-toggle="toggle" id="chkTestReal">
-                </div>
-            </div>
-        </div>
 
         <div class="row" id="new-will-form" style="display: none;">
             <div class="mbr-white col-md-12 content-container wills-form">
@@ -61,6 +49,9 @@ My Wills
                                     <div class="input-group-btn" style="display: flex;justify-content: center;">
                                         <button type="submit" class="btn btn-sm btn-secondary btn-form display-4">Create Last Will</button>
                                     </div>
+                                </div>
+                                <div id="testnet-message" class="col-md-12" style="display: none;">
+                                    <p>Important: You are going to create a will in the TEST Network.  To change it for the real network, please activate the <a href="#network-button">button</a> at the end of the page.</p>
                                 </div>
                                 <div class="col-md-4">
 
@@ -104,7 +95,25 @@ My Wills
             </div>
         </div>
 
+        <!-- Select The correct Network -->
+        <div id="network-button" class="row">
+            <div class="col-md-12 test-real-selector">
+                <div class="pull-right">
+                    <style>
+                        .toggle, .toggle-on, .toggle-off { border-radius: 20px; background: white; height:30px !important; width:100px !important; }
+                        .toggle-handle { border-radius: 20px; }
+                    </style>
+                    <label style="color:white">Real network</label>
+                    <input type="checkbox" data-toggle="toggle" id="chkTestReal" checked>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+
+
+
 
     <!-- Send Modal HTML -->
     <div id="SendModal" class="modal fade" data-backdrop="static">
@@ -672,6 +681,14 @@ My Wills
             if ($(this).is(":checked")) nettype = "real";
             var oldval = localStorage.getItem("network");
             localStorage.setItem("network",nettype);
+
+            if(nettype == "test"){
+                $("#testnet-message").show();
+            }else{
+                $("#testnet-message").hide();
+            }
+
+
             if (oldval != nettype) {
                 //location.reload();
                 loadWills();
