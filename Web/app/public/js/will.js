@@ -285,17 +285,23 @@ MyWills.prototype._saveWill = function (event) {
     }
 };
 
+function replaceAll(text,find,replace) {
+    return text.replace(new RegExp('[' + find + ']', 'g'), replace);
+}
+
 MyWills.prototype._generateLinks = function (lastwill,address) {
     lastwill.heirs.forEach(function(item){
         var url = this._createLink("2",item.account,address);
         item.url = url;
-        item.escapedUrl = url.replace("&", "%26");
+        console.log(url);
+        item.escapedUrl = replaceAll(url,"&", "%26");
+        console.log("adsasd:"+item.escapedUrl);
     }.bind(this));
 
     lastwill.witness.forEach(function(item){
         var url = this._createLink("1",item.account,address);
         item.url = url;
-        item.escapedUrl = url.replace("&", "%26");
+        item.escapedUrl = replaceAll(url,"&", "%26");
     }.bind(this));
 
     this.lastwill = lastwill;
