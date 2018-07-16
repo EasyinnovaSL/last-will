@@ -29,7 +29,7 @@ function removeLastWill() {
 
 function getAddress() {
     var networkId = getNetworkId();
-    localStorage.getItem("address"+networkId);
+    return localStorage.getItem("address"+networkId);
 }
 
 function setAddress(address) {
