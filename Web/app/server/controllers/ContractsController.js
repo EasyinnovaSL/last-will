@@ -327,14 +327,11 @@ exports.sendTransaction = function (functionName, parameters, options) {
 
             // Send transaction
             var serializedTx = tx.serialize();
-            web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).on('confirmation', async function (number, receipt){
-                var currentLastWillAddress = await exports.getLastWillContract(parameters[0],options.req);
-                if (lastWillAddress !== currentLastWillAddress) {
-                    return resolve(currentLastWillAddress);
-                }
-                if (number === 24) {
-                    return resolve(null);
-                }
+            web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).on('transactionHash',  function (hash){
+
+                    return resolve(hash);
+
+
             }).on('error', function (err, receipt){
                 console.error(err);
                 reject(false);

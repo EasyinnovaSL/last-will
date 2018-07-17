@@ -241,6 +241,7 @@ MyWills.prototype._saveWill = function (event) {
         if (!inputValue) inputValue = 0;
 
         // Make Ajax post request
+
         $.ajax({
             type: "POST",
             url: "/will",
@@ -259,10 +260,33 @@ MyWills.prototype._saveWill = function (event) {
                 $('#OkModal .btn-success').hide();
                 $('#OkModal .close').hide();
             },
-            success: function(address){
-                    localStorage.setItem("address",ownerAddress);
+            success: function(hash){
+                $('#OkModal p').html("Contract creation hash "+hash);
+
+                localStorage.setItem("address",ownerAddress);
+                onTransactioCompleted(hash,function (){
+
+                    this.getWills(ownerAddress).then(function(wills){
+                       var lastwill=wills[wills.length -1];
+
+                        $('#OkModal p').html("Last Will created successfully!<br><strong>Make sure to send the generated links or backup them.</strong>");
+                        $('#OkModal .btn-success').show();
+                        $('#OkModal .close').show();
+                        this.renderLastWill();
+                        $("#last-will-links").show();
+                        $("#new-will-form").hide();
+
+                        }
+
+
+                    );
+
+
+                }.bind(this),2);
+
                     $("#listOwner").val(ownerAddress);
-                    this._generateLinks(lastwill,address);
+
+
             }.bind(this),
             error: function(err){
                 setTimeout(function(){
@@ -514,4 +538,30 @@ function showInputError(input, message){
 function hideInputError(input) {
     input.css('box-shadow', '');
     input.parent().find('p.error').remove();
+}
+
+function onTransactioCompleted(hash,callback,numConfirmations=12){
+ interval=setInterval(function (){
+     localWeb3 = new Web3(new Web3.providers.HttpProvider(getProvider()));
+     current_hash=hash;
+     localWeb3.eth.getBlockNumber().then( function(blockNumber) {
+
+         localWeb3.eth.getTransaction(current_hash).then(function(object)
+         {
+
+             if (object && object.blockNumber && blockNumber - object.blockNumber  >= numConfirmations) {
+                 clearInterval(interval);
+                 callback();
+             }
+         }
+     );
+
+
+     });
+
+
+
+
+},10000)
+
 }
