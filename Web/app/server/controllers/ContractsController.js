@@ -352,12 +352,12 @@ exports.sendTransaction = function (functionName, parameters, options) {
                 count++;
                 try {
                     var ret = await exports.sendTxByNonce(rawTx, lastWillAddress, privateKey, options, parameters, nonce);
-                    resolve(ret);
+                    return resolve(ret);
                 } catch(err) {
                     if (err.repeat) {
                         nonce++;
                     } else {
-                        reject(err.err);
+                        return  reject(err.err);
                     }
                 }
             }
