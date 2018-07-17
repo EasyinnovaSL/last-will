@@ -358,7 +358,9 @@ MyWills.prototype._saveWill = function (event) {
 
             }.bind(this),
             error: function(err){
+                removeLastWill();
                 setTimeout(function(){
+
                     $('#OkModal').modal('hide');
                     $('#ErrorModal').find('.modal-body').find('p').html(err.responseText);
                     $('#ErrorModal').modal('show');
