@@ -18,7 +18,7 @@ contract BackToLife {
     }
 
     /* Create Last Will Contract */
-    function createLastWill (address _owner, string _listHeirs, string _listHeirsPercentages, string _listWitnesses) {
+    function createLastWill (address _owner, string _listHeirs, string _listHeirsPercentages, string _listWitnesses, uint256 _gasPrice, uint256 _gasCost) {
 
         address owner = _owner;
 
@@ -55,7 +55,9 @@ contract BackToLife {
         uint256 listWitnessLength = s.count(delim) + 1;
 
         /* Create the My Will contract */
-        address myWillAddress = new MyWill(owner, _listHeirs, _listHeirsPercentages, _listWitnesses, club);
+        address myWillAddress = new MyWill();
+        MyWill myWillContract = MyWill(myWillAddress);
+        myWillContract.setParameters(owner, _listHeirs, _listHeirsPercentages, _listWitnesses, club, _gasPrice, _gasCost);
         var myWillAddressString = addressToString(myWillAddress);
         mapOwnerStringContract[owner] =  mapOwnerStringContract[owner].toSlice().concat(myWillAddressString.toSlice()).toSlice().concat(";".toSlice());
     }

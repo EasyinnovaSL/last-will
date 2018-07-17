@@ -7,8 +7,15 @@ contract MyWill {
 
     using strings for *;
 
+    /* Back To Life SC address */
+    address sender;
+
     /* The club address */
     address club;
+
+    /* The contract creation cost in gas */
+    uint256 gasPrice;
+    uint256 gasCost;
 
     /* The contract owner */
     address owner;
@@ -24,7 +31,7 @@ contract MyWill {
     mapping (string => bool) mapHeirsVoteOwnerHasDied;
 
     /* The status of the contract*/
-    enum Status {CREATED, ALIVE, DEAD}
+    enum Status {CREATED, ALIVE, DEAD, INIT}
     Status status;
 
     /* EVENTS */
@@ -35,10 +42,18 @@ contract MyWill {
     /* Contract creation */
     /* ***************** */
 
-    function MyWill (address _owner, string _listHeirs, string _listHeirsPercentages, string _listWitnesses, address _club) {
+    function MyWill () {
+        sender = msg.sender;
+        status = Status.INIT;
+    }
+
+    function setParameters(address _owner, string _listHeirs, string _listHeirsPercentages, string _listWitnesses, address _club, uint256 _gasPrice, uint256 _gasCost) onlySender onlyInit {
+        status = Status.CREATED;
+
         club = _club;
         owner = _owner;
-        status = Status.CREATED;
+        gasPrice = _gasPrice;
+        gasCost = _gasCost;
         listHeirs = _listHeirs;
         listHeirsPercentages = _listHeirsPercentages;
         listWitnesses = _listWitnesses;
@@ -62,6 +77,16 @@ contract MyWill {
 
     modifier onlyOwner() {
         require(msg.sender == owner);
+        _;
+    }
+
+    modifier onlySender() {
+        require(msg.sender == sender);
+        _;
+    }
+
+    modifier onlyInit() {
+        require(status == Status.INIT);
         _;
     }
 
@@ -131,23 +156,23 @@ contract MyWill {
             // Check if the minimum ammount is provided
             var witnessesList = listWitnesses.toSlice().copy();
             var witnessesLength = witnessesList.count(";".toSlice()) + 1;
-            var needed = 1000000000000000 * witnessesLength + 5000000000000000; // 0.001 for each witness and 0.005 for the costs of deploying the smart contract
+            var needed = getWitnessWeiCost() * witnessesLength + getCreationWeiCost();
             require(msg.value > needed);
+
+            // Send contract creation cost to club
+            club.transfer(getCreationWeiCost());
 
             // Send ether to witnesses
             for (uint i = 0; i < witnessesLength; i++) {
                 var witnessAddress = parseAddr(witnessesList.split(";".toSlice()).toString());
-                witnessAddress.transfer(1000000000000000);
+                witnessAddress.transfer(getWitnessWeiCost());
             }
-
-            // Send ether to club
-            club.transfer(5000000000000000);
 
             // Set the status to active
             status = Status.ALIVE;
 
             // Deposit event
-            Deposit(msg.sender, msg.value - needed);
+            Deposit(msg.sender, msg.value);
         } else {
             Deposit(msg.sender, msg.value);
         }
@@ -210,6 +235,14 @@ contract MyWill {
 
     function getStatus() returns (Status){
         return status;
+    }
+
+    function getCreationWeiCost() returns (uint256) {
+        return gasPrice * gasCost;
+    }
+
+    function getWitnessWeiCost() returns (uint256) {
+        return (1000000 * gasPrice);
     }
 
     function getHeirs() returns (string, string) {
