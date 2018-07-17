@@ -91,6 +91,35 @@ function MyWills(options) {
 
         if(_lastwill && _lastwill.transactionHash){
             //Show modal
+            $('#OkModal').modal('show');
+            $('#OkModal .btn-success').hide();
+            $('#OkModal .close').hide();
+            $('#OkModal p').html("Contract creation hash "+_lastwill.transactionHash);
+
+
+            onTransactioCompleted(_lastwill.hash,function (){
+
+                this.getWills(ownerAddress).then(function(wills){
+                        var lastwill=wills[wills.length -1];
+                        setAddress(ownerAddress);
+
+                        this.setLasWillAddress(lastwill.address);
+                        this._generateLinks(this.lastwill, address);
+                        $("#listOwner").val(ownerAddress);
+                        $('#OkModal p').html("Last Will created successfully!<br><strong>Make sure to send the generated links or backup them.</strong>");
+                        $('#OkModal .btn-success').show();
+                        $('#OkModal .close').show();
+                        this.renderLastWill();
+                        $("#last-will-links").show();
+                        $("#new-will-form").hide();
+
+                    }.bind(this)
+
+
+                );
+
+
+            }.bind(this),2);
         }
 
         $("#last-will-links").hide();
@@ -302,7 +331,7 @@ MyWills.prototype._saveWill = function (event) {
                 $('#OkModal .btn-success').hide();
                 $('#OkModal .close').hide();
             },
-            success: function(address){
+            success: function(hash){
                 $('#OkModal p').html("Contract creation hash "+hash);
                 this.setLasWillTransactionHash(hash);
                 onTransactioCompleted(hash,function (){
@@ -312,7 +341,7 @@ MyWills.prototype._saveWill = function (event) {
                         setAddress(ownerAddress);
 
                         this.setLasWillAddress(lastwill.address);
-                        this._generateLinks(this.lastwill, address);
+                        this._generateLinks(this.lastwill, lastwill.address);
                         $("#listOwner").val(ownerAddress);
                             $('#OkModal p').html("Last Will created successfully!<br><strong>Make sure to send the generated links or backup them.</strong>");
                             $('#OkModal .btn-success').show();
