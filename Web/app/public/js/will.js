@@ -99,13 +99,11 @@ function MyWills(options) {
 
             onTransactioCompleted(_lastwill.transactionHash,function (){
 
-                this.getWills(ownerAddress).then(function(wills){
+                this.getWills(getAddress()).then(function(wills){
                         var lastwill=wills[wills.length -1];
-                        setAddress(ownerAddress);
-
                         this.setLasWillAddress(lastwill.address);
-                        this._generateLinks(this.lastwill, address);
-                        $("#listOwner").val(ownerAddress);
+                        this._generateLinks(this.lastwill, lastwill.address);
+                        $("#listOwner").val(getAddress());
                         $('#OkModal p').html("Last Will created successfully!<br><strong>Make sure to send the generated links or backup them.</strong>");
                         $('#OkModal .btn-success').show();
                         $('#OkModal .close').show();
