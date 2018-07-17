@@ -94,9 +94,9 @@ function MyWills(options) {
             $('#OkModal').modal('show');
             $('#OkModal .btn-success').hide();
             $('#OkModal .close').hide();
-            var link = "https://etherscan.io/tx/"+hash;
+            var link = "https://etherscan.io/tx/"+_lastwill.transactionHash;
             if(!realContractSelected() || !contracts.production){
-                var link = "https://ropsten.etherscan.io/tx/"+hash;
+                link = "https://ropsten.etherscan.io/tx/"+_lastwill.transactionHash;
             }
             $('#OkModal p').html("Confirming transaction.<br><a href='"+link+"' target='_blank'>View transaction in Etherscan</a>");
 
@@ -335,7 +335,7 @@ MyWills.prototype._saveWill = function (event) {
             success: function(hash){
                 var link = "https://etherscan.io/tx/"+hash;
                 if(!realContractSelected() || !contracts.production){
-                    var link = "https://ropsten.etherscan.io/tx/"+hash;
+                    link = "https://ropsten.etherscan.io/tx/"+hash;
                 }
                 $('#OkModal p').html("Confirming transaction.<br><a href='"+link+"' target='_blank'>View transaction in Etherscan</a>");
                 this.setLasWillTransactionHash(hash);
