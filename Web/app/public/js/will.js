@@ -97,7 +97,7 @@ function MyWills(options) {
             $('#OkModal p').html("Contract creation hash "+_lastwill.transactionHash);
 
 
-            onTransactioCompleted(_lastwill.hash,function (){
+            onTransactioCompleted(_lastwill.transactionHash,function (){
 
                 this.getWills(ownerAddress).then(function(wills){
                         var lastwill=wills[wills.length -1];
