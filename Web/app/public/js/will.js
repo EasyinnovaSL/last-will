@@ -40,7 +40,7 @@ function setAddress(address) {
 function MyWills(options) {
     jQuery.extend(options, self.options);
     var _lastwill = getLastWill();
-    this.lastwill = _lastwill || {witness:[],heirs:[],address:''};
+    this.lastwill = _lastwill || {witness:[],heirs:[],address:'', transactionHash: ''};
     this.confirmationsNeeded = 2;
     this.lastListOwnerValue = "";
 
@@ -83,11 +83,16 @@ function MyWills(options) {
     }
 
     // Load Previous Last Will
-    if (_lastwill) {
+    if (_lastwill && _lastwill.address) {
         this.renderLastWill(this.lastwill);
         $("#last-will-links").show();
         $("#new-will-form").hide();
     } else {
+
+        if(_lastwill && _lastwill.transactionHash){
+            //Show modal
+        }
+
         $("#last-will-links").hide();
         $("#new-will-form").show();
     }
@@ -229,7 +234,7 @@ MyWills.prototype._saveWill = function (event) {
         var heir=[];
         var heir_percentage=[];
         var witness=[];
-        var lastwill = {witness:[],heirs:[],address:''};
+        var lastwill = {witness:[], heirs:[], address:'', transactionHash: ''};
 
         $('div.field').each(function (){
             var account = localWeb3.eth.accounts.create([localWeb3.utils.randomHex(32)]);
@@ -272,6 +277,12 @@ MyWills.prototype._saveWill = function (event) {
         var inputValue = $("#ethToContract").val();
         if (!inputValue) inputValue = 0;
 
+
+        //Save will in localstorage before send the call
+        this._lastWillToLocalStorage(lastwill);
+
+
+
         // Make Ajax post request
         $.ajax({
             type: "POST",
@@ -293,12 +304,15 @@ MyWills.prototype._saveWill = function (event) {
             },
             success: function(address){
                 $('#OkModal p').html("Contract creation hash "+hash);
+                this.setLasWillTransactionHash(hash);
                 onTransactioCompleted(hash,function (){
 
                     this.getWills(ownerAddress).then(function(wills){
                             var lastwill=wills[wills.length -1];
-                        localStorage.setItem("address",ownerAddress);
-                        this._generateLinks(lastwill,address);
+                        setAddress(ownerAddress);
+
+                        this.setLasWillAddress(lastwill.address);
+                        this._generateLinks(this.lastwill, address);
                         $("#listOwner").val(ownerAddress);
                             $('#OkModal p').html("Last Will created successfully!<br><strong>Make sure to send the generated links or backup them.</strong>");
                             $('#OkModal .btn-success').show();
@@ -307,7 +321,7 @@ MyWills.prototype._saveWill = function (event) {
                             $("#last-will-links").show();
                             $("#new-will-form").hide();
 
-                        }
+                        }.bind(this)
 
 
                     );
@@ -360,6 +374,22 @@ MyWills.prototype._generateLinks = function (lastwill,address) {
     this._listWills();
 
 };
+
+MyWills.prototype._lastWillToLocalStorage = function (lastwill) {
+    this.lastwill = lastwill;
+    setLastWill(lastwill);
+};
+
+MyWills.prototype.setLasWillTransactionHash = function (transactionHash) {
+    this.lastwill.transactionHash = transactionHash;
+    setLastWill(this.lastwill);
+};
+
+MyWills.prototype.setLasWillAddress = function (address) {
+    this.lastwill.address = address;
+    setLastWill(this.lastwill);
+};
+
 
 MyWills.prototype._listWills = function (forcedAddress = null) {
     var address = getAddress() || forcedAddress;
