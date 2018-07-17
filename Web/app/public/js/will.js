@@ -27,6 +27,16 @@ function removeLastWill() {
     localStorage.removeItem("lastwill"+networkId);
 }
 
+function getAddress() {
+    var networkId = getNetworkId();
+    return localStorage.getItem("address"+networkId);
+}
+
+function setAddress(address) {
+    var networkId = getNetworkId();
+    localStorage.setItem("address"+networkId, address);
+}
+
 function MyWills(options) {
     jQuery.extend(options, self.options);
     var _lastwill = getLastWill();
@@ -57,7 +67,7 @@ function MyWills(options) {
             var address = $(event.target).val();
             this.lastListOwnerValue = address;
             if (web3.utils.isAddress(address)) {
-                localStorage.setItem("address", address);
+                setAddress(address);
                 this._listWills(address);
             } else {
                 $(".wills-container").html("");
@@ -66,7 +76,7 @@ function MyWills(options) {
     }.bind(this));
 
     // Read saved address from cache
-    var savedAddress = localStorage.getItem("address") || null;
+    var savedAddress = getAddress() || null;
     if (savedAddress !== null) {
         $("#listOwner").val(savedAddress);
         this._listWills(savedAddress);
@@ -89,35 +99,57 @@ MyWills.prototype._depositWill = function (event) {
     var contract = $(event.target).data('address');
     var count = $(event.target).data('count');
     var firstTime = parseInt($(event.target).data('status')) === 0;
-    var fee = 0.005 + (count * 0.001);
 
-    var modal = $("#DepositModal");
-    modal.find('#fees-extended').collapse('hide');
-    modal.find('.fee-details').text('Show Fee Details');
-    modal.find("[name=address]").html(contract);
-    modal.find("[name=addressEnd]").html(contract.slice(-4));
-    modal.find("[name=addressCopy]").data('text',contract);
-    modal.find("[name=fee]").html(fee + " Eth");
+    // Get the fee from SC
+    var localWeb3 = new Web3(new Web3.providers.HttpProvider(getProvider()));
+    var MyWill = new localWeb3.eth.Contract(getHierarchyContract().abi, contract);
+    MyWill.methods.getCreationWeiCost().call(function(err, creationWeiCost){
+        if (!err) {
+            MyWill.methods.getWitnessWeiCost().call(function(err, witnessWeiCost){
+                if (!err) {
+                    // Check SC for the applied fees
+                    var BN = localWeb3.utils.BN;
+                    var creationCost = new BN(creationWeiCost);
+                    var witnessCost = new BN(witnessWeiCost);
+                    var allWitnessCost = witnessCost.mul(new BN(count));
+                    var totalFeeWei = creationCost.add(allWitnessCost);
+                    var totalFee = localWeb3.utils.fromWei(totalFeeWei, 'ether');
 
-    modal.find(".first-time").hide();
-    if (firstTime) {
-        modal.find(".first-time").show();
-        modal.find("[name=limit]").html("210.000");
-        modal.find("[name=limitCopy]").data('text',"210000");
-    } else {
-        modal.find("[name=limit]").html("50.000");
-        modal.find("[name=limitCopy]").data('text',"50000");
-    }
+                    // Show Modal
+                    var modal = $("#DepositModal");
+                    modal.find('#fees-extended').collapse('hide');
+                    modal.find('.fee-details').text('Show Fee Details');
+                    modal.find("[name=address]").html(contract);
+                    modal.find("[name=addressEnd]").html(contract.slice(-4));
+                    modal.find("[name=addressCopy]").data('text',contract);
+                    modal.find("[name=fee]").html(totalFee + " Eth");
+                    modal.find("[name=feeCreation]").html(localWeb3.utils.fromWei(creationCost, 'ether'));
+                    modal.find("[name=feeWitness]").html(localWeb3.utils.fromWei(witnessCost, 'ether'));
 
-    if (realContractSelected()){
-        modal.find('.content-real').show();
-        modal.find('.content-ropsten').hide();
-    } else {
-        modal.find('.content-real').hide();
-        modal.find('.content-ropsten').show();
-    }
+                    modal.find(".first-time").hide();
+                    if (firstTime) {
+                        modal.find(".first-time").show();
+                        modal.find("[name=limit]").html("210.000");
+                        modal.find("[name=limitCopy]").data('text',"210000");
+                    } else {
+                        modal.find("[name=limit]").html("50.000");
+                        modal.find("[name=limitCopy]").data('text',"50000");
+                    }
 
-    modal.modal('show');
+                    if (realContractSelected()){
+                        modal.find('.content-real').show();
+                        modal.find('.content-ropsten').hide();
+                    } else {
+                        modal.find('.content-real').hide();
+                        modal.find('.content-ropsten').show();
+                    }
+
+                    modal.modal('show');
+
+                }
+            });
+        }
+    });
 };
 
 MyWills.prototype._showNewWillForm = function(event) {
@@ -241,7 +273,6 @@ MyWills.prototype._saveWill = function (event) {
         if (!inputValue) inputValue = 0;
 
         // Make Ajax post request
-
         $.ajax({
             type: "POST",
             url: "/will",
@@ -260,21 +291,21 @@ MyWills.prototype._saveWill = function (event) {
                 $('#OkModal .btn-success').hide();
                 $('#OkModal .close').hide();
             },
-            success: function(hash){
+            success: function(address){
                 $('#OkModal p').html("Contract creation hash "+hash);
-
-                localStorage.setItem("address",ownerAddress);
                 onTransactioCompleted(hash,function (){
 
                     this.getWills(ownerAddress).then(function(wills){
-                       var lastwill=wills[wills.length -1];
-
-                        $('#OkModal p').html("Last Will created successfully!<br><strong>Make sure to send the generated links or backup them.</strong>");
-                        $('#OkModal .btn-success').show();
-                        $('#OkModal .close').show();
-                        this.renderLastWill();
-                        $("#last-will-links").show();
-                        $("#new-will-form").hide();
+                            var lastwill=wills[wills.length -1];
+                        localStorage.setItem("address",ownerAddress);
+                        this._generateLinks(lastwill,address);
+                        $("#listOwner").val(ownerAddress);
+                            $('#OkModal p').html("Last Will created successfully!<br><strong>Make sure to send the generated links or backup them.</strong>");
+                            $('#OkModal .btn-success').show();
+                            $('#OkModal .close').show();
+                            this.renderLastWill();
+                            $("#last-will-links").show();
+                            $("#new-will-form").hide();
 
                         }
 
@@ -283,9 +314,6 @@ MyWills.prototype._saveWill = function (event) {
 
 
                 }.bind(this),2);
-
-                    $("#listOwner").val(ownerAddress);
-
 
             }.bind(this),
             error: function(err){
@@ -299,17 +327,23 @@ MyWills.prototype._saveWill = function (event) {
     }
 };
 
+function replaceAll(text,find,replace) {
+    return text.replace(new RegExp('[' + find + ']', 'g'), replace);
+}
+
 MyWills.prototype._generateLinks = function (lastwill,address) {
     lastwill.heirs.forEach(function(item){
         var url = this._createLink("2",item.account,address);
         item.url = url;
-        item.escapedUrl = url.replace("&", "%26");
+        console.log(url);
+        item.escapedUrl = replaceAll(url,"&", "%26");
+        console.log("adsasd:"+item.escapedUrl);
     }.bind(this));
 
     lastwill.witness.forEach(function(item){
         var url = this._createLink("1",item.account,address);
         item.url = url;
-        item.escapedUrl = url.replace("&", "%26");
+        item.escapedUrl = replaceAll(url,"&", "%26");
     }.bind(this));
 
     this.lastwill = lastwill;
@@ -328,7 +362,7 @@ MyWills.prototype._generateLinks = function (lastwill,address) {
 };
 
 MyWills.prototype._listWills = function (forcedAddress = null) {
-    var address = localStorage.getItem("address") || forcedAddress;
+    var address = getAddress() || forcedAddress;
     if (address === null) return;
     $('.wills-container').html($("#generic-loader").clone().show());
     this.getWills(address).then(function(wills){

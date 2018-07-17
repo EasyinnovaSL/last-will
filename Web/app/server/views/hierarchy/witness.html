@@ -35,7 +35,7 @@ Witness
 
         </div>
 
-        <div class="row" style="margin-top: 30px; padding-bottom: 177px;">
+        <div class="row" style="margin-top: 30px;">
             <div id="transactions-container" class="mbr-white col-md-12"></div>
         </div>
     </div>
@@ -76,19 +76,26 @@ Witness
                 $("#alive-div").show();
                 $("#dead-button").on('click', function(){
 
-                    localWeb3.eth.getBalance(account.address.toLowerCase()).then(function (balanceSender){
-                        if (!(balanceSender > 0)) {
+                    localWeb3.eth.getBalance(account.address.toLowerCase()).then(async function (balanceSender){
+                        console.log("Balance: " + balanceSender);
+                        var gas = await contract.methods.ownerDied().estimateGas({from: account.address.toLowerCase(), to: willAddress.toLowerCase()});
+                        //console.log("Required gas: " + gas);
+                        var gasPrice = await localWeb3.eth.getGasPrice();
+                        //console.log("Gas price: " + gasPrice);
+                        var minimumWeis = gasPrice*gas;
+                        console.log("Required balance: " + minimumWeis);
+                        if (balanceSender < minimumWeis) {
                             $('#ErrorModal').find('.modal-body').find('p').html("Your account <strong>"+
                                 account.address.toLowerCase() +
-                                "</strong> doesn't have enough balance. <br> Please add some ether to make the action");
+                                "</strong> doesn't have enough balance. It is required at least " + (minimumWeis/1000000000000000000.0) + " Ether. " +
+                                "But your account only has " + (balanceSender/1000000000000000000.0) + " Ether. " +
+                                "Please transfer some ether to your account in order to make the action");
 
                             $('#ErrorModal').modal('show');
-
                         }else{
-
                             localWeb3.eth.getBalance(willAddress).then(function (balance){
                                 if (balance > 0) {
-                                    contract.methods.ownerDied().send({from: account.address.toLowerCase(), to: willAddress.toLowerCase(), gas: '1000000'}, function(err, tx){
+                                    contract.methods.ownerDied().send({from: account.address.toLowerCase(), to: willAddress.toLowerCase(), gas: gas}, function(err, tx){
                                         if (err) {
                                             console.error(err);
 
@@ -99,7 +106,6 @@ Witness
                                             }else{
                                                 $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong.');
                                             }
-
 
                                             $('#ErrorModal').modal('show');
                                             return;
@@ -128,12 +134,10 @@ Witness
                                 $('#ErrorModal').find('.modal-body').find('p').html('Something went wrong.');
                                 $('#ErrorModal').modal('show');
                             });
-
-
                         }
                     }).catch(function(err){
                         console.error(err);
-                        $('#ErrorModal').find('.modal-body').find('p').html("Your account don't have balance, please add ether to send the transaction");
+                        $('#ErrorModal').find('.modal-body').find('p').html("Your account <strong>" + account.address.toLowerCase() + "</strong> don't have balance, please add ether to send the transaction");
                         $('#ErrorModal').modal('show');
                     });
 

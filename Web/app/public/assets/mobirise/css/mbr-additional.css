@@ -12,6 +12,9 @@ body {
   font-style: normal;
   line-height: 1.5;
 }
+.mbr-parallax-background{
+  min-height: 70vh;
+}
 .mbr-section-title {
   font-style: normal;
   line-height: 1.2;
